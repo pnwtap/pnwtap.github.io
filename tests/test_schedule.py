@@ -48,3 +48,11 @@ def test_raises_when_tier_too_small():
     locs = [_loc("easy", 0), _loc("medium", 0), _loc("hard", 0)]  # only 1 hard, ramp needs 2
     with pytest.raises(ValueError, match="hard"):
         build_schedule(locs, date(2026, 7, 7), 5, RAMP, seed=0)
+
+
+def test_no_intra_day_duplicate_with_odd_tier_pool():
+    # 3 hard (odd) exercises the reshuffle-boundary duplicate bug
+    locs = [_loc("easy", 0), _loc("medium", 0)] + [_loc("hard", i) for i in range(3)]
+    sched = build_schedule(locs, date(2026, 7, 7), 400, RAMP, seed=0)
+    for ids in sched.values():
+        assert len(set(ids)) == len(ids)     # no location repeats within a day

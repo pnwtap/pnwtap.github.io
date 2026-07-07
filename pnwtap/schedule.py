@@ -20,6 +20,18 @@ def _tier_cycle(indices: list[int], seed: int, tier: str):
         yield from order
 
 
+def _draw_distinct(cycle, count):
+    """Pull `count` distinct indices from a tier cycle, skipping cross-pass repeats."""
+    picks = []
+    seen = set()
+    while len(picks) < count:
+        idx = next(cycle)
+        if idx not in seen:
+            seen.add(idx)
+            picks.append(idx)
+    return picks
+
+
 def build_schedule(locations, start_date: date, horizon_days: int, ramp: list[str], seed: int = 0) -> dict[str, list[int]]:
     by_tier: dict[str, list[int]] = {"easy": [], "medium": [], "hard": []}
     for idx, loc in enumerate(locations):
@@ -37,5 +49,8 @@ def build_schedule(locations, start_date: date, horizon_days: int, ramp: list[st
     schedule: dict[str, list[int]] = {}
     for offset in range(horizon_days):
         day = start_date + timedelta(days=offset)
-        schedule[day.isoformat()] = [next(cycles[tier]) for tier in ramp]
+        # draw each tier's picks for the day distinctly, then order them per the ramp
+        day_by_tier = {tier: _draw_distinct(cycles[tier], count) for tier, count in need.items()}
+        iters = {tier: iter(picks) for tier, picks in day_by_tier.items()}
+        schedule[day.isoformat()] = [next(iters[tier]) for tier in ramp]
     return schedule

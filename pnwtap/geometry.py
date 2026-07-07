@@ -20,6 +20,8 @@ def parse_geometry(s: str) -> list[tuple[float, float]]:
     return points
 
 
+# NOTE: static/game.js contains a JS mirror of the functions below (haversine /
+# projection / nearest-point / score). Change both in lockstep.
 def haversine_km(a: tuple[float, float], b: tuple[float, float]) -> float:
     """Great-circle distance in km between two (lat, lng) points."""
     lat1, lat2 = math.radians(a[0]), math.radians(b[0])
