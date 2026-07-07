@@ -1,4 +1,3 @@
-import math
 import pytest
 from pnwtap.geometry import (
     parse_geometry, haversine_km, nearest_point_km, within_bbox,
@@ -45,6 +44,11 @@ def test_nearest_point_line_is_near_midsegment():
     d_end = haversine_km(tap, line[0])
     assert d_mid < d_end
     assert d_mid == pytest.approx(2.2, abs=1.0)  # ~0.02 deg lat ≈ 2.2 km
+
+
+def test_nearest_point_rejects_empty_path():
+    with pytest.raises(ValueError):
+        nearest_point_km((48.0, -121.0), [])
 
 
 def test_within_bbox():

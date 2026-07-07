@@ -50,6 +50,8 @@ def _segment_dist_km(tap: tuple[float, float], a: tuple[float, float], b: tuple[
 
 def nearest_point_km(tap: tuple[float, float], path: list[tuple[float, float]]) -> float:
     """Distance in km from `tap` to the nearest point on `path` (point or polyline)."""
+    if not path:
+        raise ValueError("empty path")
     if len(path) == 1:
         return haversine_km(tap, path[0])
     return min(_segment_dist_km(tap, path[i], path[i + 1]) for i in range(len(path) - 1))
