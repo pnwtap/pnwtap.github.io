@@ -3,7 +3,7 @@ import json
 import shutil
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader
 
 
 def build_payload(locations, schedule, image_map, config) -> dict:
@@ -43,7 +43,7 @@ def render_site(locations, schedule, image_map, config, *, docs_dir, template_di
 
     env = Environment(
         loader=FileSystemLoader(str(template_dir)),
-        autoescape=select_autoescape(["html"]),
+        autoescape=True,
     )
     html = env.get_template("index.html.jinja").render(data_json=data_json)
 
