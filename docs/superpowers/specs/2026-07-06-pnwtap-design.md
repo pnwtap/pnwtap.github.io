@@ -7,15 +7,16 @@
 
 `pnwtap` is a daily geography tapping game in the style of [MapTap](https://maptap.gg),
 scoped to the Pacific Northwest (Oregon, Washington, British Columbia, Alberta). Each day
-presents 5 rounds; in each round the player is shown the *name* of a location and taps where
-they think it is on an unlabeled terrain map. They are scored 0–100 per round on how close the
-tap was, with harder locations worth more via difficulty multipliers. After 5 rounds the player
-gets a final score (max 1000) and a Wordle-style share string to paste into a group chat.
+presents 4 rounds; in each round the player is shown a *prompt* for a location — its name, or
+an image of it — and taps where they think it is on an unlabeled terrain map. They are scored
+0–100 per round on how close the tap was, with harder locations worth more via difficulty
+multipliers. After 4 rounds the player gets a final score (max 1000) and a Wordle-style share
+string to paste into a group chat.
 
 The location set is intentionally regional and eclectic: notable peaks (Vesper, Baker, Sahale,
 Assiniboine, Temple…), hikes/traverses (Wapta…), roads (Mountain Loop Highway, I-5 exits),
-climbs (FlyBoys…), rivers, and specific points of interest (Fremont Troll, Microsoft Campus,
-Stevens Pass ski area…).
+climbs (FlyBoys…), rivers, towns (Gold Bar, North Bend, Fall City, Squamish, Jasper…), and
+specific points of interest (Fremont Troll, Microsoft Campus, Stevens Pass ski area…).
 
 It is built for a small group of friends. It is an honor-system game — there is no anti-cheat.
 
@@ -40,7 +41,9 @@ It is built for a small group of friends. It is an honor-system game — there i
 
 ## Gameplay & scoring
 
-- **Rounds per day:** 5.
+- **Rounds per day:** 4.
+- **Prompt:** each round shows either the location's `name` or, if the location has an `image`,
+  that image instead (the name is hidden until the reveal). See the Sheet schema and UX sections.
 - **Distance:** haversine distance from the player's tap to the *nearest point on the location's
   geometry*. For a single-point location (a peak, a POI) this is distance to that point. For a
   linear location (river, road, traverse) it is the distance to the nearest point on the
@@ -49,8 +52,8 @@ It is built for a small group of friends. It is an honor-system game — there i
   bullseye; ~78 at 10 km off; ~37 at 40 km off. `D` and all other tunables live in one config
   block.
 - **Difficulty tiers & multipliers:** each location is tagged `easy` / `medium` / `hard`. The
-  daily set ramps easy→hard with shape **1 easy / 2 medium / 2 hard**, and per-round scores are
-  multiplied **×1 / ×1 / ×2 / ×3 / ×3**, giving a max daily score of **1000**. (Ramp shape and
+  daily set ramps easy→hard with shape **1 easy / 1 medium / 2 hard**, and per-round scores are
+  multiplied **×1 / ×2 / ×3 / ×4**, giving a max daily score of **1000**. (Ramp shape and
   multipliers are tunable.)
 - **Emoji tiers:** each round's difficulty is marked by an emoji in the share string (exact
   glyphs, e.g. 🏅/🔥/🏆, chosen during implementation). The emoji marks *difficulty*, not
@@ -75,24 +78,33 @@ One tab with these columns:
 
 | column | meaning |
 |--------|---------|
-| `name` | Display name shown to the player (e.g. `Mt Baker`, `Wapta Traverse`). |
-| `category` | `peak` / `hike` / `traverse` / `road` / `climb` / `river` / `poi` — drives pin icon/flavor. |
+| `name` | Display name; the prompt when there is no image, and always shown on the reveal (e.g. `Mt Baker`, `Squamish`). |
+| `category` | `peak` / `hike` / `traverse` / `road` / `climb` / `river` / `town` / `poi` — drives pin icon/flavor. |
 | `difficulty` | `easy` / `medium` / `hard` — drives the ramp and multiplier. |
 | `geometry` | One-or-more `lat,lng` points, semicolon-separated. One point = a point feature; several = a line sketch (3–8 points is plenty). |
+| `image` | *(optional)* URL of an image of the location. If present, that round shows the image as the prompt instead of the name. Blank = name prompt. |
 | `blurb` | Short writeup shown on the reveal (like MapTap's little writeups). |
 
 Example rows:
 
-| name | category | difficulty | geometry | blurb |
-|------|----------|-----------|----------|-------|
-| Mt Baker | peak | easy | `48.7767,-121.8144` | Glaciated stratovolcano… |
-| Wapta Traverse | traverse | hard | `51.68,-116.45; 51.60,-116.40; 51.53,-116.34` | Classic icefield ski traverse… |
-| Mountain Loop Hwy | road | medium | `48.09,-121.62; 48.06,-121.47; 47.93,-121.09` | Scenic loop through the Mountain Loop… |
+| name | category | difficulty | geometry | image | blurb |
+|------|----------|-----------|----------|-------|-------|
+| Mt Baker | peak | easy | `48.7767,-121.8144` | | Glaciated stratovolcano… |
+| Wapta Traverse | traverse | hard | `51.68,-116.45; 51.60,-116.40; 51.53,-116.34` | | Classic icefield ski traverse… |
+| Mountain Loop Hwy | road | medium | `48.09,-121.62; 48.06,-121.47; 47.93,-121.09` | | Scenic loop through the Mountain Loop… |
+| Squamish | town | medium | `49.7016,-123.1558` | | Sea-to-Sky climbing town… |
+| Fremont Troll | poi | hard | `47.6510,-122.3473` | `https://…/troll.jpg` | Concrete troll under the Aurora Bridge… |
 
 **Access:** the Sheet is exposed via **File → Share → Publish to web → CSV**. The Python build
 fetches that CSV URL with no credentials (no service account, no OAuth). Tradeoff: the CSV URL is
 publicly readable — harmless here, since every answer is baked into the public site anyway. (A
 private sheet via `gspread` + service-account key was rejected as unnecessary auth overhead.)
+
+**Images:** the `image` column holds a plain URL, so the Sheet stays the single source of truth.
+At build time, `build.py` **downloads each referenced image into `docs/img/` and rewrites the
+baked reference to the local copy**, so the published site is self-contained and won't break if
+the source link later dies. Downloaded images are cached by content so rebuilds don't re-fetch
+unchanged ones.
 
 ## The page / UX flow
 
@@ -100,11 +112,12 @@ private sheet via `gspread` + service-account key was rejected as unnecessary au
   **terrain/shaded-relief tiles with place-name labels off**, from a free tile provider. The
   player reads ridgelines, glaciers, and coastline to locate a peak — labels would give the
   answer away. The tile source is swappable.
-- **Per round:** show the location `name` (blurb hidden) → player pans/zooms the unlabeled
-  terrain map and taps → locks it in → reveal shows the **true geometry, the player's tap, a line
-  between them, the round score, and the `blurb`** → Next.
-- **After round 5:** final score (out of 1000) and a Wordle-style share string with a copy
-  button, e.g. `pnwtap Jul 6 · 95🏅 88🔥 97🔥 95🏆 92🏆 · Final 862`.
+- **Per round:** show the prompt — the location `name`, or its `image` if it has one (name
+  hidden) — with the blurb hidden → player pans/zooms the unlabeled terrain map and taps → locks
+  it in → reveal shows the **name, true geometry, the player's tap, a line between them, the round
+  score, and the `blurb`** (plus the image, if any) → Next.
+- **After round 4:** final score (out of 1000) and a Wordle-style share string with a copy
+  button, e.g. `pnwtap Jul 7 · 95🏅 88🔥 96🏆 90🏆 · Final 919`.
 - **Replay guard:** `localStorage` records today's completed result so a page refresh shows the
   result rather than letting the player replay (like Wordle).
 - **No puzzle for a date** (before the schedule starts / after it ends): show a friendly
@@ -122,7 +135,7 @@ build.py  →  parse & validate geometry, build date→puzzle schedule, render p
 docs/  (index.html with data baked in, + game.js, style.css)
       │  git push
       ▼
-GitHub Pages  →  Friend's browser: today's date → 5 rounds → local scoring → share string
+GitHub Pages  →  Friend's browser: today's date → 4 rounds → local scoring → share string
 ```
 
 Python owns all editable logic. The browser owns rendering, taps, and the small scoring
@@ -137,6 +150,7 @@ pnwtap/
     sheet.py              # fetch + parse the published CSV into location records
     geometry.py           # parse geometry strings; haversine; nearest-point-on-path
     schedule.py           # deterministic date-seeded selection + easy→hard ramp
+    images.py             # download referenced images into docs/img/, cache by content
     render.py             # fill the HTML template, write docs/
   templates/
     index.html.jinja      # page template (data injected as JSON)
@@ -146,6 +160,7 @@ pnwtap/
   docs/                   # build output = GitHub Pages source
     index.html
     game.js  style.css
+    img/                  # downloaded location images (self-contained)
   tests/
     test_geometry.py
     test_schedule.py
@@ -163,6 +178,8 @@ broken day:
   swaps).
 - A tier lacking enough locations to fill the ramp → error explaining what's missing.
 - Missing required columns or empty required fields → error naming the row.
+- An `image` URL that fails to download → error naming the row (so a broken link is caught at
+  build time, not by a player).
 
 Runtime (browser) failure modes are minimal: if tiles fail to load the map is degraded but the
 game still functions; an unavailable date shows the friendly message above.
@@ -179,9 +196,9 @@ game still functions; an unavailable date shows the friendly message above.
 
 ## Tunable configuration (single block)
 
-Collected in one place for easy tweaking: `D` (score decay km), rounds per day, ramp shape,
-multipliers, PNW bounding box, tile URL/attribution, schedule horizon (days ahead), and emoji
-glyphs per tier.
+Collected in one place for easy tweaking: `D` (score decay km), rounds per day (4), ramp shape
+(1 easy / 1 medium / 2 hard), multipliers (×1/×2/×3/×4), PNW bounding box, tile URL/attribution,
+schedule horizon (days ahead), and emoji glyphs per tier.
 
 ## Deployment
 
