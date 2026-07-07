@@ -36,8 +36,11 @@ def test_rejects_out_of_bbox():
         "name,category,difficulty,geometry,image,blurb\r\n"
         "Faraway,peak,easy,\"12.0,-121.0\",,x\r\n"
     )
-    with pytest.raises(ValueError, match="bbox"):
+    with pytest.raises(ValueError) as exc:
         parse_locations(csv, BBOX)
+    msg = str(exc.value)
+    assert "bbox" in msg
+    assert "Faraway" in msg          # error must name the offending row
 
 
 def test_rejects_missing_name():
