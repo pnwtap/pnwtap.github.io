@@ -1,0 +1,18 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, sans-serif; color: #1b2a1f; }
+#app { display: flex; flex-direction: column; height: 100vh; }
+header { display: flex; align-items: baseline; gap: 12px; padding: 8px 14px; background: #1b2a1f; color: #fff; }
+header h1 { margin: 0; font-size: 20px; letter-spacing: 0.5px; }
+#status { font-size: 14px; opacity: 0.85; }
+#map { flex: 1 1 auto; min-height: 240px; }
+#panel { flex: 0 0 auto; padding: 12px 14px; max-height: 46vh; overflow: auto; border-top: 3px solid #1b2a1f; }
+.round-no { color: #6b7a6f; font-size: 13px; }
+.prompt-name { font-size: 24px; font-weight: 700; margin: 4px 0; }
+.prompt-cap { color: #6b7a6f; }
+.prompt-img, .reveal-img { max-width: 100%; max-height: 190px; border-radius: 8px; margin: 4px 0; }
+.reveal-name { font-size: 20px; font-weight: 700; }
+.reveal-score { font-size: 18px; margin: 6px 0; }
+.reveal-blurb { color: #33413a; }
+button { font-size: 16px; padding: 9px 16px; margin-top: 8px; border: 0; border-radius: 6px; background: #2e7d4f; color: #fff; cursor: pointer; }
+button:disabled { background: #b7c3ba; cursor: default; }
+#share { background: #eef2ee; padding: 10px; border-radius: 6px; white-space: pre-wrap; font-size: 15px; }

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>pnwtap</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>pnwtap</h1>
+      <div id="status"></div>
+    </header>
+    <div id="map"></div>
+    <section id="panel">
+      <div id="prompt"></div>
+      <div id="controls"></div>
+      <div id="reveal" hidden></div>
+    </section>
+  </div>
+  <script>window.PNWTAP = {{ data_json | safe }};</script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
