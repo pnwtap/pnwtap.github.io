@@ -50,7 +50,8 @@ def render_site(locations, schedule, image_map, config, *, docs_dir, template_di
     docs_dir.mkdir(parents=True, exist_ok=True)
 
     payload = build_payload(locations, schedule, image_map, config, region_mask)
-    data_json = json.dumps(payload).replace("<", "\\u003c")  # keep any "</script>" in blurbs safe
+    data_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    data_json = data_json.replace("<", "\\u003c")  # keep any "</script>" in blurbs safe
 
     env = Environment(
         loader=FileSystemLoader(str(template_dir)),
