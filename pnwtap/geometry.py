@@ -63,3 +63,19 @@ def within_bbox(pt: tuple[float, float], bbox: tuple[float, float, float, float]
     """True if pt (lat, lng) lies within bbox (min_lat, min_lng, max_lat, max_lng)."""
     min_lat, min_lng, max_lat, max_lng = bbox
     return min_lat <= pt[0] <= max_lat and min_lng <= pt[1] <= max_lng
+
+
+def in_region(pt: tuple[float, float], rings: list[list[list[float]]]) -> bool:
+    """True if pt (lat, lng) falls inside any of the region-mask rings ([[lat, lng], ...])."""
+    lat, lng = pt
+    for ring in rings:
+        inside = False
+        j = len(ring) - 1
+        for i in range(len(ring)):
+            (yi, xi), (yj, xj) = ring[i], ring[j]
+            if (yi > lat) != (yj > lat) and lng < (xj - xi) * (lat - yi) / (yj - yi) + xi:
+                inside = not inside
+            j = i
+        if inside:
+            return True
+    return False

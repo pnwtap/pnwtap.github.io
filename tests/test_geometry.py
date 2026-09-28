@@ -55,3 +55,22 @@ def test_within_bbox():
     bbox = (41.0, -126.0, 56.0, -112.0)
     assert within_bbox((48.5, -121.0), bbox) is True
     assert within_bbox((60.0, -121.0), bbox) is False
+
+
+def test_in_region_multiple_rings():
+    from pnwtap.geometry import in_region
+    a = [[0.0, 0.0], [0.0, 1.0], [1.0, 1.0], [1.0, 0.0]]
+    b = [[5.0, 5.0], [5.0, 6.0], [6.0, 6.0], [6.0, 5.0]]
+    assert in_region((0.5, 0.5), [a, b])
+    assert in_region((5.5, 5.5), [a, b])
+    assert not in_region((3.0, 3.0), [a, b])
+
+
+def test_in_region_real_mask_contains_sample_places():
+    import json, pathlib
+    from pnwtap.geometry import in_region
+    mask = json.loads((pathlib.Path(__file__).parent.parent / "data" / "region_mask.json").read_text())
+    assert in_region((48.7767, -121.8144), mask)      # Mt Baker
+    assert in_region((60.7212, -135.0568), mask)      # Whitehorse
+    assert not in_region((40.7608, -111.8910), mask)  # Salt Lake City
+    assert not in_region((46.8721, -113.9940), mask)  # Missoula, Montana

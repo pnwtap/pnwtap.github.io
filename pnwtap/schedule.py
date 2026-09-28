@@ -1,38 +1,40 @@
 """Deterministic date → puzzle schedule.
 
-Each difficulty tier is drawn from its own reshuffling cycle seeded only by
-`seed` + the tier name, then consumed in date order. This gives a stable
-schedule (same inputs → same output) with no repeats until a tier's pool
-cycles.
+Days are filled in date order. For each day and difficulty tier we pick at
+random (seeded by the date) from the *least-recently-used half* of that tier's
+pool. That gives:
+
+- determinism: same locations + same locks → same schedule;
+- spacing: a location can't come back until at least half its tier has been
+  played since, and never twice in one day;
+- stability: randomness and tie-breaks are keyed on location *names*, not sheet
+  row order, and already-played days can be pinned with `locked` so adding or
+  reordering sheet rows never rewrites a puzzle someone has already seen;
+- freshness: never-used locations are drawn first, so the first pass through
+  a tier is a permutation and newly added locations appear right away.
 """
 import random
 import zlib
 from collections import Counter
 from datetime import date, timedelta
 
-
-def _tier_cycle(indices: list[int], seed: int, tier: str):
-    """Yield indices forever, reshuffling the pool on each full pass."""
-    rng = random.Random(zlib.crc32(f"{seed}:{tier}".encode()))
-    while True:
-        order = list(indices)
-        rng.shuffle(order)
-        yield from order
+NEVER = -10**9
 
 
-def _draw_distinct(cycle, count):
-    """Pull `count` distinct indices from a tier cycle, skipping cross-pass repeats."""
-    picks = []
-    seen = set()
-    while len(picks) < count:
-        idx = next(cycle)
-        if idx not in seen:
-            seen.add(idx)
-            picks.append(idx)
-    return picks
+def _key(*parts) -> int:
+    return zlib.crc32(":".join(str(p) for p in parts).encode())
 
 
-def build_schedule(locations, start_date: date, horizon_days: int, ramp: list[str], seed: int = 0) -> dict[str, list[int]]:
+def build_schedule(
+    locations,
+    start_date: date,
+    horizon_days: int,
+    ramp: list[str],
+    seed: int = 0,
+    locked: dict[str, list[int]] | None = None,
+) -> dict[str, list[int]]:
+    """Map each ISO date in [start_date, start_date + horizon_days) to location indices, one per ramp slot."""
+    locked = locked or {}
     by_tier: dict[str, list[int]] = {"easy": [], "medium": [], "hard": []}
     for idx, loc in enumerate(locations):
         by_tier[loc.difficulty].append(idx)
@@ -44,13 +46,53 @@ def build_schedule(locations, start_date: date, horizon_days: int, ramp: list[st
                 f"need at least {count} '{tier}' locations for the ramp, have {len(by_tier[tier])}"
             )
 
-    cycles = {tier: _tier_cycle(by_tier[tier], seed, tier) for tier in by_tier}
-
+    last_used: dict[int, int] = {}
     schedule: dict[str, list[int]] = {}
     for offset in range(horizon_days):
-        day = start_date + timedelta(days=offset)
-        # draw each tier's picks for the day distinctly, then order them per the ramp
-        day_by_tier = {tier: _draw_distinct(cycles[tier], count) for tier, count in need.items()}
-        iters = {tier: iter(picks) for tier, picks in day_by_tier.items()}
-        schedule[day.isoformat()] = [next(iters[tier]) for tier in ramp]
+        day = (start_date + timedelta(days=offset)).isoformat()
+        if day in locked:
+            ids = list(locked[day])
+        else:
+            picks = {}
+            for tier, count in need.items():
+                pool = sorted(
+                    by_tier[tier],
+                    key=lambda i: (last_used.get(i, NEVER), _key(seed, locations[i].name)),
+                )
+                rng = random.Random(_key(seed, day, tier))
+                fresh = [i for i in pool if i not in last_used]
+                if len(fresh) >= count:
+                    chosen = rng.sample(fresh, count)
+                else:
+                    stale = pool[len(fresh):]
+                    eligible = stale[: max(count - len(fresh), len(pool) // 2)]
+                    chosen = fresh + rng.sample(eligible, count - len(fresh))
+                    rng.shuffle(chosen)
+                picks[tier] = iter(chosen)
+            ids = [next(picks[tier]) for tier in ramp]
+        for i in ids:
+            last_used[i] = offset
+        schedule[day] = ids
     return schedule
+
+
+def resolve_lock(lock: dict[str, list[str]], locations) -> tuple[dict[str, list[int]], list[str]]:
+    """Turn a {date: [names]} lock into {date: [indices]}; return dates whose names no longer all exist."""
+    index = {loc.name: i for i, loc in enumerate(locations)}
+    resolved, dropped = {}, []
+    for day, names in lock.items():
+        if all(n in index for n in names):
+            resolved[day] = [index[n] for n in names]
+        else:
+            dropped.append(day)
+    return resolved, sorted(dropped)
+
+
+def lock_through(schedule: dict[str, list[int]], locations, through: date) -> dict[str, list[str]]:
+    """The {date: [names]} lock for every scheduled day on or before `through`."""
+    cutoff = through.isoformat()
+    return {
+        day: [locations[i].name for i in ids]
+        for day, ids in schedule.items()
+        if day <= cutoff
+    }

@@ -1,4 +1,5 @@
 """Build the JSON payload and render the static site into docs/."""
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -22,6 +23,8 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
         "schedule": schedule,
         "regionMask": region_mask or [],
         "config": {
+            "epoch": config.EPOCH,
+            "categories": config.CATEGORIES,
             "D_km": config.D_KM,
             "multipliers": config.MULTIPLIERS,
             "ramp": config.RAMP,
@@ -30,8 +33,7 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
             "hillshadeUrl": config.HILLSHADE_URL,
             "tileAttribution": config.TILE_ATTRIBUTION,
             "bbox": config.BBOX,
-            "center": config.CENTER,
-            "zoom": config.DEFAULT_ZOOM,
+            "startBounds": config.START_BOUNDS,
             "minZoom": config.MIN_ZOOM,
             "maxZoom": config.MAX_ZOOM,
         },
@@ -49,10 +51,17 @@ def render_site(locations, schedule, image_map, config, *, docs_dir, template_di
         loader=FileSystemLoader(str(template_dir)),
         autoescape=True,
     )
-    html = env.get_template("index.html.jinja").render(data_json=data_json)
+    # content hash of the static assets, appended as ?v= so browsers never pair a
+    # fresh index.html with a stale cached game.js (GitHub Pages caches ~10 min)
+    digest = hashlib.sha1()
+    for src in sorted(Path(static_dir).iterdir()):
+        if src.is_file():
+            digest.update(src.read_bytes())
+    html = env.get_template("index.html.jinja").render(data_json=data_json, v=digest.hexdigest()[:10])
 
     index_path = docs_dir / "index.html"
     index_path.write_text(html, encoding="utf-8")
-    for fname in ("game.js", "style.css"):
-        shutil.copy(Path(static_dir) / fname, docs_dir / fname)
+    for src in Path(static_dir).iterdir():
+        if src.is_file():
+            shutil.copy(src, docs_dir / src.name)
     return index_path

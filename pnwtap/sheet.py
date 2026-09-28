@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 import requests
 
-from pnwtap.geometry import parse_geometry, within_bbox
+from pnwtap.geometry import in_region, parse_geometry, within_bbox
 
 DIFFICULTIES = {"easy", "medium", "hard"}
 
@@ -20,20 +20,34 @@ class Location:
     blurb: str
 
 
-def parse_locations(csv_text: str, bbox) -> list[Location]:
-    """Parse CSV text into validated Location records. Raises ValueError naming the offending row."""
+def parse_locations(csv_text: str, bbox, categories=None, region=None) -> list[Location]:
+    """Parse CSV text into validated Location records. Raises ValueError naming the offending row.
+
+    `categories`, if given, is the set of allowed category values; `region`, if given, is
+    the list of mask rings every point must fall inside (so it's visible on the map).
+    """
     reader = csv.DictReader(io.StringIO(csv_text))
     locations: list[Location] = []
+    seen: dict[str, int] = {}
     for line_no, row in enumerate(reader, start=2):  # header is line 1
         name = (row.get("name") or "").strip()
         if not name:
+            if not any((v or "").strip() for v in row.values() if isinstance(v, str)):
+                continue  # skip fully blank rows (common at the bottom of a sheet)
             raise ValueError(f"row {line_no}: missing name")
+        if name in seen:
+            raise ValueError(f"row {line_no} ({name}): duplicate name (also row {seen[name]})")
+        seen[name] = line_no
 
         difficulty = (row.get("difficulty") or "").strip().lower()
         if difficulty not in DIFFICULTIES:
             raise ValueError(f"row {line_no} ({name}): bad difficulty {difficulty!r}")
 
         category = (row.get("category") or "").strip().lower() or "poi"
+        if categories is not None and category not in categories:
+            raise ValueError(
+                f"row {line_no} ({name}): bad category {category!r} (allowed: {', '.join(sorted(categories))})"
+            )
 
         try:
             geometry = parse_geometry(row.get("geometry") or "")
@@ -42,6 +56,8 @@ def parse_locations(csv_text: str, bbox) -> list[Location]:
         for pt in geometry:
             if not within_bbox(pt, bbox):
                 raise ValueError(f"row {line_no} ({name}): point {pt} outside PNW bbox")
+            if region and not in_region(pt, region):
+                raise ValueError(f"row {line_no} ({name}): point {pt} outside the map region (lat/lng typo?)")
 
         image = (row.get("image") or "").strip() or None
         blurb = (row.get("blurb") or "").strip()

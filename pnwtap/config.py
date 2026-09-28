@@ -10,17 +10,26 @@ RAMP = ["easy", "medium", "hard", "hard"]   # difficulty of each round, in order
 MULTIPLIERS = [1, 2, 3, 4]           # per-round score multiplier; max score = 100*sum = 1000
 
 # Scheduling
-HORIZON_DAYS = 365                   # how many days of puzzles to bake ahead
-SEED = 0                             # change to reshuffle the whole schedule
+EPOCH = "2026-07-07"                 # puzzle #1; the schedule is always built from here
+HORIZON_DAYS = 400                   # days of puzzles to bake ahead of the build date
+SEED = 0                             # change to reshuffle all *future* days (played days are locked)
 
 # Share-string emoji per difficulty tier
 EMOJI = {"easy": "🏅", "medium": "🔥", "hard": "🏆"}
 
+# Allowed sheet categories and the icon shown next to each prompt
+CATEGORIES = {
+    "peak": "🏔️", "hike": "🥾", "traverse": "🎿", "road": "🛣️", "climb": "🧗",
+    "river": "🏞️", "town": "🏘️", "poi": "📍", "lake": "💧", "glacier": "🧊",
+    "pass": "⛰️", "island": "🏝️",
+}
+
 # Region bounding box for typo validation: (min_lat, min_lng, max_lat, max_lng).
 # Covers WA, OR, BC, AB, and YT — the area the stencil (data/region_mask.json) spans.
 BBOX = (41.5, -141.5, 70.0, -109.5)
-CENTER = [49.5, -122.5]              # initial map center [lat, lng] (over the populated south)
-DEFAULT_ZOOM = 6
+# Each round opens framed on this box [[south, west], [north, east]] — the populated
+# south of the region (OR → southern BC/AB); players zoom out for the far north.
+START_BOUNDS = [[43.0, -125.5], [53.0, -113.0]]
 
 # Map tiles (Esri, unlabeled, no API key): satellite imagery — naturally
 # colourful (forest, snow, rock, water), deep zoom, and no place-name labels

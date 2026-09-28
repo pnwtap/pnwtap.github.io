@@ -50,3 +50,31 @@ def test_rejects_missing_name():
     )
     with pytest.raises(ValueError, match="name"):
         parse_locations(csv, BBOX)
+
+
+def test_rejects_duplicate_names():
+    csv = GOOD_CSV + "Mt Baker,peak,easy,\"48.7767,-121.8144\",,again\r\n"
+    with pytest.raises(ValueError, match="duplicate"):
+        parse_locations(csv, BBOX)
+
+
+def test_rejects_unknown_category():
+    csv = (
+        "name,category,difficulty,geometry,image,blurb\r\n"
+        "Odd,volcanoe,easy,\"48.0,-121.0\",,x\r\n"
+    )
+    with pytest.raises(ValueError, match="Odd.*category"):
+        parse_locations(csv, BBOX, categories={"peak"})
+
+
+def test_skips_blank_trailing_rows():
+    locs = parse_locations(GOOD_CSV + ",,,,,\r\n,,,,,\r\n", BBOX)
+    assert len(locs) == 3
+
+
+def test_rejects_point_outside_region_mask():
+    square = [[[47.0, -123.0], [47.0, -121.0], [49.0, -121.0], [49.0, -123.0]]]
+    ok = parse_locations(GOOD_CSV.split("Wapta")[0], BBOX, region=square)
+    assert [l.name for l in ok] == ["Mt Baker"]
+    with pytest.raises(ValueError, match="Wapta.*region"):
+        parse_locations(GOOD_CSV, BBOX, region=square)

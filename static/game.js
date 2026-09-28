@@ -3,141 +3,96 @@
 
   const DATA = window.PNWTAP;
   const CFG = DATA.config;
+  const S = window.PNWTAP_SCORING;
 
+  const card = document.getElementById("card");
   const cardBody = document.getElementById("card-body");
   const roundPill = document.getElementById("round-pill");
+  const puzzleNo = document.getElementById("puzzle-no");
+  const helpBtn = document.getElementById("help-btn");
   const setPill = (t) => { roundPill.textContent = t; };
 
-  // ---- today's puzzle ----
-  function todayISO() {
-    const d = new Date();
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  // ---- dates ----
+  const iso = (d) => {
     const p = (n) => String(n).padStart(2, "0");
     return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-  }
-  const DATE = todayISO();
+  };
+  const parseISO = (s) => new Date(s + "T00:00:00");
+  const addDays = (s, n) => { const d = parseISO(s); d.setDate(d.getDate() + n); return iso(d); };
+  const dayNumber = (s) => Math.round((parseISO(s) - parseISO(CFG.epoch)) / 864e5) + 1;
+  const prettyDate = (s) => parseISO(s).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+  const TODAY = iso(new Date());
+  // ?date=YYYY-MM-DD plays a past puzzle (never a future one)
+  const requested = new URLSearchParams(location.search).get("date");
+  const DATE = requested && requested <= TODAY && DATA.schedule[requested] ? requested : TODAY;
+  const IS_ARCHIVE = DATE !== TODAY;
   const todaysIds = DATA.schedule[DATE];
 
-  // ---- scoring math (mirrors pnwtap/geometry.py) ----
-  const R = 6371.0088;
-  const rad = (x) => (x * Math.PI) / 180;
+  // ---- storage (localStorage may be unavailable: private mode, blocked site data) ----
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* play on */ } },
+    keys() { try { return Object.keys(localStorage); } catch (e) { return []; } },
+  };
+  const KEY = (d) => "pnwtap:" + d;
+  function loadGame(d) {
+    const g = store.get(KEY(d));
+    if (Array.isArray(g)) return { rounds: g, done: true, playedOn: d };   // v1 format
+    return g && Array.isArray(g.rounds) ? g : null;
+  }
 
-  function haversine(a, b) {
-    const dphi = rad(b[0] - a[0]);
-    const dlmb = rad(b[1] - a[1]);
-    const h = Math.sin(dphi / 2) ** 2 +
-      Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(dlmb / 2) ** 2;
-    return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
-  }
-  function project(origin, pt) {
-    return [
-      rad(pt[1] - origin[1]) * Math.cos(rad(origin[0])) * R,
-      rad(pt[0] - origin[0]) * R,
-    ];
-  }
-  function segDist(tap, a, b) {
-    const [ax, ay] = project(tap, a);
-    const [bx, by] = project(tap, b);
-    const dx = bx - ax, dy = by - ay;
-    if (dx === 0 && dy === 0) return Math.hypot(ax, ay);
-    let t = -(ax * dx + ay * dy) / (dx * dx + dy * dy);
-    t = Math.max(0, Math.min(1, t));
-    return Math.hypot(ax + t * dx, ay + t * dy);
-  }
-  function nearestKm(tap, path) {
-    if (path.length === 1) return haversine(tap, path[0]);
-    let best = Infinity;
-    for (let i = 0; i < path.length - 1; i++) {
-      best = Math.min(best, segDist(tap, path[i], path[i + 1]));
-    }
-    return best;
-  }
-  function unproject(origin, x, y) {
-    const lat = origin[0] + (y / R) * 180 / Math.PI;
-    const lng = origin[1] + (x / (R * Math.cos(rad(origin[0])))) * 180 / Math.PI;
-    return [lat, lng];
-  }
-  function nearestPointOnPath(tap, path) {
-    if (path.length === 1) return path[0];
-    let best = Infinity;
-    let bestPt = path[0];
-    for (let i = 0; i < path.length - 1; i++) {
-      const [ax, ay] = project(tap, path[i]);
-      const [bx, by] = project(tap, path[i + 1]);
-      const dx = bx - ax, dy = by - ay;
-      let cx, cy;
-      if (dx === 0 && dy === 0) {
-        cx = ax; cy = ay;
-      } else {
-        let t = -(ax * dx + ay * dy) / (dx * dx + dy * dy);
-        t = Math.max(0, Math.min(1, t));
-        cx = ax + t * dx; cy = ay + t * dy;
-      }
-      const d = Math.hypot(cx, cy);
-      if (d < best) { best = d; bestPt = unproject(tap, cx, cy); }
-    }
-    return bestPt;
-  }
-  const scoreFor = (distKm) => Math.round(100 * Math.exp(-distKm / CFG.D_km));
-
-  // ---- map: coloured terrain + shaded-relief overlay, locked to the region ----
+  // ---- map ----
+  const MASK = DATA.regionMask || [];
   const bb = CFG.bbox; // [minLat, minLng, maxLat, maxLng]
-  const MASK = DATA.regionMask || [];       // region-shaped stencil rings ([lat,lng])
-
-  // Bounds of the play region: the mask's extent if present, else the bbox.
   let regionBounds = L.latLngBounds([bb[0], bb[1]], [bb[2], bb[3]]);
   if (MASK.length) {
     regionBounds = L.latLngBounds(MASK[0]);
     MASK.forEach((ring) => ring.forEach((pt) => regionBounds.extend(pt)));
   }
+  const startBounds = L.latLngBounds(CFG.startBounds);
+  const compact = window.matchMedia("(max-width: 640px)").matches;
 
   const map = L.map("map", {
     minZoom: CFG.minZoom,
     maxZoom: CFG.maxZoom,
-    maxBounds: regionBounds.pad(0.35),   // roomy to roam, but not infinitely
-    maxBoundsViscosity: 0.25,            // soft edge
+    maxBounds: regionBounds.pad(0.35),
+    maxBoundsViscosity: 0.25,
     zoomControl: false,
-  }).setView(CFG.center, CFG.zoom);
-  L.control.zoom({ position: "bottomleft" }).addTo(map);
+    attributionControl: false,
+    zoomSnap: 0.25,
+  });
+  if (!compact) L.control.zoom({ position: "bottomright" }).addTo(map);
+  L.control.attribution({ position: compact ? "topright" : "bottomright", prefix: false })
+    .addAttribution(CFG.tileAttribution).addTo(map);
 
-  // `bounds` clips tile loading to the region box — the stencil below hides
-  // the rectangular corners, and anywhere with no tiles shows #map's colour.
   L.tileLayer(CFG.tileUrl, {
-    attribution: CFG.tileAttribution,
-    bounds: regionBounds,
-    noWrap: true,                        // don't repeat the imagery east–west
-    minZoom: CFG.minZoom,
-    maxZoom: CFG.maxZoom,
+    bounds: regionBounds, noWrap: true, minZoom: CFG.minZoom, maxZoom: CFG.maxZoom,
   }).addTo(map);
 
   if (CFG.hillshadeUrl) {
     map.createPane("hillshade");
     const pane = map.getPane("hillshade");
-    pane.style.zIndex = 250;                 // above base tiles, below markers
-    pane.classList.add("hillshade-pane");    // blends via CSS
+    pane.style.zIndex = 250;
+    pane.classList.add("hillshade-pane");
     L.tileLayer(CFG.hillshadeUrl, { pane: "hillshade", maxZoom: CFG.maxZoom }).addTo(map);
   }
 
-  // Stencil: fill a region-sized rectangle with the frame colour, punching
-  // region-shaped holes so only WA / OR / BC / AB / YT show through in imagery.
-  // Outside the rectangle, #map's background is the same colour, so it's seamless.
-  // The mask lives in the default overlay pane (added before roundLayers, so the
-  // reveal line/markers draw over it) and uses a padded renderer so it stays
-  // rendered — and animates in lockstep with the tiles — during zoom.
+  // Stencil: the frame colour everywhere except region-shaped holes (WA/OR/BC/AB/YT).
   if (MASK.length) {
     const maskRenderer = L.svg({ padding: 3 });
-    // a wide outer ring (well past any viewport) with clamped latitude; the
-    // renderer clips rasterisation to near the view, so this stays cheap
     const outN = Math.min(85, regionBounds.getNorth() + 25);
     const outS = Math.max(-85, regionBounds.getSouth() - 25);
     const outW = regionBounds.getWest() - 50;
     const outE = regionBounds.getEast() + 50;
     const outer = [[outN, outW], [outN, outE], [outS, outE], [outS, outW]];
-    // frame fill with region-shaped holes (no stroke, so the rectangle is invisible)
     L.polygon([outer].concat(MASK), {
       renderer: maskRenderer, stroke: false,
       fill: true, fillColor: "#2b352e", fillOpacity: 1, interactive: false,
     }).addTo(map);
-    // trace just the region outline in a soft tan
     L.polygon(MASK, {
       renderer: maskRenderer, fill: false,
       stroke: true, color: "#e2c48b", weight: 1, opacity: 0.5, interactive: false,
@@ -146,178 +101,313 @@
 
   const roundLayers = L.layerGroup().addTo(map);
 
-  const guessIcon = L.divIcon({
+  const guessIcon = (label) => L.divIcon({
     className: "guess-marker",
-    html: '<span class="guess-dot"></span>',
+    html: `<span class="guess-dot">${label || ""}</span>`,
     iconSize: [22, 22], iconAnchor: [11, 11],
   });
-  const answerIcon = () => L.divIcon({
+  const answerIcon = (pulse) => L.divIcon({
     className: "answer-marker",
-    html: '<span class="answer-ring"></span><span class="answer-dot"></span>',
+    html: (pulse ? '<span class="answer-ring"></span>' : "") + '<span class="answer-dot"></span>',
     iconSize: [22, 22], iconAnchor: [11, 11],
   });
 
-  // ---- state ----
-  const results = [];       // {score, mult, difficulty, name}
-  let roundIdx = 0;
-  let tapMarker = null;
-  let tapLatLng = null;
+  // Keep revealed features clear of the floating card.
+  function framePadding() {
+    const r = card.getBoundingClientRect();
+    const H = window.innerHeight;
+    const m = 36;
+    if (r.right < window.innerWidth / 2) {           // wide screens: card docked on the left
+      return { paddingTopLeft: [r.right + m, m], paddingBottomRight: [m, m] };
+    }
+    const sheet = r.bottom >= H - 2;                 // phone bottom sheet vs. floating top card
+    const covered = Math.min(sheet ? H - r.top : r.bottom, H - 140);   // always leave some map
+    return sheet
+      ? { paddingTopLeft: [m, m], paddingBottomRight: [m, covered + m / 2] }
+      : { paddingTopLeft: [m, covered + m / 2], paddingBottomRight: [m, m] };
+  }
+  function frame(bounds, opts) {
+    map.flyToBounds(bounds, Object.assign(framePadding(), { duration: 0.7, maxZoom: 10 }, opts));
+  }
+  const resetView = () => map.fitBounds(startBounds, Object.assign(framePadding(), { animate: false }));
 
+  // ---- keyboard: Enter presses the card's primary button ----
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" || !helpEl.hidden || e.target.closest?.("button, a, input")) return;
+    const btn = cardBody.querySelector("button.primary:not(:disabled)");
+    if (btn) { e.preventDefault(); btn.click(); }
+  });
+
+  const CAT_LABEL = { poi: "landmark" };
+
+  // ---- scoring helpers ----
+  const total = (rounds) => rounds.reduce((s, r) => s + r.score * r.mult, 0);
+  const fmtKm = (km) => (km < 1 ? km.toFixed(1) : km < 10 ? km.toFixed(1).replace(/\.0$/, "") : Math.round(km)) + " km";
+  function verdict(score) {
+    if (score >= 99) return "Bullseye! 🎯";
+    if (score >= 90) return "Nailed it";
+    if (score >= 70) return "So close";
+    if (score >= 40) return "Right neighbourhood";
+    if (score >= 15) return "In the ballpark";
+    return "Way off";
+  }
+  const maxScore = 100 * CFG.multipliers.reduce((a, b) => a + b, 0);
+
+  // ---- help overlay ----
+  const helpEl = document.getElementById("help");
+  function openHelp() {
+    helpEl.hidden = false;
+    helpEl.querySelector("button").focus({ preventScroll: true });
+  }
+  function closeHelp() {
+    helpEl.hidden = true;
+    store.set("pnwtap-help-seen", 1);
+  }
+  document.getElementById("help-tiers").textContent =
+    CFG.ramp.map((t, i) => `${CFG.emoji[t]} ×${CFG.multipliers[i]}`).join("  ");
+  helpEl.querySelector("button").onclick = closeHelp;
+  helpEl.onclick = (e) => { if (e.target === helpEl) closeHelp(); };
+  helpBtn.onclick = openHelp;
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !helpEl.hidden) closeHelp(); });
+
+  // ---- game ----
   if (!todaysIds) {
-    setPill("");
+    resetView();
     cardBody.innerHTML = '<p class="msg">No puzzle scheduled for today — check back another day!</p>';
     return;
   }
 
-  function resetRoundLayers() {
+  puzzleNo.textContent = `#${dayNumber(DATE)}` + (IS_ARCHIVE ? ` · ${prettyDate(DATE)}` : "");
+  const game = loadGame(DATE) || { rounds: [], done: false };
+  const save = () => store.set(KEY(DATE), game);
+
+  function startRound() {
     roundLayers.clearLayers();
-    tapMarker = null;
-    tapLatLng = null;
-  }
-
-  // ---- guess view ----
-  function renderGuess(loc) {
+    const roundIdx = game.rounds.length;
+    const loc = DATA.locations[todaysIds[roundIdx]];
+    const mult = CFG.multipliers[roundIdx];
     setPill(`${roundIdx + 1} / ${todaysIds.length}`);
-    const ask = loc.image
-      ? '<p class="ask">Tap as close as you can to <strong>this place</strong>.</p>' +
-        `<img class="prompt-img" src="${loc.image}" alt="Where is this?">`
-      : `<p class="ask">Tap as close as you can to <strong>${loc.name}</strong>.</p>`;
-    cardBody.innerHTML = ask + '<button id="lock" disabled>Lock in guess</button>';
-    const lockBtn = document.getElementById("lock");
 
-    function onClick(e) {
-      tapLatLng = [e.latlng.lat, e.latlng.lng];
-      if (!tapMarker) {
-        tapMarker = L.marker(e.latlng, { icon: guessIcon, draggable: true }).addTo(roundLayers);
-        tapMarker.on("dragend", () => {
-          const p = tapMarker.getLatLng();
-          tapLatLng = [p.lat, p.lng];
-        });
+    const icon = CFG.categories[loc.category] || "📍";
+    const label = `<span class="cat">${icon} ${esc(CAT_LABEL[loc.category] || loc.category)}</span>`;
+    const line = loc.geometry.length > 1 ? '<p class="hint">Anywhere along it counts.</p>' : "";
+    const ask = loc.image
+      ? `<p class="ask">Where is <strong>this place</strong>?</p>${label}` +
+        `<img class="prompt-img" src="${esc(loc.image)}" alt="Photo of the mystery location">`
+      : `<p class="ask"><strong>${esc(loc.name)}</strong></p>${label}${line}`;
+    cardBody.innerHTML =
+      `<div class="round-meta"><span>${CFG.emoji[loc.difficulty]} ${esc(loc.difficulty)} · ×${mult}</span>` +
+      `<span>${total(game.rounds)} pts so far</span></div>` + ask +
+      '<button class="primary" id="lock" disabled>Tap the map</button>';
+    const lockBtn = document.getElementById("lock");
+    resetView();   // after the card is filled, so the framing knows its size
+
+    let tap = null;
+    let marker = null;
+    function place(latlng) {
+      tap = [latlng.lat, latlng.lng];
+      if (!marker) {
+        marker = L.marker(latlng, { icon: guessIcon(), draggable: true, autoPan: true }).addTo(roundLayers);
+        marker.on("dragend", () => place(marker.getLatLng()));
       } else {
-        tapMarker.setLatLng(e.latlng);
+        marker.setLatLng(latlng);
       }
       lockBtn.disabled = false;
+      lockBtn.textContent = "Lock in guess";
     }
+    const onClick = (e) => place(e.latlng);
     map.on("click", onClick);
 
     lockBtn.onclick = () => {
-      if (!tapLatLng) return;
+      if (!tap) return;
       map.off("click", onClick);
-      if (tapMarker && tapMarker.dragging) tapMarker.dragging.disable();
-      lockRound(loc);
+      if (marker.dragging) marker.dragging.disable();
+      const near = S.nearest(tap, loc.geometry);
+      const score = S.score(near.km, CFG.D_km);
+      const r = {
+        i: todaysIds[roundIdx], name: loc.name, difficulty: loc.difficulty,
+        mult, km: near.km, score, guess: tap, point: near.point,
+      };
+      game.rounds.push(r);
+      if (game.rounds.length === todaysIds.length) { game.done = true; game.playedOn = TODAY; }
+      save();
+      animateReveal(r, loc);
+      renderResult(r, loc);
     };
   }
 
-  function startRound() {
-    resetRoundLayers();
-    map.setView(CFG.center, CFG.zoom, { animate: false });
-    renderGuess(DATA.locations[todaysIds[roundIdx]]);
-  }
-
-  // ---- reveal: MapTap-style line that draws from the guess to the truth ----
-  function animateReveal(from, loc, nearPt) {
-    // outline linear features (rivers/roads/traverses); mark the true point
+  // ---- reveal: a line that draws from the guess to the truth ----
+  function drawAnswer(loc, point, pulse) {
     if (loc.geometry.length > 1) {
-      L.polyline(loc.geometry, { color: "#c0392b", weight: 4, opacity: 0.9 }).addTo(roundLayers);
+      L.polyline(loc.geometry, { color: "#c0392b", weight: 4, opacity: 0.9, interactive: false }).addTo(roundLayers);
     }
-    L.marker(nearPt, { icon: answerIcon(), interactive: false, zIndexOffset: 1000 }).addTo(roundLayers);
-
-    // the connector, starting as a zero-length line at the guess
+    L.marker(point, { icon: answerIcon(pulse), interactive: false, zIndexOffset: 1000 }).addTo(roundLayers);
+  }
+  function animateReveal(r, loc) {
+    drawAnswer(loc, r.point, true);
+    const from = r.guess, to = r.point;
     const line = L.polyline([from, from], {
-      color: "#2f523e", weight: 4, opacity: 0.95, lineCap: "round",
+      color: "#f4c542", weight: 4, opacity: 0.95, lineCap: "round", interactive: false,
     }).addTo(roundLayers);
 
-    // frame both points, THEN grow the line once the map has settled
-    const bounds = L.latLngBounds([from, nearPt]);
+    const bounds = L.latLngBounds([from, to]);
     if (loc.geometry.length > 1) loc.geometry.forEach((p) => bounds.extend(p));
-    map.flyToBounds(bounds.pad(0.45), { duration: 0.7, maxZoom: 10 });
+    frame(bounds);
 
-    setTimeout(function grow() {
-      const startT = performance.now();
-      const DUR = 700;
-      (function frame(now) {
-        const t = Math.min(1, (now - startT) / DUR);
-        const e = 1 - Math.pow(1 - t, 3);   // easeOutCubic
-        line.setLatLngs([from, [
-          from[0] + (nearPt[0] - from[0]) * e,
-          from[1] + (nearPt[1] - from[1]) * e,
-        ]]);
-        if (t < 1) requestAnimationFrame(frame);
-      })(performance.now());
+    setTimeout(() => {
+      const t0 = performance.now();
+      (function step(now) {
+        const t = Math.min(1, (now - t0) / 700);
+        const e = 1 - Math.pow(1 - t, 3);
+        line.setLatLngs([from, [from[0] + (to[0] - from[0]) * e, from[1] + (to[1] - from[1]) * e]]);
+        if (t < 1) requestAnimationFrame(step);
+      })(t0);
     }, 720);
   }
 
-  // ---- result view (replaces the guess view in the same card) ----
-  function renderResult(loc, dist, score, mult, last) {
-    setPill(`${roundIdx + 1} / ${todaysIds.length}`);
-    const tier = CFG.emoji[loc.difficulty] || "";
+  function renderResult(r, loc) {
+    setPill(`${game.rounds.length} / ${todaysIds.length}`);
+    const last = game.done;
     cardBody.innerHTML =
-      `<p class="result-name">${loc.name} <span class="tier">${tier}</span></p>` +
-      `<p class="result-score"><b>${Math.round(dist)} km</b> off · ` +
-        `<b>${score}</b> × ${mult} = <span class="pts">${score * mult}</span></p>` +
-      (loc.image ? `<img class="reveal-img" src="${loc.image}" alt="">` : "") +
-      (loc.blurb ? `<p class="reveal-blurb">${loc.blurb}</p>` : "") +
-      `<button id="next">${last ? "See results" : "Next round"}</button>`;
-    document.getElementById("next").onclick = () => {
-      roundIdx += 1;
-      if (roundIdx < todaysIds.length) startRound();
-      else finish();
+      `<p class="verdict">${verdict(r.score)}</p>` +
+      `<p class="result-name">${esc(loc.name)} <span class="tier">${CFG.emoji[loc.difficulty] || ""}</span></p>` +
+      `<p class="result-score"><b>${fmtKm(r.km)}</b> off · <b>${r.score}</b> × ${r.mult} = ` +
+        `<span class="pts">${r.score * r.mult}</span></p>` +
+      (loc.image ? `<img class="reveal-img" src="${esc(loc.image)}" alt="">` : "") +
+      (loc.blurb ? `<p class="reveal-blurb">${esc(loc.blurb)}</p>` : "") +
+      `<button class="primary" id="next">${last ? "See results" : "Next round"}</button>`;
+    document.getElementById("next").onclick = () => (last ? renderFinal(true) : startRound());
+    document.getElementById("next").focus({ preventScroll: true });
+  }
+
+  // ---- finish: summary map, breakdown, stats, share ----
+  function shareText() {
+    const parts = game.rounds.map((r) => `${r.score}${CFG.emoji[r.difficulty]}`).join(" ");
+    return `pnwtap #${dayNumber(DATE)} · ${prettyDate(DATE)}\n${parts}\nFinal ${total(game.rounds)}/${maxScore}\n` +
+      location.origin + location.pathname;
+  }
+
+  function stats() {
+    const games = store.keys()
+      .filter((k) => /^pnwtap:\d{4}-\d{2}-\d{2}$/.test(k))
+      .map((k) => [k.slice(7), loadGame(k.slice(7))])
+      .filter(([, g]) => g && g.done);
+    const scores = games.map(([, g]) => total(g.rounds));
+    const onTime = new Set(games.filter(([d, g]) => (g.playedOn || d) === d).map(([d]) => d));
+    let streak = 0;
+    for (let d = onTime.has(TODAY) ? TODAY : addDays(TODAY, -1); onTime.has(d); d = addDays(d, -1)) streak++;
+    let best = 0, run = 0;
+    [...onTime].sort().forEach((d, i, a) => { run = i && addDays(a[i - 1], 1) === d ? run + 1 : 1; best = Math.max(best, run); });
+    return {
+      played: games.length,
+      avg: scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0,
+      top: scores.length ? Math.max(...scores) : 0,
+      streak, best,
     };
   }
 
-  function lockRound(loc) {
-    const dist = nearestKm(tapLatLng, loc.geometry);
-    const score = scoreFor(dist);
-    const mult = CFG.multipliers[roundIdx];
-    results.push({ score, mult, difficulty: loc.difficulty, name: loc.name });
-
-    const nearPt = nearestPointOnPath(tapLatLng, loc.geometry);
-    animateReveal(tapLatLng, loc, nearPt);
-    renderResult(loc, dist, score, mult, roundIdx === todaysIds.length - 1);
+  function drawSummary() {
+    roundLayers.clearLayers();
+    const bounds = L.latLngBounds([]);
+    game.rounds.forEach((r, n) => {
+      const loc = DATA.locations[r.i] || { geometry: [r.point] };
+      drawAnswer(loc, r.point, false);
+      L.polyline([r.guess, r.point], { color: "#f4c542", weight: 3, opacity: 0.9, dashArray: "6 6", interactive: false })
+        .addTo(roundLayers);
+      L.marker(r.guess, { icon: guessIcon(n + 1), interactive: false }).addTo(roundLayers);
+      bounds.extend(r.guess).extend(r.point);
+    });
+    return bounds;
   }
 
-  // ---- finish / share ----
-  function prettyDate() {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const d = new Date(DATE + "T00:00:00");
-    return `${months[d.getMonth()]} ${d.getDate()}`;
-  }
-  function shareString() {
-    const parts = results.map((r) => `${r.score}${CFG.emoji[r.difficulty]}`);
-    const total = results.reduce((s, r) => s + r.score * r.mult, 0);
-    return `pnwtap ${prettyDate()} · ${parts.join(" ")} · Final ${total}`;
+  function countUp(el, to) {
+    const t0 = performance.now();
+    (function step(now) {
+      const t = Math.min(1, (now - t0) / 900);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - t, 3)));
+      if (t < 1) requestAnimationFrame(step);
+    })(t0);
   }
 
-  function finish() {
-    localStorage.setItem("pnwtap:" + DATE, JSON.stringify(results));
-    renderFinal();
-  }
-
-  function renderFinal() {
-    resetRoundLayers();
+  let tick = null;
+  function renderFinal(fresh) {
     setPill("");
-    map.flyTo(CFG.center, CFG.zoom, { duration: 0.6 });
-    const total = results.reduce((s, r) => s + r.score * r.mult, 0);
-    const share = shareString();
+    const bounds = drawSummary();
+    if (bounds.isValid()) setTimeout(() => frame(bounds, { maxZoom: 9 }), 50);
+
+    const score = total(game.rounds);
+    const st = stats();
+    const rows = game.rounds.map((r, n) =>
+      `<li data-n="${n}"><span class="rn">${n + 1}</span><span class="rname">${CFG.emoji[r.difficulty]} ${esc(r.name)}</span>` +
+      `<span class="rkm">${fmtKm(r.km)}</span><span class="rpts">${r.score * r.mult}</span></li>`).join("");
+    const yesterday = addDays(DATE, -1);
+    const missed = !IS_ARCHIVE && DATA.schedule[yesterday] && !(loadGame(yesterday) || {}).done
+      ? `<a class="archive-link" href="?date=${yesterday}">Missed yesterday? Play #${dayNumber(yesterday)} →</a>` : "";
+    const back = IS_ARCHIVE ? '<a class="archive-link" href="./">Back to today’s puzzle →</a>' : "";
+
     cardBody.innerHTML =
-      '<p class="final">Final score</p>' +
-      `<div class="final-score">${total} <span>/ 1000</span></div>` +
-      `<pre id="share">${share}</pre>` +
-      '<button id="copy">Copy result</button>';
-    const copyBtn = document.getElementById("copy");
-    copyBtn.onclick = () => {
-      navigator.clipboard.writeText(share)
-        .then(() => { copyBtn.textContent = "Copied!"; })
-        .catch(() => { copyBtn.textContent = "Select the text above to copy"; });
+      `<div class="final-head"><div><p class="final">Final score</p>` +
+      `<div class="final-score"><span id="final-n">${fresh ? 0 : score}</span><small> / ${maxScore}</small></div></div>` +
+      `<div class="next-in"><p class="final">Next puzzle</p><div id="countdown">–</div></div></div>` +
+      `<ol class="breakdown">${rows}</ol>` +
+      '<button class="primary" id="share">Share result</button>' +
+      '<div class="stats">' +
+        `<div><b>${st.played}</b><span>played</span></div>` +
+        `<div><b>${st.avg}</b><span>average</span></div>` +
+        `<div><b>${st.top}</b><span>best</span></div>` +
+        `<div><b>${st.streak}</b><span>streak</span></div>` +
+      "</div>" + missed + back;
+    if (fresh) countUp(document.getElementById("final-n"), score);
+
+    // tap a row to fly to that round
+    cardBody.querySelectorAll(".breakdown li").forEach((li) => {
+      li.onclick = () => {
+        const r = game.rounds[+li.dataset.n];
+        const loc = DATA.locations[r.i] || { geometry: [r.point] };
+        const b = L.latLngBounds([r.guess, r.point]);
+        loc.geometry.forEach((p) => b.extend(p));
+        frame(b, { maxZoom: 11 });
+      };
+    });
+
+    const shareBtn = document.getElementById("share");
+    shareBtn.onclick = async () => {
+      const text = shareText();
+      const touch = window.matchMedia("(pointer: coarse)").matches;
+      try {
+        if (touch && navigator.share) { await navigator.share({ text }); return; }
+        await navigator.clipboard.writeText(text);
+        shareBtn.textContent = "Copied to clipboard!";
+      } catch (e) {
+        if (e && e.name === "AbortError") return;   // user closed the share sheet
+        const box = document.createElement("textarea");
+        box.className = "share-box";
+        box.readOnly = true;
+        box.value = text;
+        box.rows = text.split("\n").length;
+        shareBtn.replaceWith(box);
+        box.focus();
+        box.select();
+      }
     };
+
+    const cd = document.getElementById("countdown");
+    clearInterval(tick);
+    const upd = () => {
+      const now = new Date();
+      const mid = new Date(now); mid.setHours(24, 0, 0, 0);
+      const s = Math.max(0, Math.floor((mid - now) / 1000));
+      if (s === 0 && !IS_ARCHIVE) { location.reload(); return; }
+      cd.textContent = [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60]
+        .map((n) => String(n).padStart(2, "0")).join(":");
+    };
+    upd();
+    tick = setInterval(upd, 1000);
   }
 
-  // ---- resume if already played today ----
-  const saved = localStorage.getItem("pnwtap:" + DATE);
-  if (saved) {
-    results.push(...JSON.parse(saved));
-    renderFinal();
-  } else {
-    startRound();
-  }
+  // ---- go: finished → summary; otherwise the next unplayed round (locked guesses stay locked) ----
+  resetView();
+  if (game.done) renderFinal(false);
+  else startRound();
+  if (!store.get("pnwtap-help-seen") && !game.rounds.length) openHelp();
 })();
