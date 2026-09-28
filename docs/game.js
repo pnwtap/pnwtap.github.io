@@ -146,7 +146,7 @@
 
   // ---- keyboard: Enter presses the card's primary button ----
   document.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter" || !helpEl.hidden || e.target.closest?.("button, a, input")) return;
+    if (e.key !== "Enter" || !helpEl.hidden || e.target.closest?.("button, a, input, select")) return;
     const btn = cardBody.querySelector("button.primary:not(:disabled)");
     if (btn) { e.preventDefault(); btn.click(); }
   });
@@ -155,7 +155,9 @@
 
   // ---- scoring helpers ----
   const total = (rounds) => rounds.reduce((s, r) => s + r.score * r.mult, 0);
-  const fmtKm = (km) => (km < 1 ? km.toFixed(1) : km < 10 ? km.toFixed(1).replace(/\.0$/, "") : Math.round(km)) + " km";
+  const fmtKm = (km) => (km == null ? "–"
+    : (km < 1 ? km.toFixed(1) : km < 10 ? km.toFixed(1).replace(/\.0$/, "") : Math.round(km)) + " km");
+  const offBy = (km) => (km === 0 ? "<b>Inside it</b>" : `<b>${fmtKm(km)}</b> off`);
   function verdict(score) {
     if (score >= 99) return "Bullseye! 🎯";
     if (score >= 90) return "Nailed it";
@@ -256,7 +258,7 @@
         const flat = S.score(near.km, CFG.D_km);
         animateReveal({ guess: tap, point: near.point }, loc);
         document.getElementById("pt-out").innerHTML =
-          `<p class="result-score"><b>${fmtKm(near.km)}</b> off · <b>${sc}</b> / 100` +
+          `<p class="result-score">${offBy(near.km)} · <b>${sc}</b> / 100` +
           (loc.d_km !== CFG.D_km ? ` <span class="pt-flat">(${flat} with the point decay)</span>` : "") + "</p>" +
           (loc.blurb ? `<p class="reveal-blurb">${esc(loc.blurb)}</p>` : "");
         lockBtn.textContent = "Next location";
@@ -372,7 +374,7 @@
     cardBody.innerHTML =
       `<p class="verdict">${verdict(r.score)}</p>` +
       `<p class="result-name">${esc(loc.name)} <span class="tier">${CFG.emoji[loc.difficulty] || ""}</span></p>` +
-      `<p class="result-score"><b>${fmtKm(r.km)}</b> off · <b>${r.score}</b> × ${r.mult} = ` +
+      `<p class="result-score">${offBy(r.km)} · <b>${r.score}</b> × ${r.mult} = ` +
         `<span class="pts">${r.score * r.mult}</span></p>` +
       (loc.image ? `<img class="reveal-img" src="${esc(loc.image)}" alt="">` : "") +
       (loc.blurb ? `<p class="reveal-blurb">${esc(loc.blurb)}</p>` : "") +
@@ -397,13 +399,11 @@
     const onTime = new Set(games.filter(([d, g]) => (g.playedOn || d) === d).map(([d]) => d));
     let streak = 0;
     for (let d = onTime.has(TODAY) ? TODAY : addDays(TODAY, -1); onTime.has(d); d = addDays(d, -1)) streak++;
-    let best = 0, run = 0;
-    [...onTime].sort().forEach((d, i, a) => { run = i && addDays(a[i - 1], 1) === d ? run + 1 : 1; best = Math.max(best, run); });
     return {
       played: games.length,
       avg: scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0,
       top: scores.length ? Math.max(...scores) : 0,
-      streak, best,
+      streak,
     };
   }
 
@@ -411,6 +411,7 @@
     roundLayers.clearLayers();
     const bounds = L.latLngBounds([]);
     game.rounds.forEach((r, n) => {
+      if (!r.guess || !r.point) return;                 // saved by the first version: score only
       const loc = DATA.locations[r.i] || { geometry: [r.point] };
       drawAnswer(loc, r.point, false);
       L.polyline([r.guess, r.point], { color: "#f4c542", weight: 3, opacity: 0.9, dashArray: "6 6", interactive: false })
@@ -431,6 +432,7 @@
   }
 
   let tick = null;
+  let reloadAt = null;   // today's puzzle page flips to the new puzzle just after midnight
   function renderFinal(fresh) {
     setPill("");
     const bounds = drawSummary();
@@ -464,6 +466,7 @@
     cardBody.querySelectorAll(".breakdown li").forEach((li) => {
       li.onclick = () => {
         const r = game.rounds[+li.dataset.n];
+        if (!r.guess || !r.point) return;
         const loc = DATA.locations[r.i] || { geometry: [r.point] };
         const b = L.latLngBounds([r.guess, r.point]);
         loc.geometry.forEach((p) => b.extend(p));
@@ -493,17 +496,16 @@
     };
 
     const cd = document.getElementById("countdown");
+    const midnight = new Date(); midnight.setHours(24, 0, 0, 0);
     clearInterval(tick);
     const upd = () => {
-      const now = new Date();
-      const mid = new Date(now); mid.setHours(24, 0, 0, 0);
-      const s = Math.max(0, Math.floor((mid - now) / 1000));
-      if (s === 0 && !IS_ARCHIVE) { location.reload(); return; }
+      const s = Math.max(0, Math.floor((midnight - new Date()) / 1000));
       cd.textContent = [Math.floor(s / 3600), Math.floor(s / 60) % 60, s % 60]
         .map((n) => String(n).padStart(2, "0")).join(":");
     };
     upd();
     tick = setInterval(upd, 1000);
+    if (!IS_ARCHIVE && !reloadAt) reloadAt = setTimeout(() => location.reload(), midnight - new Date() + 1500);
   }
 
   // ---- go: finished → summary; otherwise the next unplayed round (locked guesses stay locked) ----
