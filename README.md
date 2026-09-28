@@ -27,7 +27,8 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb`.
   - one point = a point (peak, town, crag);
   - several = a line (river, road, traverse) scored by distance to its nearest part;
   - several with the **last point equal to the first** = an area (lake, island, park): a tap
-    inside scores 100.
+    inside scores 100. Exception: for routes (`traverse / hike / road / river / climb`) a closed
+    ring is just a loop — the Timberline Trail scores along the trail, not across Mt Hood.
 
   Bigger features get a tighter score decay (`geometry.decay_km`): the zone where you'd score ≥ 37
   is the same size as for a single peak, so a 900 km river doesn't hand out points for tapping
