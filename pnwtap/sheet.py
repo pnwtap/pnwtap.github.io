@@ -5,9 +5,12 @@ from dataclasses import dataclass
 
 import requests
 
-from pnwtap.geometry import in_region, parse_geometry, within_bbox
+from pnwtap.geometry import in_region, is_closed, parse_geometry, within_bbox
 
 DIFFICULTIES = {"easy", "medium", "hard"}
+# Routes stay lines even when they loop back to the start (Timberline Trail, Magic S Loop);
+# a closed ring in any other category (lake, island, park...) is an area.
+ROUTE_CATEGORIES = {"traverse", "hike", "road", "river", "climb"}
 
 
 @dataclass
@@ -18,6 +21,15 @@ class Location:
     geometry: list[tuple[float, float]]
     image: str | None
     blurb: str
+
+    @property
+    def kind(self) -> str:
+        """"point", "line", or "area" — how the location is scored and drawn."""
+        if len(self.geometry) == 1:
+            return "point"
+        if is_closed(self.geometry) and self.category not in ROUTE_CATEGORIES:
+            return "area"
+        return "line"
 
 
 def parse_locations(csv_text: str, bbox, categories=None, region=None) -> list[Location]:

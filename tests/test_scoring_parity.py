@@ -21,15 +21,16 @@ def _cases():
         [(48.09, -121.62), (48.06, -121.47), (47.93, -121.09)],        # Mountain Loop Hwy
         [(51.68, -116.45), (51.60, -116.40), (51.53, -116.34)],        # Wapta
         [(60.72, -135.05), (64.06, -139.43)],                          # long northern line
-        [(49.9, -119.6), (50.3, -119.4), (49.5, -119.5), (49.9, -119.6)],  # area (closed ring)
+        [(49.9, -119.6), (50.3, -119.4), (49.5, -119.5), (49.9, -119.6)],  # closed ring
     ]
     cases = []
     for path in paths:
-        for _ in range(25):
-            tap = (rng.uniform(42, 62), rng.uniform(-138, -112))
-            cases.append((tap, path))
-        cases.append((path[0], path))                                   # bullseye
-    cases.append(((49.9, -119.5), paths[-1]))                           # inside the area
+        for area in ([False, True] if len(path) >= 4 else [False]):   # ring as a loop route and as an area
+            for _ in range(25):
+                tap = (rng.uniform(42, 62), rng.uniform(-138, -112))
+                cases.append((tap, path, area))
+            cases.append((path[0], path, area))                         # bullseye
+            cases.append(((49.9, -119.5), path, area))                  # inside the ring
     return cases
 
 
@@ -39,11 +40,12 @@ def test_js_scoring_matches_python():
     script = (
         f"const S = require({json.dumps(str(SCORING_JS))});"
         f"const cases = {json.dumps(cases)};"
-        f"console.log(JSON.stringify(cases.map(([t, p]) => {{"
-        f"  const n = S.nearest(t, p); return [n.km, S.score(n.km, {config.D_KM})]; }})));"
+        f"console.log(JSON.stringify(cases.map(([t, p, a]) => {{"
+        f"  const n = S.nearest(t, p, a); return [n.km, S.score(n.km, {config.D_KM})]; }})));"
     )
     out = json.loads(subprocess.run(["node", "-e", script], capture_output=True, text=True, check=True).stdout)
-    for (tap, path), (js_km, js_score) in zip(cases, out):
-        py_km = nearest_point_km(tap, path)
+    assert len(out) == len(cases)
+    for (tap, path, area), (js_km, js_score) in zip(cases, out):
+        py_km = nearest_point_km(tap, path, area=area)
         assert js_km == pytest.approx(py_km, rel=1e-9, abs=1e-9)
         assert js_score == round(100 * math.exp(-py_km / config.D_KM))

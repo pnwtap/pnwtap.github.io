@@ -78,3 +78,16 @@ def test_rejects_point_outside_region_mask():
     assert [l.name for l in ok] == ["Mt Baker"]
     with pytest.raises(ValueError, match="Wapta.*region"):
         parse_locations(GOOD_CSV, BBOX, region=square)
+
+
+def test_kind_point_line_area_and_loop_route():
+    ring = '"49.0,-120.0; 49.0,-119.0; 50.0,-119.0; 49.0,-120.0"'
+    csv = (
+        "name,category,difficulty,geometry,image,blurb\r\n"
+        'Pt,peak,easy,"48.0,-121.0",,x\r\n'
+        'Ln,river,easy,"48.0,-121.0; 48.5,-121.0",,x\r\n'
+        f"Lk,lake,easy,{ring},,x\r\n"
+        f"Loop,traverse,easy,{ring},,x\r\n"
+    )
+    kinds = {l.name: l.kind for l in parse_locations(csv, BBOX)}
+    assert kinds == {"Pt": "point", "Ln": "line", "Lk": "area", "Loop": "line"}

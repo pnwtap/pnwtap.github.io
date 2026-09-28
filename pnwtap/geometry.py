@@ -21,7 +21,7 @@ def parse_geometry(s: str) -> list[tuple[float, float]]:
 
 
 # NOTE: static/scoring.js mirrors haversine_km / nearest_point_km (incl. the area
-# rule). Change both in lockstep — tests/test_scoring_parity.py checks them.
+# case). Change both in lockstep — tests/test_scoring_parity.py checks them.
 def haversine_km(a: tuple[float, float], b: tuple[float, float]) -> float:
     """Great-circle distance in km between two (lat, lng) points."""
     lat1, lat2 = math.radians(a[0]), math.radians(b[0])
@@ -50,18 +50,18 @@ def _segment_dist_km(tap: tuple[float, float], a: tuple[float, float], b: tuple[
     return math.hypot(ax + t * dx, ay + t * dy)
 
 
-def is_area(path: list[tuple[float, float]]) -> bool:
-    """A closed ring (first point == last, 4+ points) is an area: a lake, island, or park."""
+def is_closed(path: list[tuple[float, float]]) -> bool:
+    """A closed ring: 4+ points with the last equal to the first."""
     return len(path) >= 4 and tuple(path[0]) == tuple(path[-1])
 
 
-def nearest_point_km(tap: tuple[float, float], path: list[tuple[float, float]]) -> float:
-    """Distance in km from `tap` to `path`: a point, a polyline, or an area (0 inside)."""
+def nearest_point_km(tap: tuple[float, float], path: list[tuple[float, float]], area: bool = False) -> float:
+    """Distance in km from `tap` to `path` (a point or polyline); for an `area`, 0 inside the ring."""
     if not path:
         raise ValueError("empty path")
     if len(path) == 1:
         return haversine_km(tap, path[0])
-    if is_area(path) and in_region(tap, [path]):
+    if area and in_region(tap, [path]):
         return 0.0
     return min(_segment_dist_km(tap, path[i], path[i + 1]) for i in range(len(path) - 1))
 
@@ -76,15 +76,15 @@ def length_km(path: list[tuple[float, float]]) -> float:
 
 
 def area_km2(path: list[tuple[float, float]]) -> float:
-    """Planar (shoelace) area of a closed ring, in km²; 0 for points and lines."""
-    if not is_area(path):
+    """Planar (shoelace) area of a closed ring, in km²; 0 for anything not closed."""
+    if not is_closed(path):
         return 0.0
     c = _centroid(path)
     xy = [_project(c, p) for p in path]
     return abs(sum(x1 * y2 - x2 * y1 for (x1, y1), (x2, y2) in zip(xy, xy[1:]))) / 2
 
 
-def decay_km(path: list[tuple[float, float]], base_km: float, floor_km: float) -> float:
+def decay_km(path: list[tuple[float, float]], base_km: float, floor_km: float, area: bool = False) -> float:
     """Score decay distance for this feature, calibrated so a big feature isn't a freebie.
 
     The zone where you score >= 37 (within one decay distance) should cover the same
@@ -94,8 +94,8 @@ def decay_km(path: list[tuple[float, float]], base_km: float, floor_km: float) -
     """
     if len(path) == 1:
         return base_km
-    a = area_km2(path)
-    p = length_km(path) if is_area(path) else 2 * length_km(path)  # a line's zone has two sides
+    a = area_km2(path) if area else 0.0
+    p = length_km(path) if area else 2 * length_km(path)  # a line's zone has two sides
     target = math.pi * base_km ** 2 - a
     if target <= 0:
         return floor_km

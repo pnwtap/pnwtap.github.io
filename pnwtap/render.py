@@ -19,7 +19,8 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
             "geometry": [[lat, lng] for (lat, lng) in loc.geometry],
             "image": image_map.get(idx),
             "blurb": loc.blurb,
-            "d_km": round(decay_km(loc.geometry, config.D_KM, config.D_MIN_KM), 2),
+            "kind": loc.kind,
+            "d_km": round(decay_km(loc.geometry, config.D_KM, config.D_MIN_KM, area=loc.kind == "area"), 2),
         })
     return {
         "locations": locs,

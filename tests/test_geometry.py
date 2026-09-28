@@ -77,20 +77,29 @@ def test_in_region_real_mask_contains_sample_places():
 
 
 # ---- areas & size-calibrated decay ----
-from pnwtap.geometry import area_km2, decay_km, is_area
+from pnwtap.geometry import area_km2, decay_km, is_closed
 
 SQUARE = [(49.0, -120.0), (49.0, -119.0), (50.0, -119.0), (50.0, -120.0), (49.0, -120.0)]
 
 
-def test_closed_ring_is_area_and_inside_scores_zero():
-    assert is_area(SQUARE)
-    assert not is_area(SQUARE[:-1])
-    assert nearest_point_km((49.5, -119.5), SQUARE) == 0.0
-    assert nearest_point_km((49.5, -118.9), SQUARE) == pytest.approx(7.2, abs=0.3)
+def test_area_scores_zero_inside_but_a_loop_does_not():
+    assert is_closed(SQUARE)
+    assert not is_closed(SQUARE[:-1])
+    assert nearest_point_km((49.5, -119.5), SQUARE, area=True) == 0.0
+    assert nearest_point_km((49.5, -119.5), SQUARE) == pytest.approx(36.4, abs=0.5)   # loop: to the edge
+    assert nearest_point_km((49.5, -118.9), SQUARE, area=True) == pytest.approx(7.2, abs=0.3)
 
 
 def test_area_km2_of_one_degree_square():
     assert area_km2(SQUARE) == pytest.approx(111.2 * 72.9, rel=0.02)
+
+
+def test_decay_areas_and_loops():
+    assert decay_km(SQUARE, 40, 10, area=True) == 10          # 8,000 km² dwarfs a point's zone
+    small = [(49.0, -120.0), (49.0, -119.9), (49.1, -119.9), (49.1, -120.0), (49.0, -120.0)]
+    as_loop = decay_km(small, 40, 10)                          # ~40 km loop route
+    as_area = decay_km(small, 40, 10, area=True)               # ~80 km² lake
+    assert 10 < as_loop < as_area < 40
 
 
 def test_decay_point_keeps_base():
