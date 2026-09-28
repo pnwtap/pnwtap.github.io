@@ -23,8 +23,15 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb`.
   (the list and icons live in `CATEGORIES` in `pnwtap/config.py`).
 - `difficulty`: `easy / medium / hard`. The day is 1 easy, 1 medium, 2 hard, so keep roughly twice
   as many hard rows as easy or medium ones.
-- `geometry`: one or more `lat,lng` points, semicolon-separated (one = a point; several = a line
-  that you score against anywhere along). Quote the cell — it contains commas.
+- `geometry`: one or more `lat,lng` points, semicolon-separated. Quote the cell — it contains commas.
+  - one point = a point (peak, town, crag);
+  - several = a line (river, road, traverse) scored by distance to its nearest part;
+  - several with the **last point equal to the first** = an area (lake, island, park): a tap
+    inside scores 100.
+
+  Bigger features get a tighter score decay (`geometry.decay_km`): the zone where you'd score ≥ 37
+  is the same size as for a single peak, so a 900 km river doesn't hand out points for tapping
+  the right province. Points use `D_KM` (40 km); huge features bottom out at `D_MIN_KM` (10 km).
 - `image` (optional): a URL. If set, that round shows the image instead of the name.
 - `blurb`: a line or two shown on the reveal.
 
@@ -52,6 +59,13 @@ Enable GitHub Pages on the repo with **Settings → Pages → Source: Deploy fro
 
 The site keeps working with no rebuilds for `HORIZON_DAYS` (400) days; rebuild whenever you add
 locations. Add `?date=YYYY-MM-DD` to the URL to play a past day (future days are refused).
+
+## Playtesting
+
+Open `?playtest` (e.g. `http://localhost:8000/?playtest`) to play any location on demand: pick
+from the list or step with ◀ ▶ 🎲, see each feature's decay distance and what the score would
+have been under the flat point decay, and tick **show all answers** to overlay every location on
+the map — the quickest way to spot a bad coordinate. Nothing is saved in this mode.
 
 ## Schedule
 
