@@ -6,7 +6,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 
-def build_payload(locations, schedule, image_map, config) -> dict:
+def build_payload(locations, schedule, image_map, config, region_mask=None) -> dict:
     locs = []
     for idx, loc in enumerate(locations):
         locs.append({
@@ -20,25 +20,29 @@ def build_payload(locations, schedule, image_map, config) -> dict:
     return {
         "locations": locs,
         "schedule": schedule,
+        "regionMask": region_mask or [],
         "config": {
             "D_km": config.D_KM,
             "multipliers": config.MULTIPLIERS,
             "ramp": config.RAMP,
             "emoji": config.EMOJI,
             "tileUrl": config.TILE_URL,
+            "hillshadeUrl": config.HILLSHADE_URL,
             "tileAttribution": config.TILE_ATTRIBUTION,
             "bbox": config.BBOX,
             "center": config.CENTER,
             "zoom": config.DEFAULT_ZOOM,
+            "minZoom": config.MIN_ZOOM,
+            "maxZoom": config.MAX_ZOOM,
         },
     }
 
 
-def render_site(locations, schedule, image_map, config, *, docs_dir, template_dir, static_dir) -> Path:
+def render_site(locations, schedule, image_map, config, *, docs_dir, template_dir, static_dir, region_mask=None) -> Path:
     docs_dir = Path(docs_dir)
     docs_dir.mkdir(parents=True, exist_ok=True)
 
-    payload = build_payload(locations, schedule, image_map, config)
+    payload = build_payload(locations, schedule, image_map, config, region_mask)
     data_json = json.dumps(payload).replace("<", "\\u003c")  # keep any "</script>" in blurbs safe
 
     env = Environment(

@@ -1,18 +1,194 @@
+/* pnwtap — warm, minimal styling inspired by amybell.info (Hyde theme:
+   forest green + manila cream, Open Sans). */
+:root {
+  --green: #2f523e;
+  --green-soft: #4a7c59;
+  --green-bright: #157123;
+  --cream: #faf6ea;
+  --cream-deep: #f0e6d0;
+  --tan: #e2c48b;
+  --ink: #2a2a2a;
+  --ink-soft: #55605a;
+  --target: #c0392b;
+}
+
 * { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, -apple-system, sans-serif; color: #1b2a1f; }
-#app { display: flex; flex-direction: column; height: 100vh; }
-header { display: flex; align-items: baseline; gap: 12px; padding: 8px 14px; background: #1b2a1f; color: #fff; }
-header h1 { margin: 0; font-size: 20px; letter-spacing: 0.5px; }
-#status { font-size: 14px; opacity: 0.85; }
-#map { flex: 1 1 auto; min-height: 240px; }
-#panel { flex: 0 0 auto; padding: 12px 14px; max-height: 46vh; overflow: auto; border-top: 3px solid #1b2a1f; }
-.round-no { color: #6b7a6f; font-size: 13px; }
-.prompt-name { font-size: 24px; font-weight: 700; margin: 4px 0; }
-.prompt-cap { color: #6b7a6f; }
-.prompt-img, .reveal-img { max-width: 100%; max-height: 190px; border-radius: 8px; margin: 4px 0; }
-.reveal-name { font-size: 20px; font-weight: 700; }
-.reveal-score { font-size: 18px; margin: 6px 0; }
-.reveal-blurb { color: #33413a; }
-button { font-size: 16px; padding: 9px 16px; margin-top: 8px; border: 0; border-radius: 6px; background: #2e7d4f; color: #fff; cursor: pointer; }
-button:disabled { background: #b7c3ba; cursor: default; }
-#share { background: #eef2ee; padding: 10px; border-radius: 6px; white-space: pre-wrap; font-size: 15px; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Open Sans", system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+}
+
+/* Full-bleed map behind everything */
+#map {
+  position: fixed;
+  inset: 0;
+  background: #2b352e; /* solid frame around the rendered region */
+  cursor: crosshair;
+}
+
+/* The shaded-relief overlay multiplies onto the coloured terrain for crisp mountains */
+.hillshade-pane { mix-blend-mode: multiply; opacity: 0.55; }
+
+/* Floating card, pinned near the top */
+#card {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 380px);
+  z-index: 1000;
+  background: rgba(250, 246, 234, 0.94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--tan);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(30, 40, 30, 0.28);
+  overflow: hidden;
+  animation: card-in 0.35s ease both;
+}
+@keyframes card-in { from { opacity: 0; transform: translate(-50%, -8px); } }
+
+#card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: var(--green);
+  color: #fff;
+}
+.wordmark { font-weight: 700; letter-spacing: 0.4px; font-size: 16px; }
+.round-pill {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.round-pill:empty { display: none; }
+
+#card-body { padding: 14px 16px 16px; }
+
+/* Guess prompt */
+.ask { margin: 0 0 12px; font-size: 18px; line-height: 1.35; }
+.ask strong { color: var(--green); }
+.prompt-img {
+  display: block;
+  width: 100%;
+  max-height: 190px;
+  object-fit: cover;
+  border-radius: 9px;
+  margin: 0 0 12px;
+  border: 1px solid var(--tan);
+}
+
+/* Buttons */
+button {
+  font: inherit;
+  font-weight: 600;
+  width: 100%;
+  padding: 11px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--green);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+button:hover:not(:disabled) { background: var(--green-bright); }
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { background: #b9c3bb; cursor: default; }
+
+/* Result view */
+.result-name {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.result-name .tier { font-size: 18px; }
+.result-score {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.result-score b { color: var(--ink); }
+.result-score .pts { color: var(--green-soft); font-weight: 700; }
+.reveal-img {
+  display: block;
+  width: 100%;
+  max-height: 170px;
+  object-fit: cover;
+  border-radius: 9px;
+  margin: 0 0 10px;
+  border: 1px solid var(--tan);
+}
+.reveal-blurb {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+/* Final scoreboard */
+.final { margin: 2px 0 4px; font-size: 15px; color: var(--ink-soft); }
+.final-score { font-size: 40px; font-weight: 700; color: var(--green); line-height: 1; }
+.final-score span { font-size: 18px; color: var(--ink-soft); font-weight: 600; }
+#share {
+  margin: 12px 0;
+  padding: 11px 12px;
+  background: var(--cream-deep);
+  border: 1px solid var(--tan);
+  border-radius: 9px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "Open Sans", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.msg { margin: 0; font-size: 16px; line-height: 1.4; }
+
+/* ---- Map markers & reveal animation ---- */
+.guess-marker .guess-dot,
+.answer-marker .answer-dot {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+.guess-marker .guess-dot {
+  width: 15px; height: 15px;
+  background: var(--green);
+  border: 2.5px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.answer-marker .answer-dot {
+  width: 15px; height: 15px;
+  background: var(--target);
+  border: 2.5px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  animation: pop 0.3s ease both;
+}
+.answer-marker .answer-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 15px; height: 15px;
+  margin: -7.5px 0 0 -7.5px;
+  border-radius: 50%;
+  border: 2px solid var(--target);
+  animation: pulse 1.6s ease-out infinite;
+}
+@keyframes pop { from { transform: translate(-50%, -50%) scale(0); } }
+@keyframes pulse {
+  from { opacity: 0.7; transform: scale(1); }
+  to   { opacity: 0;   transform: scale(3.6); }
+}
+
+.leaflet-container { font-family: inherit; }

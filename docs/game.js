@@ -4,10 +4,9 @@
   const DATA = window.PNWTAP;
   const CFG = DATA.config;
 
-  const statusEl = document.getElementById("status");
-  const promptEl = document.getElementById("prompt");
-  const controlsEl = document.getElementById("controls");
-  const revealEl = document.getElementById("reveal");
+  const cardBody = document.getElementById("card-body");
+  const roundPill = document.getElementById("round-pill");
+  const setPill = (t) => { roundPill.textContent = t; };
 
   // ---- today's puzzle ----
   function todayISO() {
@@ -17,11 +16,6 @@
   }
   const DATE = todayISO();
   const todaysIds = DATA.schedule[DATE];
-
-  if (!todaysIds) {
-    statusEl.textContent = "No puzzle scheduled for today — check back another day!";
-    return;
-  }
 
   // ---- scoring math (mirrors pnwtap/geometry.py) ----
   const R = 6371.0088;
@@ -85,10 +79,83 @@
   }
   const scoreFor = (distKm) => Math.round(100 * Math.exp(-distKm / CFG.D_km));
 
-  // ---- map ----
-  const map = L.map("map", { minZoom: 4, maxZoom: 12 }).setView(CFG.center, CFG.zoom);
-  L.tileLayer(CFG.tileUrl, { attribution: CFG.tileAttribution }).addTo(map);
+  // ---- map: coloured terrain + shaded-relief overlay, locked to the region ----
+  const bb = CFG.bbox; // [minLat, minLng, maxLat, maxLng]
+  const MASK = DATA.regionMask || [];       // region-shaped stencil rings ([lat,lng])
+
+  // Bounds of the play region: the mask's extent if present, else the bbox.
+  let regionBounds = L.latLngBounds([bb[0], bb[1]], [bb[2], bb[3]]);
+  if (MASK.length) {
+    regionBounds = L.latLngBounds(MASK[0]);
+    MASK.forEach((ring) => ring.forEach((pt) => regionBounds.extend(pt)));
+  }
+
+  const map = L.map("map", {
+    minZoom: CFG.minZoom,
+    maxZoom: CFG.maxZoom,
+    maxBounds: regionBounds.pad(0.35),   // roomy to roam, but not infinitely
+    maxBoundsViscosity: 0.25,            // soft edge
+    zoomControl: false,
+  }).setView(CFG.center, CFG.zoom);
+  L.control.zoom({ position: "bottomleft" }).addTo(map);
+
+  // `bounds` clips tile loading to the region box — the stencil below hides
+  // the rectangular corners, and anywhere with no tiles shows #map's colour.
+  L.tileLayer(CFG.tileUrl, {
+    attribution: CFG.tileAttribution,
+    bounds: regionBounds,
+    noWrap: true,                        // don't repeat the imagery east–west
+    minZoom: CFG.minZoom,
+    maxZoom: CFG.maxZoom,
+  }).addTo(map);
+
+  if (CFG.hillshadeUrl) {
+    map.createPane("hillshade");
+    const pane = map.getPane("hillshade");
+    pane.style.zIndex = 250;                 // above base tiles, below markers
+    pane.classList.add("hillshade-pane");    // blends via CSS
+    L.tileLayer(CFG.hillshadeUrl, { pane: "hillshade", maxZoom: CFG.maxZoom }).addTo(map);
+  }
+
+  // Stencil: fill a region-sized rectangle with the frame colour, punching
+  // region-shaped holes so only WA / OR / BC / AB / YT show through in imagery.
+  // Outside the rectangle, #map's background is the same colour, so it's seamless.
+  // The mask lives in the default overlay pane (added before roundLayers, so the
+  // reveal line/markers draw over it) and uses a padded renderer so it stays
+  // rendered — and animates in lockstep with the tiles — during zoom.
+  if (MASK.length) {
+    const maskRenderer = L.svg({ padding: 3 });
+    // a wide outer ring (well past any viewport) with clamped latitude; the
+    // renderer clips rasterisation to near the view, so this stays cheap
+    const outN = Math.min(85, regionBounds.getNorth() + 25);
+    const outS = Math.max(-85, regionBounds.getSouth() - 25);
+    const outW = regionBounds.getWest() - 50;
+    const outE = regionBounds.getEast() + 50;
+    const outer = [[outN, outW], [outN, outE], [outS, outE], [outS, outW]];
+    // frame fill with region-shaped holes (no stroke, so the rectangle is invisible)
+    L.polygon([outer].concat(MASK), {
+      renderer: maskRenderer, stroke: false,
+      fill: true, fillColor: "#2b352e", fillOpacity: 1, interactive: false,
+    }).addTo(map);
+    // trace just the region outline in a soft tan
+    L.polygon(MASK, {
+      renderer: maskRenderer, fill: false,
+      stroke: true, color: "#e2c48b", weight: 1, opacity: 0.5, interactive: false,
+    }).addTo(map);
+  }
+
   const roundLayers = L.layerGroup().addTo(map);
+
+  const guessIcon = L.divIcon({
+    className: "guess-marker",
+    html: '<span class="guess-dot"></span>',
+    iconSize: [22, 22], iconAnchor: [11, 11],
+  });
+  const answerIcon = () => L.divIcon({
+    className: "answer-marker",
+    html: '<span class="answer-ring"></span><span class="answer-dot"></span>',
+    iconSize: [22, 22], iconAnchor: [11, 11],
+  });
 
   // ---- state ----
   const results = [];       // {score, mult, difficulty, name}
@@ -96,33 +163,32 @@
   let tapMarker = null;
   let tapLatLng = null;
 
+  if (!todaysIds) {
+    setPill("");
+    cardBody.innerHTML = '<p class="msg">No puzzle scheduled for today — check back another day!</p>';
+    return;
+  }
+
   function resetRoundLayers() {
     roundLayers.clearLayers();
     tapMarker = null;
     tapLatLng = null;
   }
 
-  function showPrompt(loc) {
-    const head = `<div class="round-no">Round ${roundIdx + 1} of ${todaysIds.length}</div>`;
-    const body = loc.image
-      ? `<img class="prompt-img" src="${loc.image}" alt="Where is this?">`
-      : `<div class="prompt-name">${loc.name}</div>`;
-    promptEl.innerHTML = `${head}${body}<div class="prompt-cap">Tap the map where you think this is.</div>`;
-  }
-
-  function startRound() {
-    resetRoundLayers();
-    revealEl.hidden = true;
-    revealEl.innerHTML = "";
-    const loc = DATA.locations[todaysIds[roundIdx]];
-    showPrompt(loc);
-    controlsEl.innerHTML = `<button id="lock" disabled>Lock in guess</button>`;
+  // ---- guess view ----
+  function renderGuess(loc) {
+    setPill(`${roundIdx + 1} / ${todaysIds.length}`);
+    const ask = loc.image
+      ? '<p class="ask">Tap as close as you can to <strong>this place</strong>.</p>' +
+        `<img class="prompt-img" src="${loc.image}" alt="Where is this?">`
+      : `<p class="ask">Tap as close as you can to <strong>${loc.name}</strong>.</p>`;
+    cardBody.innerHTML = ask + '<button id="lock" disabled>Lock in guess</button>';
     const lockBtn = document.getElementById("lock");
 
     function onClick(e) {
       tapLatLng = [e.latlng.lat, e.latlng.lng];
       if (!tapMarker) {
-        tapMarker = L.marker(e.latlng, { draggable: true }).addTo(roundLayers);
+        tapMarker = L.marker(e.latlng, { icon: guessIcon, draggable: true }).addTo(roundLayers);
         tapMarker.on("dragend", () => {
           const p = tapMarker.getLatLng();
           tapLatLng = [p.lat, p.lng];
@@ -142,25 +208,53 @@
     };
   }
 
-  function lockRound(loc) {
-    const dist = nearestKm(tapLatLng, loc.geometry);
-    const score = scoreFor(dist);
-    const mult = CFG.multipliers[roundIdx];
-    results.push({ score, mult, difficulty: loc.difficulty, name: loc.name });
+  function startRound() {
+    resetRoundLayers();
+    map.setView(CFG.center, CFG.zoom, { animate: false });
+    renderGuess(DATA.locations[todaysIds[roundIdx]]);
+  }
 
-    if (loc.geometry.length === 1) {
-      L.circleMarker(loc.geometry[0], { radius: 8, color: "#c0392b", fillColor: "#c0392b", fillOpacity: 0.9 }).addTo(roundLayers);
-    } else {
-      L.polyline(loc.geometry, { color: "#c0392b", weight: 4 }).addTo(roundLayers);
+  // ---- reveal: MapTap-style line that draws from the guess to the truth ----
+  function animateReveal(from, loc, nearPt) {
+    // outline linear features (rivers/roads/traverses); mark the true point
+    if (loc.geometry.length > 1) {
+      L.polyline(loc.geometry, { color: "#c0392b", weight: 4, opacity: 0.9 }).addTo(roundLayers);
     }
-    const nearPt = nearestPointOnPath(tapLatLng, loc.geometry);
-    L.polyline([tapLatLng, nearPt], { color: "#333", weight: 2, dashArray: "4 6" }).addTo(roundLayers);
+    L.marker(nearPt, { icon: answerIcon(), interactive: false, zIndexOffset: 1000 }).addTo(roundLayers);
 
-    const last = roundIdx === todaysIds.length - 1;
-    revealEl.hidden = false;
-    revealEl.innerHTML =
-      `<div class="reveal-name">${loc.name}</div>` +
-      `<div class="reveal-score">${Math.round(dist)} km off · <strong>${score}</strong> × ${mult} = ${score * mult}</div>` +
+    // the connector, starting as a zero-length line at the guess
+    const line = L.polyline([from, from], {
+      color: "#2f523e", weight: 4, opacity: 0.95, lineCap: "round",
+    }).addTo(roundLayers);
+
+    // frame both points, THEN grow the line once the map has settled
+    const bounds = L.latLngBounds([from, nearPt]);
+    if (loc.geometry.length > 1) loc.geometry.forEach((p) => bounds.extend(p));
+    map.flyToBounds(bounds.pad(0.45), { duration: 0.7, maxZoom: 10 });
+
+    setTimeout(function grow() {
+      const startT = performance.now();
+      const DUR = 700;
+      (function frame(now) {
+        const t = Math.min(1, (now - startT) / DUR);
+        const e = 1 - Math.pow(1 - t, 3);   // easeOutCubic
+        line.setLatLngs([from, [
+          from[0] + (nearPt[0] - from[0]) * e,
+          from[1] + (nearPt[1] - from[1]) * e,
+        ]]);
+        if (t < 1) requestAnimationFrame(frame);
+      })(performance.now());
+    }, 720);
+  }
+
+  // ---- result view (replaces the guess view in the same card) ----
+  function renderResult(loc, dist, score, mult, last) {
+    setPill(`${roundIdx + 1} / ${todaysIds.length}`);
+    const tier = CFG.emoji[loc.difficulty] || "";
+    cardBody.innerHTML =
+      `<p class="result-name">${loc.name} <span class="tier">${tier}</span></p>` +
+      `<p class="result-score"><b>${Math.round(dist)} km</b> off · ` +
+        `<b>${score}</b> × ${mult} = <span class="pts">${score * mult}</span></p>` +
       (loc.image ? `<img class="reveal-img" src="${loc.image}" alt="">` : "") +
       (loc.blurb ? `<p class="reveal-blurb">${loc.blurb}</p>` : "") +
       `<button id="next">${last ? "See results" : "Next round"}</button>`;
@@ -171,6 +265,18 @@
     };
   }
 
+  function lockRound(loc) {
+    const dist = nearestKm(tapLatLng, loc.geometry);
+    const score = scoreFor(dist);
+    const mult = CFG.multipliers[roundIdx];
+    results.push({ score, mult, difficulty: loc.difficulty, name: loc.name });
+
+    const nearPt = nearestPointOnPath(tapLatLng, loc.geometry);
+    animateReveal(tapLatLng, loc, nearPt);
+    renderResult(loc, dist, score, mult, roundIdx === todaysIds.length - 1);
+  }
+
+  // ---- finish / share ----
   function prettyDate() {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const d = new Date(DATE + "T00:00:00");
@@ -184,19 +290,25 @@
 
   function finish() {
     localStorage.setItem("pnwtap:" + DATE, JSON.stringify(results));
-    renderResults();
+    renderFinal();
   }
 
-  function renderResults() {
+  function renderFinal() {
     resetRoundLayers();
-    revealEl.hidden = true;
+    setPill("");
+    map.flyTo(CFG.center, CFG.zoom, { duration: 0.6 });
     const total = results.reduce((s, r) => s + r.score * r.mult, 0);
-    promptEl.innerHTML = `<div class="prompt-name">Final score: ${total} / 1000</div>`;
     const share = shareString();
-    controlsEl.innerHTML = `<pre id="share">${share}</pre><button id="copy">Copy result</button>`;
-    document.getElementById("copy").onclick = () => {
-      navigator.clipboard.writeText(share);
-      document.getElementById("copy").textContent = "Copied!";
+    cardBody.innerHTML =
+      '<p class="final">Final score</p>' +
+      `<div class="final-score">${total} <span>/ 1000</span></div>` +
+      `<pre id="share">${share}</pre>` +
+      '<button id="copy">Copy result</button>';
+    const copyBtn = document.getElementById("copy");
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(share)
+        .then(() => { copyBtn.textContent = "Copied!"; })
+        .catch(() => { copyBtn.textContent = "Select the text above to copy"; });
     };
   }
 
@@ -204,7 +316,7 @@
   const saved = localStorage.getItem("pnwtap:" + DATE);
   if (saved) {
     results.push(...JSON.parse(saved));
-    renderResults();
+    renderFinal();
   } else {
     startRound();
   }

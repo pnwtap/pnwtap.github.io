@@ -1,5 +1,6 @@
 """Build the pnwtap static site from the sheet (or a local CSV) into docs/."""
 import argparse
+import json
 from datetime import date
 from pathlib import Path
 
@@ -31,9 +32,15 @@ def main() -> None:
     sched = schedule.build_schedule(locations, start, config.HORIZON_DAYS, config.RAMP, config.SEED)
     print(f"scheduled {len(sched)} days starting {start.isoformat()}")
 
+    mask_path = ROOT / "data" / "region_mask.json"
+    region_mask = json.loads(mask_path.read_text(encoding="utf-8")) if mask_path.exists() else []
+    if region_mask:
+        print(f"loaded region stencil: {len(region_mask)} rings")
+
     index_path = render.render_site(
         locations, sched, image_map, config,
         docs_dir=docs_dir, template_dir=ROOT / "templates", static_dir=ROOT / "static",
+        region_mask=region_mask,
     )
     print(f"wrote {index_path}")
 
