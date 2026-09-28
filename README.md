@@ -77,7 +77,12 @@ python3 -m venv .venv
 git add docs data/schedule_lock.json && git commit -m "Rebuild" && git push
 ```
 
-Enable GitHub Pages on the repo with **Settings → Pages → Source: Deploy from branch → /docs**.
+Enable GitHub Pages on the repo with **Settings → Pages → Source: Deploy from branch → main, /docs**.
+
+`.github/workflows/rebuild.yml` then keeps it fresh: every night (just after midnight Pacific) and on
+every push to `main` it runs the tests, rebuilds from the sheet, and commits `docs/` and
+`data/schedule_lock.json`. So once the sheet URL is set, editing the sheet is all it takes — new
+places are live the next morning, or immediately via **Actions → Rebuild site → Run workflow**.
 
 The site keeps working with no rebuilds for `HORIZON_DAYS` (400) days; rebuild whenever you add
 locations. Add `?date=YYYY-MM-DD` to the URL to play a past day (future days are refused).

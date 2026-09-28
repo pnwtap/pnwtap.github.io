@@ -1,0 +1,42 @@
+# Rebuild the site nightly (and on every push to main) and commit docs/ plus the
+# schedule lock. Nightly matters even with no data changes: each build locks
+# "today" into data/schedule_lock.json, so later edits to the sheet can never
+# rewrite a puzzle someone has already played.
+name: Rebuild site
+
+on:
+  schedule:
+    - cron: "15 9 * * *"   # 02:15 PDT / 01:15 PST: just after midnight Pacific
+  push:
+    branches: [main]
+  workflow_dispatch:       # "Run workflow" button, e.g. right after editing the sheet
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rebuild
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TZ: America/Los_Angeles   # the puzzle day is a Pacific day
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python build.py
+      - name: Commit the rebuilt site and schedule lock
+        run: |
+          git add docs data/schedule_lock.json
+          if git diff --cached --quiet; then echo "nothing changed"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Rebuild $(date +%F)"
+          git push
