@@ -15,7 +15,7 @@ import os
 import ssl
 import urllib.request
 
-from shapely.geometry import shape
+from shapely.geometry import box, shape
 from shapely.ops import unary_union
 
 NE_URL = (
@@ -24,6 +24,10 @@ NE_URL = (
 )
 REGIONS = {"Washington", "Oregon", "British Columbia", "Alberta", "Yukon"}
 COUNTRIES = {"Canada", "United States of America"}
+# Southeast Alaska (everything east of the 141st meridian: the panhandle, Yakutat) is
+# part of the same coastline. Without it the stencil slices the Alexander Archipelago
+# in half and BC's north coast looks landlocked. No places there are asked about.
+PANHANDLE = ("Alaska", box(-141.0, 50.0, -125.0, 62.0))
 COAST_BUFFER_DEG = 0.9   # ~100 km outward margin: smooths the edge and takes in coastal islands
 SIMPLIFY_TOL = 0.03      # degrees; larger = coarser outline
 MIN_ISLAND_DIAG = 0.4    # drop leftover islands smaller than this (bbox diagonal, degrees)
@@ -69,6 +73,10 @@ def main():
     ]
     if len(geoms) != len(REGIONS):
         raise SystemExit(f"expected {len(REGIONS)} regions, matched {len(geoms)}")
+    alaska = [shape(f["geometry"]) for f in data["features"] if f["properties"].get("name") == PANHANDLE[0]]
+    if len(alaska) != 1:
+        raise SystemExit("couldn't find Alaska for the panhandle")
+    geoms.append(alaska[0].buffer(0).intersection(PANHANDLE[1]))
 
     # union adjacent regions, then expand outward ~100 km so the edge is smooth
     # (not blocky) and coastal islands — San Juans, Gulf Islands, Haida Gwaii —
