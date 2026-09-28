@@ -302,7 +302,9 @@
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          access_key: fb.key, subject, from_name: "pnwtap", botcheck: f.botcheck.checked,
+          access_key: fb.key, subject, from_name: "pnwtap",
+          // like a real unticked checkbox, the honeypot is only sent when a bot ticks it
+          ...(f.botcheck.checked ? { botcheck: true } : {}),
           message: lines.join("\n"), replyto: /@/.test(f.contact.value) ? f.contact.value : undefined,
         }),
       });
