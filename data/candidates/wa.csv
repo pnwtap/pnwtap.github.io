@@ -1,0 +1,81 @@
+name,category,difficulty,geometry,image,blurb
+Mt Rainier,peak,easy,"46.8517,-121.7603",,"At 14,410 ft the most glaciated peak in the Lower 48; Disappointment Cleaver is the trade route most summiteers slog."
+Mt Baker,peak,easy,"48.7766,-121.8145",,"Holds the world record for single-season snowfall, 1,140 inches in 1998-99, and the Easton and Coleman glaciers are classic first volcano climbs."
+Mt St Helens,peak,easy,"46.1912,-122.1944",,"Lost 1,300 ft of summit in 1980; the Monitor Ridge permit climb ends at a crater rim looking straight into the lava dome."
+Mt Adams,peak,easy,"46.2024,-121.4909",,"Washington's second-highest; the South Spur is a walk-up and a famous glissade chute, with Lunch Counter camp around 9,000 ft."
+Space Needle,poi,easy,"47.6204,-122.3491",,Built for the 1962 World's Fair; its 605 ft top is a pale shadow of the Rainier you can see from it on a clear day.
+Pike Place Market,poi,easy,"47.6094,-122.3417",,"Running since 1907, home of the flying fish and the gum wall; the original Starbucks sits across the street."
+Fremont Troll,poi,easy,"47.6510,-122.3473",,"An 18-ft concrete troll under the Aurora Bridge, clutching a real VW Beetle; built in 1990 by local artists."
+Microsoft Campus (Redmond),poi,easy,"47.6419,-122.1272",,Sprawling Redmond HQ along SR-520; plenty of engineers here sneak out to Snoqualmie Pass for night skiing.
+Spokane,town,easy,"47.6589,-117.4250",,"Eastern WA's biggest city, built around the falls of the Spokane River; Mt Spokane ski area sits just to the northeast."
+Leavenworth,town,easy,"47.5950,-120.6628",,"Faux-Bavarian village at the mouth of Icicle Canyon, basecamp for the Enchantments, Snow Creek Wall and endless granite boulders."
+Snoqualmie Falls,poi,easy,"47.5415,-121.8373",,"A 268-ft plunge on the Snoqualmie River, taller than Niagara, and famous from the opening credits of Twin Peaks."
+San Juan Island,island,easy,"48.5333,-123.0833",,"Home of Friday Harbor and Lime Kiln Point, one of the best shore spots in the world to watch orcas pass by."
+Whidbey Island,island,easy,"48.4064,-122.6444; 48.2939,-122.6064; 48.2192,-122.6789; 48.0039,-122.5389; 47.9739,-122.3469",,"Long, skinny island stretching from Deception Pass to the Clinton ferry; one of the longest islands in the Lower 48."
+Lake Chelan,lake,easy,"47.8344,-120.0214; 47.8756,-120.1617; 48.2022,-120.5911; 48.3094,-120.6553",,"A 50-mile glacial trench over 1,480 ft deep, with its bottom below sea level; the only road-free way to Stehekin is by boat or on foot."
+Hurricane Ridge,poi,easy,"47.9692,-123.4985",,A mile-high road-accessible perch in the Olympics with a tiny rope-tow ski area and in-your-face views of Mt Olympus.
+Columbia River,river,easy,"48.9144,-117.7822; 48.6108,-118.0558; 47.9100,-118.3300; 47.9572,-118.9785; 47.9953,-119.6333; 48.0957,-119.7806; 47.8100,-119.9800; 47.5333,-120.2956; 47.4235,-120.3103; 46.9500,-119.9900; 46.6450,-119.9050; 46.6300,-119.5500; 46.2800,-119.2700; 46.0800,-118.9100; 45.9297,-119.2961; 45.7200,-120.2000; 45.6000,-121.1800; 45.7100,-121.5100; 45.6442,-121.9406; 45.6150,-122.6700; 46.1000,-122.9300; 46.1900,-123.8300",,"Enters WA from BC near Northport, sweeps the Big Bend past Grand Coulee and Vantage, then carves the Gorge on the Oregon line."
+Bellingham,town,easy,"48.7500,-122.4833",,"College town on Bellingham Bay, gateway to Mt Baker via SR-542 and to the sandstone boulders of Larrabee and Chuckanut."
+Husky Stadium,poi,easy,"47.6503,-122.3016",,"UW's lakeside stadium on Union Bay; some fans still arrive by boat, ""sailgating"" before kickoff."
+Grand Coulee Dam,poi,easy,"47.9572,-118.9785",,"The largest power producer in the US, holding back Lake Roosevelt at the head of the Grand Coulee."
+Deception Pass,poi,easy,"48.4064,-122.6444",,"Narrow tidal channel between Whidbey and Fidalgo islands, spanned by a 1935 bridge 180 ft above ripping currents."
+Mount Si,peak,medium,"47.5072,-121.7395",,"The North Bend training grind: 3,150 ft of gain in 4 miles, topped by the exposed Haystack scramble."
+North Bend,town,medium,"47.4956,-121.7700",,"Last stop for coffee before Snoqualmie Pass, overshadowed by Mount Si, and the real-world Twin Peaks town."
+Stevens Pass,pass,medium,"47.7447,-121.0889",,"US-2 crest at 4,061 ft and home of Stevens Pass ski area; the PCT crosses right through the parking lots."
+Mountain Loop Hwy,road,medium,"48.0828,-121.9697; 48.0887,-121.7737; 48.0539,-121.5196; 48.0285,-121.4450; 48.0993,-121.3937; 48.2522,-121.6031",,"Granite Falls to Darrington via Barlow Pass; gravel over the top, winter-gated, and access to Vesper, Pilchuck, Big Four and Sloan."
+Snoqualmie Pass,pass,medium,"47.4233,-121.4108",,"I-90 crest at just 3,022 ft, lowest of the major Cascade passes, with four ski areas and the Alpental backcountry right off the exit."
+Enchantments,traverse,medium,"47.5278,-120.8209; 47.4922,-120.8331; 47.4808,-120.8225; 47.4825,-120.7838; 47.4855,-120.7493; 47.4945,-120.7380; 47.5441,-120.7097",,"The one-day thru-hike: Colchuck, up Aasgard Pass, across the larch-lined Core Zone and down past Snow Lakes, about 18 miles."
+Colchuck Lake,lake,medium,"47.4922,-120.8331",,Turquoise lake beneath Dragontail and Colchuck Peak; the jumping-off point for Aasgard Pass and the Enchantments thru-hike.
+Hoh Rainforest,poi,medium,"47.8614,-123.9247",,"One of the wettest places in the Lower 48 at 12+ ft of rain a year, and the long approach trail to Mt Olympus."
+Mt Olympus,peak,medium,"47.8013,-123.7108",,"Highest in the Olympics at 7,980 ft; a 17-mile walk in, the Blue Glacier crossing, then a short rock summit block."
+Cape Flattery,poi,medium,"48.3860,-124.7269",,"Most northwesterly point of the contiguous US, on the Makah Reservation; sea caves and Tatoosh Island just offshore."
+Lake Crescent,lake,medium,"48.0600,-123.8300",,"Glacier-carved, over 600 ft deep and famously clear, tucked below Mount Storm King west of Port Angeles."
+Palouse Falls,poi,medium,"46.6636,-118.2236",,A 198-ft drop into a basalt amphitheater carved by the Missoula Floods; the official state waterfall.
+Discovery Park,poi,medium,"47.6583,-122.4189",,"Seattle's biggest park on the old Fort Lawton grounds in Magnolia, with bluffs and a lighthouse at West Point."
+Crystal Mountain,poi,medium,"46.9328,-121.4880",,"Washington's largest ski area, with a gondola to the summit and a face-full view of Rainier from the top."
+Mt Baker Ski Area,poi,medium,"48.8600,-121.6650",,"Legendary snowfall, cliffy lift-served terrain and the Legendary Banked Slalom; runs up from Heather Meadows under Shuksan."
+North Cascades Hwy (SR-20),road,medium,"48.5014,-122.2558; 48.5381,-121.7478; 48.5417,-121.4397; 48.6736,-121.2472; 48.7142,-121.1311; 48.5180,-120.7340; 48.5233,-120.6550; 48.4717,-120.1792",,"Opened in 1972, crossing Rainy and Washington passes; closed each winter by avalanches, and its spring reopening is a local holiday."
+Skagit River,river,medium,"48.7317,-121.0672; 48.6978,-121.2083; 48.6736,-121.2472; 48.5417,-121.4397; 48.5381,-121.7478; 48.5014,-122.2558; 48.4203,-122.3117; 48.3872,-122.3669",,"Dammed three times above Newhalem, then free-flowing past Marblemount to the delta; winter bald eagles gather by the hundreds."
+Diablo Lake,lake,medium,"48.7142,-121.1311",,Glacial flour turns this reservoir an unreal turquoise; Colonial Peak and Pyramid Peak tower over the SR-20 overlook.
+Winthrop,town,medium,"48.4717,-120.1792",,Wild West-themed Methow town with world-class Nordic trails; first stop east when SR-20 reopens in spring.
+Rattlesnake Ledge,hike,medium,"47.4360,-121.7785",,"A short, relentlessly busy switchback climb from Rattlesnake Lake to a rock ledge high above the water."
+Washington Pass,pass,medium,"48.5233,-120.6550",,"SR-20 hairpin under Liberty Bell and the Early Winters Spires; high point of the North Cascades Hwy at 5,477 ft."
+Dry Falls,poi,medium,"47.6000,-119.3569",,"Skeleton of an ice-age waterfall 3.5 miles wide and 400 ft tall, once roaring with Missoula Flood water."
+Sahale Peak,peak,hard,"48.4914,-121.0384",,Above Cascade Pass via Sahale Arm and a glacier to a tiny summit block; the Sahale Glacier camp may be the best bivy in the range.
+Vesper Peak,peak,hard,"48.0130,-121.5179",,"Mountain Loop classic via Headlee Pass and Vesper Lake; the north face Ragged Edge is a long, clean alpine rock route."
+Gold Bar,town,hard,"47.8542,-121.6933",,Small US-2 town and the last gas and grub before the Index walls and Stevens Pass; Wallace Falls is just above it.
+Fall City,town,hard,"47.5661,-121.8886",,Riverside hamlet at the Raging River mouth on the Snoqualmie; the back road to North Bend without touching I-90.
+I-90 Exit 32 (Mt Si/Little Si),road,hard,"47.4735,-121.7583",,"436th Ave SE exit, the fast way to the Mount Si and Little Si trailheads and to Rattlesnake Lake via Cedar Falls Rd."
+I-90 Exit 38 (Deception Crags/Olallie),road,hard,"47.4363,-121.6519",,"Homestead Valley Rd exit for Deception Crags sport climbing, Twin Falls and Olallie State Park along the old highway."
+I-90 Exit 47 (Denny Creek/Asahel Curtis),road,hard,"47.3962,-121.4833",,"Tinkham Rd exit: Denny Creek, Melakwa Lake, Annette Lake and the Asahel Curtis trailheads just west of the pass."
+Eldorado Peak,peak,hard,"48.5374,-121.1345",,Queen of the Cascade River; a brutal boulder-field approach then a knife-edge snow arête to the summit.
+Forbidden Peak,peak,hard,"48.5115,-121.0579",,"West Ridge is one of the Fifty Classic Climbs, reached via Boston Basin; exposed, heavily trafficked, rarely easy."
+Mt Stuart,peak,hard,"47.4751,-120.9031",,One of the biggest granite masses in the US; the North Ridge is a Fifty Classic and the Cascadian Couloir is the descent everyone curses.
+Dragontail Peak,peak,hard,"47.4787,-120.8334",,"Highest in the Enchantments, with the Backbone Ridge and Serpentine Arête rising straight out of Colchuck Lake."
+Index Town Walls,climb,hard,"47.8186,-121.5713",,Steep granite cliffs over the Skykomish with hard cracks and old-school trad; the Lower and Upper Town Walls hover over the town.
+Ptarmigan Traverse,traverse,hard,"48.4683,-121.0600; 48.4487,-121.0523; 48.4164,-121.0672; 48.3794,-121.0620; 48.3407,-121.0557; 48.3034,-121.0295; 48.3029,-121.1493",,"Cascade Pass to Dome Peak along the glaciated crest, first done in 1938 by four Ptarmigan Climbing Club members."
+Sloan Peak,peak,hard,"48.0415,-121.3402",,The Matterhorn of the Mountain Loop; the Corkscrew Route spirals around the peak to reach the summit.
+Mt Shuksan,peak,hard,"48.8315,-121.6032",,One of the most-photographed mountains anywhere; Fisher Chimneys and the Sulphide Glacier lead to a rocky summit pyramid.
+Mt Daniel,peak,hard,"47.5649,-121.1809",,"Highest point in King County, draped by the Lynch Glacier and seen from Cathedral Pass on the PCT."
+Tatoosh Range,peak,hard,"46.7520,-121.7170",,Craggy range just south of Paradise; Pinnacle and Unicorn peaks are fun scrambles with Rainier filling the whole sky.
+Lake Serene,lake,hard,"47.7819,-121.5703",,Tucked in the cirque under Mount Index's sheer north face; Bridal Veil Falls roars along the way up.
+Glacier Peak,peak,hard,"48.1119,-121.1142",,"The most remote Cascade volcano, a long approach from any road and barely visible from Seattle."
+Liberty Bell,climb,hard,"48.5154,-120.6579",,"Iconic granite spire above Washington Pass; the Beckey Route is a short classic, and the east faces are big walls."
+Castle Rock (Leavenworth),climb,hard,"47.5999,-120.7118",,"Tumwater Canyon crag above US-2, climbed since the 1940s; Saber is the classic that let generations cut their teeth."
+Frenchman Coulee,climb,hard,"47.0300,-119.9695",,"Vantage basalt columns: sunny when the west side drips, with The Feathers and Sunshine Wall right off the old highway."
+Mazama,town,hard,"48.5922,-120.4039",,"Upper Methow outpost with a famous general store, gateway to Washington Pass climbing and Harts Pass."
+Index,town,hard,"47.8208,-121.5539",,"Tiny town under Mount Index and the Town Walls, where the North and South Forks of the Skykomish meet."
+Darrington,town,hard,"48.2522,-121.6031",,"Logging town under Whitehorse Mountain, with long granite slab climbs on Squire Creek Wall and Exfoliation Dome nearby."
+Marblemount,town,hard,"48.5417,-121.4397",,Last services before the North Cascades crest; climbers get their backcountry permits at the Wilderness Information Center here.
+Mt Constance,peak,hard,"47.7728,-123.1274",,"Third-highest in the Olympics, rising abruptly above Hood Canal; loose rock and a notorious Terrible Traverse on its route."
+The Brothers,peak,hard,"47.6538,-123.1410",,Twin-summited peak visible from Seattle across the Sound; the south peak is a long but non-technical scramble from Lena Lakes.
+Goat Rocks,peak,hard,"46.4886,-121.4058",,Eroded volcano between Rainier and Adams; the PCT runs its crest along the Knife Edge past Old Snowy.
+Dog Mountain,hike,hard,"45.7170,-121.7004",,Steep Columbia Gorge grind famous for its spring balsamroot bloom and ferocious gorge winds on top.
+US-2 (Stevens Pass Hwy),road,hard,"47.9792,-122.2017; 47.8578,-121.9883; 47.8664,-121.8092; 47.8542,-121.6933; 47.8208,-121.5539; 47.7103,-121.3583; 47.7447,-121.0889; 47.5950,-120.6628",,"Everett to Leavenworth over Stevens Pass, past Index and Skykomish; the Tumwater Canyon stretch threads right below Castle Rock."
+Chinook Pass Hwy (SR-410),road,hard,"47.2011,-121.9969; 47.1433,-121.6239; 46.8669,-121.5386; 46.8717,-121.5155; 46.7261,-120.6911",,"Enumclaw to Naches, cresting at Chinook Pass by Tipsoo Lake; winter-closed, and the gateway to Crystal and Sunrise."
+Skykomish River,river,hard,"47.7103,-121.3583; 47.7661,-121.4803; 47.8208,-121.5539; 47.8542,-121.6933; 47.8664,-121.8092; 47.8303,-122.0467",,"From the South Fork at Skykomish past Index, where the forks meet, to the Snohomish near Monroe; Boulder Drop is class IV."
+Emmons Glacier,glacier,hard,"46.8622,-121.7169",,"Largest glacier by area in the Lower 48, on Rainier's northeast flank; the Emmons-Winthrop route camps at Schurman."
+Blue Glacier,glacier,hard,"47.8025,-123.6867",,The big glacier cloaking Mt Olympus; crossing it from Glacier Meadows is the crux of the standard climb.
+Cascade Pass,pass,hard,"48.4683,-121.0600",,Meadowed notch below Johannesburg's hanging glaciers; start of Sahale Arm and the Ptarmigan Traverse.
+Little Si,climb,hard,"47.4987,-121.7560",,"Mount Si's little sibling hides some of Washington's steepest sport climbing, including the overhanging World Wall."
+Steamboat Rock,peak,hard,"47.8665,-119.1353",,"A basalt butte rising 800 ft out of Banks Lake in the Grand Coulee, once an island in an ice-age river channel."

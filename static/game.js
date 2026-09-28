@@ -123,8 +123,8 @@
     const sheet = r.bottom >= H - 2;                 // phone bottom sheet vs. floating top card
     const covered = Math.min(sheet ? H - r.top : r.bottom, H - 140);   // always leave some map
     return sheet
-      ? { paddingTopLeft: [m, m], paddingBottomRight: [m, covered + m / 2] }
-      : { paddingTopLeft: [m, covered + m / 2], paddingBottomRight: [m, m] };
+      ? { paddingTopLeft: [m, m], paddingBottomRight: [m, covered + m] }
+      : { paddingTopLeft: [m, covered + m], paddingBottomRight: [m, m] };
   }
   function frame(bounds, opts) {
     map.flyToBounds(bounds, Object.assign(framePadding(), { duration: 0.7, maxZoom: 10 }, opts));

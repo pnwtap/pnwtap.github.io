@@ -10,6 +10,7 @@
   --ink: #2a2a2a;
   --ink-soft: #55605a;
   --target: #c0392b;
+  --guess: #f4c542;
 }
 
 * { box-sizing: border-box; }
@@ -61,6 +62,8 @@ html, body {
   color: #fff;
 }
 .wordmark { font-weight: 700; letter-spacing: 0.4px; font-size: 16px; }
+#puzzle-no { font-weight: 600; opacity: 0.7; margin-left: 4px; font-size: 14px; }
+.head-right { display: flex; align-items: center; gap: 8px; }
 .round-pill {
   font-size: 12px;
   font-weight: 600;
@@ -73,8 +76,27 @@ html, body {
 #card-body { padding: 14px 16px 16px; }
 
 /* Guess prompt */
-.ask { margin: 0 0 12px; font-size: 18px; line-height: 1.35; }
+.round-meta {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.ask { margin: 0 0 4px; font-size: 24px; line-height: 1.2; }
 .ask strong { color: var(--green); }
+.cat {
+  display: inline-block;
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-transform: capitalize;
+}
+.hint { margin: -8px 0 12px; font-size: 13px; color: var(--ink-soft); font-style: italic; }
+.prompt-img + button, .cat + button { margin-top: 0; }
 .prompt-img {
   display: block;
   width: 100%;
@@ -101,8 +123,27 @@ button {
 button:hover:not(:disabled) { background: var(--green-bright); }
 button:active:not(:disabled) { transform: translateY(1px); }
 button:disabled { background: #b9c3bb; cursor: default; }
+button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
+
+.icon-btn {
+  width: 24px; height: 24px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 13px;
+  line-height: 24px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.icon-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.32); }
 
 /* Result view */
+.verdict {
+  margin: 0 0 2px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--green-soft);
+}
 .result-name {
   margin: 0 0 4px;
   font-size: 20px;
@@ -137,21 +178,69 @@ button:disabled { background: #b9c3bb; cursor: default; }
 }
 
 /* Final scoreboard */
-.final { margin: 2px 0 4px; font-size: 15px; color: var(--ink-soft); }
-.final-score { font-size: 40px; font-weight: 700; color: var(--green); line-height: 1; }
-.final-score span { font-size: 18px; color: var(--ink-soft); font-weight: 600; }
-#share {
-  margin: 12px 0;
-  padding: 11px 12px;
-  background: var(--cream-deep);
+.final-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
+.final { margin: 0 0 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--ink-soft); }
+.final-score { font-size: 40px; font-weight: 700; color: var(--green); line-height: 1; font-variant-numeric: tabular-nums; }
+.final-score small { font-size: 18px; color: var(--ink-soft); font-weight: 600; }
+.next-in { text-align: right; }
+#countdown { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+.breakdown { list-style: none; margin: 0 0 12px; padding: 0; border-top: 1px solid var(--cream-deep); }
+.breakdown li {
+  display: grid;
+  grid-template-columns: 20px 1fr auto 44px;
+  gap: 8px;
+  align-items: baseline;
+  padding: 7px 2px;
+  border-bottom: 1px solid var(--cream-deep);
+  font-size: 14px;
+  cursor: pointer;
+}
+.breakdown li:hover { background: var(--cream-deep); }
+.rn { font-weight: 700; color: var(--green-soft); }
+.rname { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rkm { color: var(--ink-soft); font-size: 13px; }
+.rpts { text-align: right; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 12px; text-align: center; }
+.stats b { display: block; font-size: 18px; color: var(--green); }
+.stats span { font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; color: var(--ink-soft); }
+.share-box {
+  width: 100%;
+  padding: 10px 12px;
   border: 1px solid var(--tan);
   border-radius: 9px;
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-family: "Open Sans", monospace;
-  font-size: 14px;
-  line-height: 1.5;
+  background: var(--cream-deep);
+  font: 14px/1.5 "Open Sans", sans-serif;
+  resize: none;
 }
+.archive-link { display: block; margin-top: 12px; font-size: 13px; color: var(--green-soft); text-align: center; }
+
+/* Help overlay */
+#help {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(20, 28, 22, 0.55);
+}
+#help[hidden] { display: none; }
+.help-card {
+  width: min(100%, 400px);
+  padding: 20px 20px 18px;
+  background: var(--cream);
+  border: 1px solid var(--tan);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  animation: card-in-plain 0.25s ease both;
+}
+@keyframes card-in-plain { from { opacity: 0; transform: translateY(-8px); } }
+.help-card h2 { margin: 0 0 8px; font-size: 20px; color: var(--green); }
+.help-lead { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
+.help-list { margin: 0 0 16px; padding-left: 18px; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+.help-list li { margin-bottom: 4px; }
 
 .msg { margin: 0; font-size: 16px; line-height: 1.4; }
 
@@ -165,10 +254,16 @@ button:disabled { background: #b9c3bb; cursor: default; }
 }
 .guess-marker .guess-dot {
   width: 15px; height: 15px;
-  background: var(--green);
+  background: var(--guess);
   border: 2.5px solid #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 10px;
+  text-align: center;
 }
+.guess-marker .guess-dot:not(:empty) { width: 18px; height: 18px; line-height: 13px; }
 .answer-marker .answer-dot {
   width: 15px; height: 15px;
   background: var(--target);
@@ -192,3 +287,44 @@ button:disabled { background: #b9c3bb; cursor: default; }
 }
 
 .leaflet-container { font-family: inherit; }
+
+/* ---- Wide screens: dock the card on the left, out of the map's way ---- */
+@media (min-width: 1000px) {
+  #card {
+    top: 20px;
+    left: 20px;
+    transform: none;
+    animation-name: card-in-plain;
+    max-height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+  }
+  #card-body { overflow-y: auto; }
+}
+
+/* ---- Phones: the card becomes a bottom sheet so the map up top stays clear ---- */
+@media (max-width: 640px) {
+  #card {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transform: none;
+    border-radius: 16px 16px 0 0;
+    border-width: 1px 0 0;
+    max-height: 62vh;
+    display: flex;
+    flex-direction: column;
+    animation: sheet-in 0.3s ease both;
+  }
+  @keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } }
+  #card-head { padding: 7px 14px; }
+  #card-body {
+    padding: 12px 14px calc(14px + env(safe-area-inset-bottom));
+    overflow-y: auto;
+  }
+  .ask { font-size: 21px; }
+  .reveal-blurb { font-size: 13.5px; }
+  .reveal-img, .prompt-img { max-height: 140px; }
+  .final-score { font-size: 34px; }
+}

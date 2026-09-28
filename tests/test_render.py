@@ -49,3 +49,23 @@ def test_script_breakout_is_escaped(tmp_path):
     html = index.read_text(encoding="utf-8")
     assert "</script><b>x</b>" not in html      # raw breakout must not survive
     assert "\\u003c/script>" in html              # escaped form is present
+
+
+def test_assets_are_cache_busted_and_copied(tmp_path):
+    import pathlib, re
+    root = pathlib.Path(__file__).resolve().parent.parent
+    locs = _pool()
+    sched = build_schedule(locs, date(2026, 7, 7), 3, config.RAMP, seed=0)
+    html = render_site(locs, sched, {}, config, docs_dir=tmp_path,
+                       template_dir=root / "templates", static_dir=root / "static").read_text()
+    for asset in ("style.css", "scoring.js", "game.js"):
+        assert re.search(rf'{re.escape(asset)}\?v=[0-9a-f]{{10}}"', html), asset
+        assert (tmp_path / asset).exists()
+
+
+def test_payload_carries_epoch_and_categories():
+    locs = _pool()
+    payload = build_payload(locs, {}, {}, config)
+    assert payload["config"]["epoch"] == config.EPOCH
+    assert payload["config"]["categories"]["peak"]
+    assert payload["config"]["startBounds"] == config.START_BOUNDS

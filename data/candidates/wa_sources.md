@@ -1,0 +1,84 @@
+# WA candidate coordinate sources
+
+Coordinates verified 2026-09-28 via the Wikipedia API (prop=coordinates) and OpenStreetMap via the Overpass API (Nominatim was rate-limited). A plain URL means the coordinate comes from that page.
+
+- **Mt Rainier**: https://en.wikipedia.org/wiki/Mount_Rainier
+- **Mt Baker**: https://en.wikipedia.org/wiki/Mount_Baker
+- **Mt St Helens**: https://en.wikipedia.org/wiki/Mount_St._Helens
+- **Mt Adams**: https://en.wikipedia.org/wiki/Mount_Adams_(Washington)
+- **Space Needle**: https://en.wikipedia.org/wiki/Space_Needle
+- **Pike Place Market**: https://en.wikipedia.org/wiki/Pike_Place_Market
+- **Fremont Troll**: https://en.wikipedia.org/wiki/Fremont_Troll
+- **Microsoft Campus (Redmond)**: https://en.wikipedia.org/wiki/Microsoft_campus
+- **Spokane**: https://en.wikipedia.org/wiki/Spokane,_Washington
+- **Leavenworth**: https://en.wikipedia.org/wiki/Leavenworth,_Washington
+- **Snoqualmie Falls**: https://en.wikipedia.org/wiki/Snoqualmie_Falls
+- **San Juan Island**: https://en.wikipedia.org/wiki/San_Juan_Island
+- **Whidbey Island**: Wikipedia: https://en.wikipedia.org/wiki/Deception_Pass , https://en.wikipedia.org/wiki/Oak_Harbor,_Washington , https://en.wikipedia.org/wiki/Coupeville,_Washington , https://en.wikipedia.org/wiki/Freeland,_Washington , https://en.wikipedia.org/wiki/Clinton,_Washington
+- **Lake Chelan**: Wikipedia: https://en.wikipedia.org/wiki/Chelan,_Washington , https://en.wikipedia.org/wiki/Manson,_Washington , https://en.wikipedia.org/wiki/Lucerne,_Washington , https://en.wikipedia.org/wiki/Stehekin,_Washington
+- **Hurricane Ridge**: OpenStreetMap Overpass (name/tag query) "Hurricane Ridge Visitor Center" (Wikipedia coord is the ridge high point, not the visitor center)
+- **Columbia River**: Wikipedia: https://en.wikipedia.org/wiki/Northport,_Washington , https://en.wikipedia.org/wiki/Grand_Coulee_Dam , https://en.wikipedia.org/wiki/Chief_Joseph_Dam , https://en.wikipedia.org/wiki/Rocky_Reach_Dam , https://en.wikipedia.org/wiki/Wanapum_Dam , https://en.wikipedia.org/wiki/McNary_Dam , https://en.wikipedia.org/wiki/Bonneville_Dam , https://en.wikipedia.org/wiki/Longview,_Washington
+- **Bellingham**: https://en.wikipedia.org/wiki/Bellingham,_Washington
+- **Husky Stadium**: https://en.wikipedia.org/wiki/Husky_Stadium
+- **Grand Coulee Dam**: https://en.wikipedia.org/wiki/Grand_Coulee_Dam
+- **Deception Pass**: https://en.wikipedia.org/wiki/Deception_Pass
+- **Mount Si**: https://en.wikipedia.org/wiki/Mount_Si + OSM peak node "Mount Si" 47.5069,-121.7390
+- **North Bend**: https://en.wikipedia.org/wiki/North_Bend,_Washington
+- **Stevens Pass**: https://en.wikipedia.org/wiki/Stevens_Pass_Ski_Area
+- **Mountain Loop Hwy**: Wikipedia: https://en.wikipedia.org/wiki/Granite_Falls,_Washington , https://en.wikipedia.org/wiki/Big_Four_Ice_Caves , https://en.wikipedia.org/wiki/Darrington,_Washington ; OSM: Verlot place node, Barlow Pass saddle node, Bedal hamlet node
+- **Snoqualmie Pass**: https://en.wikipedia.org/wiki/Snoqualmie_Pass
+- **Enchantments**: OSM: Stuart Lake Trailhead, Aasgard Pass, Lake Viviane, Upper Snow Lake, Nada Lake, Snow Lakes Trailhead; Wikipedia: https://en.wikipedia.org/wiki/Colchuck_Lake
+- **Colchuck Lake**: https://en.wikipedia.org/wiki/Colchuck_Lake
+- **Hoh Rainforest**: https://en.wikipedia.org/wiki/Hoh_Rainforest
+- **Mt Olympus**: https://en.wikipedia.org/wiki/Mount_Olympus_(Washington)
+- **Cape Flattery**: https://en.wikipedia.org/wiki/Cape_Flattery
+- **Lake Crescent**: https://en.wikipedia.org/wiki/Lake_Crescent
+- **Palouse Falls**: https://en.wikipedia.org/wiki/Palouse_Falls
+- **Discovery Park**: https://en.wikipedia.org/wiki/Discovery_Park_(Seattle)
+- **Crystal Mountain**: https://en.wikipedia.org/wiki/Crystal_Mountain_(Washington) + OSM relation "Crystal Mountain" 46.9328,-121.4880
+- **Mt Baker Ski Area**: https://en.wikipedia.org/wiki/Mt._Baker_Ski_Area (48.8620,-121.6540) + OSM Heather Meadows 48.8563,-121.6858; midpoint of the two bases
+- **North Cascades Hwy (SR-20)**: Wikipedia: https://en.wikipedia.org/wiki/Sedro-Woolley,_Washington , https://en.wikipedia.org/wiki/Concrete,_Washington , https://en.wikipedia.org/wiki/Marblemount,_Washington , https://en.wikipedia.org/wiki/Newhalem,_Washington , https://en.wikipedia.org/wiki/Diablo_Lake , https://en.wikipedia.org/wiki/Washington_Pass , https://en.wikipedia.org/wiki/Winthrop,_Washington ; OSM Rainy Pass saddle node
+- **Skagit River**: Wikipedia: https://en.wikipedia.org/wiki/Ross_Dam , https://en.wikipedia.org/wiki/Gorge_Dam , https://en.wikipedia.org/wiki/Newhalem,_Washington , https://en.wikipedia.org/wiki/Marblemount,_Washington , https://en.wikipedia.org/wiki/Concrete,_Washington , https://en.wikipedia.org/wiki/Sedro-Woolley,_Washington , https://en.wikipedia.org/wiki/Mount_Vernon,_Washington , https://en.wikipedia.org/wiki/Skagit_River (mouth)
+- **Diablo Lake**: https://en.wikipedia.org/wiki/Diablo_Lake
+- **Winthrop**: https://en.wikipedia.org/wiki/Winthrop,_Washington
+- **Rattlesnake Ledge**: OpenStreetMap Overpass (name/tag query) viewpoint node "Rattlesnake Ledge" (Wikipedia Rattlesnake Ridge coord is the ridge, not the ledge)
+- **Washington Pass**: https://en.wikipedia.org/wiki/Washington_Pass
+- **Dry Falls**: https://en.wikipedia.org/wiki/Dry_Falls + OSM cliff way 47.6030,-119.3503
+- **Sahale Peak**: https://en.wikipedia.org/wiki/Sahale_Mountain + OSM peak node "Sahale Mountain" 48.4914,-121.0384
+- **Vesper Peak**: https://en.wikipedia.org/wiki/Vesper_Peak
+- **Gold Bar**: https://en.wikipedia.org/wiki/Gold_Bar,_Washington
+- **Fall City**: OpenStreetMap Overpass (name/tag query) place node "Fall City" (Wikipedia page has no coord)
+- **I-90 Exit 32 (Mt Si/Little Si)**: OpenStreetMap Overpass (name/tag query) motorway_junction ref=32 nodes 47.4732,-121.7647 and 47.4737,-121.7518 (midpoint)
+- **I-90 Exit 38 (Deception Crags/Olallie)**: OpenStreetMap Overpass (name/tag query) motorway_junction ref=38 nodes 47.4432,-121.6750 and 47.4294,-121.6288 (midpoint of split EB/WB exits)
+- **I-90 Exit 47 (Denny Creek/Asahel Curtis)**: OpenStreetMap Overpass (name/tag query) motorway_junction ref=47 nodes 47.3969,-121.4915 and 47.3955,-121.4750 (midpoint)
+- **Eldorado Peak**: https://en.wikipedia.org/wiki/Eldorado_Peak
+- **Forbidden Peak**: https://en.wikipedia.org/wiki/Forbidden_Peak
+- **Mt Stuart**: https://en.wikipedia.org/wiki/Mount_Stuart
+- **Dragontail Peak**: https://en.wikipedia.org/wiki/Dragontail_Peak
+- **Index Town Walls**: OpenStreetMap Overpass (name/tag query) climbing=area relation "Lower Town Wall" (no Wikipedia coord)
+- **Ptarmigan Traverse**: Wikipedia: https://en.wikipedia.org/wiki/Cascade_Pass , https://en.wikipedia.org/wiki/Mount_Formidable , https://en.wikipedia.org/wiki/Dome_Peak ; OSM: Cache Col, Le Conte Mountain, White Rock Lakes, Downey Creek
+- **Sloan Peak**: https://en.wikipedia.org/wiki/Sloan_Peak
+- **Mt Shuksan**: https://en.wikipedia.org/wiki/Mount_Shuksan
+- **Mt Daniel**: https://en.wikipedia.org/wiki/Mount_Daniel
+- **Tatoosh Range**: Wikipedia: https://en.wikipedia.org/wiki/Tatoosh_Range ; OSM peak nodes Pinnacle Peak 46.7579,-121.7326 and Unicorn Peak 46.7462,-121.7012 (point placed between them)
+- **Lake Serene**: https://en.wikipedia.org/wiki/Lake_Serene
+- **Glacier Peak**: https://en.wikipedia.org/wiki/Glacier_Peak
+- **Liberty Bell**: https://en.wikipedia.org/wiki/Liberty_Bell_Mountain
+- **Castle Rock (Leavenworth)**: OpenStreetMap Overpass (name/tag query) natural=peak "Castle Rock" 47.5999,-120.7118 in Tumwater Canyon (no Wikipedia coord)
+- **Frenchman Coulee**: https://en.wikipedia.org/wiki/Frenchman_Coulee + OSM locality node 47.0300,-119.9695
+- **Mazama**: https://en.wikipedia.org/wiki/Mazama,_Washington
+- **Index**: https://en.wikipedia.org/wiki/Index,_Washington
+- **Darrington**: https://en.wikipedia.org/wiki/Darrington,_Washington
+- **Marblemount**: https://en.wikipedia.org/wiki/Marblemount,_Washington
+- **Mt Constance**: https://en.wikipedia.org/wiki/Mount_Constance
+- **The Brothers**: https://en.wikipedia.org/wiki/The_Brothers_(Olympic_Mountains)
+- **Goat Rocks**: https://en.wikipedia.org/wiki/Goat_Rocks
+- **Dog Mountain**: OpenStreetMap Overpass (name/tag query) natural=peak "Dog Mountain" (ele 898 m) in the Columbia Gorge (no Wikipedia page)
+- **US-2 (Stevens Pass Hwy)**: Wikipedia: https://en.wikipedia.org/wiki/Everett,_Washington , https://en.wikipedia.org/wiki/Monroe,_Washington , https://en.wikipedia.org/wiki/Sultan,_Washington , https://en.wikipedia.org/wiki/Gold_Bar,_Washington , https://en.wikipedia.org/wiki/Index,_Washington , https://en.wikipedia.org/wiki/Skykomish,_Washington , https://en.wikipedia.org/wiki/Stevens_Pass_Ski_Area , https://en.wikipedia.org/wiki/Leavenworth,_Washington
+- **Chinook Pass Hwy (SR-410)**: Wikipedia: https://en.wikipedia.org/wiki/Enumclaw,_Washington , https://en.wikipedia.org/wiki/Greenwater,_Washington , https://en.wikipedia.org/wiki/Cayuse_Pass , https://en.wikipedia.org/wiki/Chinook_Pass , https://en.wikipedia.org/wiki/Naches,_Washington
+- **Skykomish River**: Wikipedia: https://en.wikipedia.org/wiki/Skykomish,_Washington , https://en.wikipedia.org/wiki/Baring,_Washington , https://en.wikipedia.org/wiki/Index,_Washington , https://en.wikipedia.org/wiki/Gold_Bar,_Washington , https://en.wikipedia.org/wiki/Sultan,_Washington , https://en.wikipedia.org/wiki/Skykomish_River (mouth)
+- **Emmons Glacier**: https://en.wikipedia.org/wiki/Emmons_Glacier
+- **Blue Glacier**: https://en.wikipedia.org/wiki/Blue_Glacier
+- **Cascade Pass**: https://en.wikipedia.org/wiki/Cascade_Pass
+- **Little Si**: https://en.wikipedia.org/wiki/Little_Si + OSM peak node 47.4987,-121.7560
+- **Steamboat Rock**: OpenStreetMap Overpass (name/tag query) natural=peak "Steamboat Rock" 47.8665,-119.1353; https://en.wikipedia.org/wiki/Steamboat_Rock_State_Park

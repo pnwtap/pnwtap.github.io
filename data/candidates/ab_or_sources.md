@@ -1,0 +1,52 @@
+# ab_or.csv coordinate sources
+
+Wikipedia coords via en.wikipedia.org API (prop=coordinates); OSM via nominatim.openstreetmap.org or photon.komoot.io (OSM data). Verified 2026-09-28.
+
+- **Banff**: https://en.wikipedia.org/wiki/Banff,_Alberta
+- **Lake Louise**: https://en.wikipedia.org/wiki/Lake_Louise_(Alberta)
+- **Calgary**: https://en.wikipedia.org/wiki/Calgary
+- **Jasper**: https://en.wikipedia.org/wiki/Jasper,_Alberta
+- **Edmonton**: https://en.wikipedia.org/wiki/Edmonton
+- **Moraine Lake**: https://en.wikipedia.org/wiki/Moraine_Lake
+- **Canmore**: https://en.wikipedia.org/wiki/Canmore,_Alberta
+- **Icefields Parkway**: https://en.wikipedia.org/wiki/Icefields_Parkway ; anchors: OSM Nominatim: Lake Louise hamlet, Bow Summit, Saskatchewan River Crossing, Sunwapta Falls, Athabasca Falls; https://en.wikipedia.org/wiki/Bow_Lake_(Alberta), https://en.wikipedia.org/wiki/Athabasca_Glacier, https://en.wikipedia.org/wiki/Jasper,_Alberta
+- **Athabasca Glacier**: https://en.wikipedia.org/wiki/Athabasca_Glacier
+- **Drumheller**: https://en.wikipedia.org/wiki/Drumheller
+- **Waterton**: OSM via photon.komoot.io: Waterton Park hamlet; https://en.wikipedia.org/wiki/Waterton_Park
+- **Wapta Traverse**: OSM Nominatim: Peyto Hut, Bow Hut, Scott Duncan Hut; OSM via photon.komoot.io: Balfour/Rob Ritchie Hut, Sherbrooke Lake; https://en.wikipedia.org/wiki/Peyto_Lake, https://en.wikipedia.org/wiki/Wapta_Lake, https://en.wikipedia.org/wiki/Wapta_Icefield
+- **Mount Temple**: https://en.wikipedia.org/wiki/Mount_Temple_(Alberta)
+- **Mount Columbia**: https://en.wikipedia.org/wiki/Mount_Columbia_(Canada)
+- **Mount Alberta**: https://en.wikipedia.org/wiki/Mount_Alberta
+- **Mount Edith Cavell**: https://en.wikipedia.org/wiki/Mount_Edith_Cavell
+- **Castle Mountain**: https://en.wikipedia.org/wiki/Castle_Mountain ; OSM via photon.komoot.io: Castle Mountain ridge
+- **Ha Ling Peak**: https://en.wikipedia.org/wiki/Ha_Ling_Peak
+- **Mount Sir Douglas**: https://en.wikipedia.org/wiki/Mount_Sir_Douglas
+- **Yamnuska**: https://en.wikipedia.org/wiki/Mount_John_Laurie
+- **Lake Agnes Tea House**: OSM Nominatim: Lake Agnes Tea House
+- **Skyline Trail**: OSM via photon.komoot.io: Evelyn Creek CG, Little/Big Shovel Pass, Snowbowl CG, Curator Lake, Signal Mountain, Signal Mtn Fire Road
+- **Crypt Lake**: OSM via photon.komoot.io: Crypt Lake; https://en.wikipedia.org/wiki/Crypt_Lake_Trail
+- **Maligne Lake**: https://en.wikipedia.org/wiki/Maligne_Lake
+- **Portland**: https://en.wikipedia.org/wiki/Portland,_Oregon
+- **Mount Hood**: https://en.wikipedia.org/wiki/Mount_Hood
+- **Crater Lake**: https://en.wikipedia.org/wiki/Crater_Lake ; OSM via photon.komoot.io: Crater Lake
+- **Multnomah Falls**: https://en.wikipedia.org/wiki/Multnomah_Falls
+- **Eugene**: https://en.wikipedia.org/wiki/Eugene,_Oregon
+- **Salem**: https://en.wikipedia.org/wiki/Salem,_Oregon
+- **Astoria**: https://en.wikipedia.org/wiki/Astoria,_Oregon
+- **Smith Rock**: https://en.wikipedia.org/wiki/Smith_Rock_State_Park
+- **Bend**: https://en.wikipedia.org/wiki/Bend,_Oregon
+- **Three Sisters**: OSM via photon.komoot.io: Middle Sister (volcano); https://en.wikipedia.org/wiki/Three_Sisters_(Oregon)
+- **Mount Jefferson**: https://en.wikipedia.org/wiki/Mount_Jefferson_(Oregon)
+- **Cannon Beach**: https://en.wikipedia.org/wiki/Cannon_Beach,_Oregon
+- **Mount Bachelor**: https://en.wikipedia.org/wiki/Mount_Bachelor
+- **Columbia River Gorge**: https://en.wikipedia.org/wiki/Columbia_River_Gorge ; anchors: https://en.wikipedia.org/wiki/Sandy_River_(Oregon), https://en.wikipedia.org/wiki/Crown_Point_(Oregon), https://en.wikipedia.org/wiki/Bonneville_Dam, OSM Nominatim: Hood River; https://en.wikipedia.org/wiki/The_Dalles,_Oregon, https://en.wikipedia.org/wiki/Deschutes_River_State_Recreation_Area
+- **Broken Top**: https://en.wikipedia.org/wiki/Broken_Top
+- **Three Fingered Jack**: https://en.wikipedia.org/wiki/Three_Fingered_Jack
+- **Mount Thielsen**: https://en.wikipedia.org/wiki/Mount_Thielsen
+- **Eagle Cap**: https://en.wikipedia.org/wiki/Eagle_Cap
+- **Steens Mountain**: https://en.wikipedia.org/wiki/Steens_Mountain
+- **Painted Hills**: OSM via photon.komoot.io: John Day Fossil Beds - Painted Hills Unit; https://en.wikipedia.org/wiki/Painted_Hills
+- **Alvord Desert**: OSM via photon.komoot.io: Alvord Desert; https://en.wikipedia.org/wiki/Alvord_Desert
+- **Timberline Trail**: https://en.wikipedia.org/wiki/Timberline_Trail ; anchors: OSM via photon.komoot.io: Timberline Lodge, Zigzag Canyon Rim, Paradise Park, Cairn Basin Shelter, Cloud Cap Inn, Elk Meadows; OSM Nominatim: Ramona Falls
+- **Deschutes River**: OSM Nominatim: Little Lava Lake, Maupin; https://en.wikipedia.org/wiki/Crane_Prairie_Reservoir, https://en.wikipedia.org/wiki/Wickiup_Reservoir, https://en.wikipedia.org/wiki/Benham_Falls, https://en.wikipedia.org/wiki/Bend,_Oregon, https://en.wikipedia.org/wiki/Lake_Billy_Chinook, https://en.wikipedia.org/wiki/Deschutes_River_State_Recreation_Area
+- **Historic Columbia River Highway**: https://en.wikipedia.org/wiki/Historic_Columbia_River_Highway ; anchors: OSM Nominatim: Troutdale, Cascade Locks, Hood River; https://en.wikipedia.org/wiki/Vista_House, https://en.wikipedia.org/wiki/Multnomah_Falls, https://en.wikipedia.org/wiki/Bonneville_Dam, https://en.wikipedia.org/wiki/Mosier,_Oregon, https://en.wikipedia.org/wiki/The_Dalles,_Oregon

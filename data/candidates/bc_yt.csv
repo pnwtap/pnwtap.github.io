@@ -1,0 +1,59 @@
+name,category,difficulty,geometry,image,blurb
+Vancouver,town,easy,"49.2608,-123.1139",,"Ski, climb and kayak on the same spring day: the North Shore peaks rise straight out of the city's backyard."
+Victoria,town,easy,"48.4283,-123.3647",,"BC's capital sits at the southern tip of Vancouver Island, gazing across the strait at the Olympics."
+Whistler,town,easy,"50.1167,-122.9542",,Host of the 2010 Olympic alpine events and jumping-off point for the Spearhead and Fitzsimmons traverses.
+Stanley Park,poi,easy,"49.3000,-123.1400",,"A 400-hectare forested peninsula ringed by the Seawall, bigger than Central Park in NYC."
+Kelowna,town,easy,"49.8881,-119.4956",,"Okanagan wine-and-beach city on the shore of Okanagan Lake, supposed home of the lake monster Ogopogo."
+Mt Robson,peak,easy,"53.1106,-119.1564",,"At 3,954 m it's the highest peak in the Canadian Rockies, and its summit is famously shrouded in cloud most days."
+Whitehorse,town,easy,"60.7242,-135.0561",,"Yukon's capital on the Yukon River, once the head of sternwheeler navigation for Klondike stampeders."
+Kamloops,town,easy,"50.6758,-120.3394",,Sagebrush and hoodoo country where the North and South Thompson rivers meet.
+Nanaimo,town,easy,"49.1642,-123.9364",,"Harbour city on Vancouver Island's east coast, and namesake of the famous no-bake bar."
+Prince George,town,easy,"53.9131,-122.7453",,Northern BC's hub at the confluence of the Fraser and Nechako rivers.
+Okanagan Lake,lake,easy,"49.9111,-119.5125",,A 135 km long glacial trench lake stretching from Vernon to Penticton.
+Grouse Mountain,peak,easy,"49.3796,-123.0818",,"Home of the Grouse Grind, a 2.9 km stair-master of a trail gaining about 850 m."
+Penticton,town,easy,"49.5008,-119.5939",,"Squeezed between Okanagan and Skaha lakes, with world-class gneiss cragging just south of town."
+Fraser River,river,easy,"52.9667,-119.4292; 53.9131,-122.7453; 52.9797,-122.4936; 50.6936,-121.9336; 49.7833,-121.4500; 49.3800,-121.4414; 49.1337,-122.3112; 49.1778,-123.2125",,"BC's longest river rises near Mt Robson, loops north to Prince George, then carves the Fraser Canyon to the sea."
+Squamish,town,medium,"49.7017,-123.1589",,"The Outdoor Recreation Capital of Canada: granite big walls, kiteboarding, mountain biking and bald eagles."
+The Chief,climb,medium,"49.6839,-123.1417",,The Stawamus Chief is a 700 m granite monolith; the Grand Wall is one of Canada's most iconic rock climbs.
+Garibaldi Lake,lake,medium,"49.9250,-123.0100",,"Its startling turquoise water is held back by The Barrier, a lava dam of unstable volcanic rock."
+Joffre Lakes,lake,medium,"50.3413,-122.4762",,"Three glacier-fed lakes stacked beneath Matier Glacier, just off the Duffey Lake Road."
+Tofino,town,medium,"49.1531,-125.9044",,"Surf town at the end of Hwy 4 on Vancouver Island's wild west coast, gateway to Clayoquot Sound."
+Revelstoke,town,medium,"50.9981,-118.1956",,"Powder town between the Selkirks and Monashees, with the most vertical of any lift-served resort in North America."
+Golden,town,medium,"51.3019,-116.9667",,"Where the Kicking Horse meets the Columbia; a base for the Rockies, Purcells and Rogers Pass."
+Sea-to-Sky Hwy,road,medium,"49.3739,-123.2772; 49.6250,-123.2042; 49.7017,-123.1589; 50.0353,-123.1186; 50.1167,-122.9542; 50.3203,-122.8075",,Highway 99 climbs from Howe Sound past the Chief and Brandywine Falls to Whistler and Pemberton.
+Bugaboos,climb,medium,"50.7458,-116.7892",,Granite spires jutting from Purcell glaciers; Conrad Kain climbed Bugaboo Spire in 1916 and called it his hardest ascent.
+Mt Garibaldi,peak,medium,"49.8503,-123.0047",,A heavily eroded stratovolcano whose rubbly Atwell Peak dominates the view north from Squamish.
+Haida Gwaii,island,medium,"53.0000,-132.0000",,"An archipelago of about 150 islands off the north coast, sometimes called the Galápagos of Canada."
+Dawson City,town,medium,"64.0600,-139.4319",,"Heart of the 1898 Klondike Gold Rush, sitting where the Klondike River joins the Yukon."
+Kluane Lake,lake,medium,"61.2639,-138.7444",,"Yukon's largest lake, beside the Alaska Highway at the edge of Kluane National Park."
+Nelson,town,medium,"49.5000,-117.2833",,"Heritage mountain town on Kootenay Lake's West Arm, home to Whitewater's deep powder."
+Pemberton,town,medium,"50.3203,-122.8075",,"Seed-potato farming valley under Mt Currie's 1,700 m north face, at the start of the Duffey Lake Road."
+Fernie,town,medium,"49.5042,-115.0628",,"Coal-mining town turned ski mecca in the Lizard Range, famed for its deep powder storm cycles."
+Coquihalla Hwy,road,medium,"49.3800,-121.4414; 49.5973,-121.0781; 50.1125,-120.7883; 50.6758,-120.3394",,"Highway 5 from Hope to Kamloops, star of Highway Thru Hell; the summit near Zopkios is a classic ski tour."
+Mt Waddington,peak,hard,"51.3736,-125.2633",,"At 4,019 m the highest peak entirely in BC, a rime-plastered tower guarded by huge glaciers."
+Wedge Mountain,peak,hard,"50.1331,-122.7933",,"At 2,892 m the highest summit in Garibaldi Park, reached via the Wedgemount Lake hut."
+Sky Pilot,peak,hard,"49.6352,-123.0863",,"A craggy 2,031 m summit looming over the Sea to Sky Gondola, above Howe Sound."
+Mt Slesse,peak,hard,"49.0256,-121.5919",,Its knife-edged NE Buttress is a North American classic; a 1956 airliner crash site lies on its slopes.
+Spearhead Traverse,traverse,hard,"50.0814,-122.8708; 50.0694,-122.8542; 50.0594,-122.8269; 50.0139,-122.8067; 50.0156,-122.8208; 50.0592,-122.9569",,"A horseshoe ski traverse from Blackcomb to Whistler over a dozen glaciers, often done in a single long day."
+Howser Towers,climb,hard,"50.7297,-116.8133",,The Bugaboos' highest summit; the Beckey-Chouinard on South Howser Tower is one of the Fifty Classic Climbs.
+Rogers Pass,pass,hard,"51.3014,-117.4764",,"The railway's 1880s route through the Selkirks, now a legendary ski touring zone with a permit system."
+Mt Sir Donald,peak,hard,"51.2631,-117.4314",,"Its Northwest Ridge offers roughly 1,000 m of quartzite scrambling, a Rogers Pass rite of passage."
+Mt Begbie,peak,hard,"50.8847,-118.2558",,"A glaciated 2,733 m peak that forms Revelstoke's skyline, south of town across the Columbia."
+Mt Joffre,peak,hard,"50.3411,-122.4456",,Highest peak of the Joffre Group; its north couloir is a coveted steep ski line.
+Tantalus Range,peak,hard,"49.8181,-123.3294",,A jagged glaciated wall across the Squamish River from Hwy 99; crossings start with a river boat or a fixed rope.
+Bella Coola,town,hard,"52.3667,-126.7500",,"Tidewater village at the end of Hwy 20 and 'The Hill,' ringed by heli-ski terrain in the Coast Range."
+The Lions,peak,hard,"49.4578,-123.1864",,Twin granite summits above Howe Sound; the Squamish people call them the Twin Sisters.
+Skeena River,river,hard,"55.2556,-127.6753; 55.0997,-128.0681; 54.5164,-128.5997; 54.3358,-129.2961; 54.1589,-129.9676",,BC's second-longest river flows through the Coast Mountains past Terrace to tidewater near Prince Rupert.
+Skaha Bluffs,climb,hard,"49.4458,-119.5611",,"Hundreds of sunny gneiss sport routes above Skaha Lake, a spring and fall escape from coastal rain."
+Duffey Lake Rd,road,hard,"50.3164,-122.7178; 50.3717,-122.4922; 50.4042,-122.3417; 50.6936,-121.9336",,Highway 99 from Mount Currie to Lillooet; Cayoosh Pass at the top has endless ski touring right off the road.
+Lake O'Hara,lake,hard,"51.3559,-116.3304",,A Yoho gem reachable by a limited-seat bus or a long walk; Abbot Pass hut sat above it until 2022.
+Mt Assiniboine,peak,hard,"50.8694,-115.6508",,The Matterhorn of the Rockies straddles the Divide; its summit lies on the BC side in Mt Assiniboine Park.
+Golden Hinde,peak,hard,"49.6627,-125.7470",,"At 2,195 m it's Vancouver Island's highest peak, deep in the backcountry of Strathcona Park."
+Cape Scott,poi,hard,"50.7822,-128.4272",,"The storm-lashed northwest tip of Vancouver Island, end of the North Coast Trail."
+Chilkoot Trail,hike,hard,"59.6969,-135.2386; 59.8094,-135.0357; 59.8500,-135.0000",,The 1898 stampeders' route over Chilkoot Pass; the Canadian half drops past Lindeman Lake to Bennett.
+Takakkaw Falls,poi,hard,"51.4997,-116.4728",,"Fed by the Daly Glacier, it drops about 373 m in Yoho; the name comes from a Cree word for magnificent."
+Mt Logan,peak,hard,"60.5672,-140.4053",,"Canada's highest peak at 5,959 m, with perhaps the largest base circumference of any mountain on Earth."
+Tombstone Park,poi,hard,"64.0829,-138.5109",,"Jagged granite peaks along the Dempster Highway, dubbed the Patagonia of the North."
+Miles Canyon,poi,hard,"60.6618,-135.0287",,Basalt-walled gorge on the Yukon River just upstream of Whitehorse that wrecked many stampeders' boats.
+Carcross Desert,poi,hard,"60.1872,-134.6947",,"Sand dunes left by an ancient glacial lake bed, often billed as one of the world's smallest deserts."
+Yukon River,river,hard,"60.4361,-134.2506; 60.7242,-135.0561; 61.1667,-135.1667; 62.0889,-136.2889; 62.7667,-137.3833; 64.0600,-139.4319",,The Klondike highway of 1898: paddlers still float it from Whitehorse to Dawson on a ~715 km journey.

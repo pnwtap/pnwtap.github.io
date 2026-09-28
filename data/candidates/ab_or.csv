@@ -1,0 +1,49 @@
+name,category,difficulty,geometry,image,blurb
+Banff,town,easy,"51.1778,-115.5736",,"Canada's highest town, founded around hot springs; the Bow River and Cascade Mountain frame its main street."
+Lake Louise,lake,easy,"51.4117,-116.2281",,Glacial flour from the Victoria Glacier turns it that milky turquoise; the hamlet sits about 4 km downhill.
+Calgary,town,easy,"51.0475,-114.0625",,Where the Bow meets the Elbow; on a clear day the Rockies' front ranges line the western skyline 80 km away.
+Jasper,town,easy,"52.8731,-118.0822",,"Railway town in the Athabasca valley, badly hit by the 2024 wildfire; hub for the Skyline, Tonquin and Edith Cavell."
+Edmonton,town,easy,"53.5344,-113.4903",,"Alberta's capital straddles the North Saskatchewan River valley, home to North America's largest urban parkland."
+Moraine Lake,lake,medium,"51.3225,-116.1856",,"Sits under the Valley of the Ten Peaks; the rockpile at its outlet is probably a rockslide, not a moraine at all."
+Canmore,town,medium,"51.0883,-115.3478",,"Former coal-mining town turned climbing and ski-touring base, tucked under the Three Sisters and Ha Ling."
+Icefields Parkway,road,medium,"51.4250,-116.1775; 51.6644,-116.4486; 51.7189,-116.4934; 51.9736,-116.7426; 52.1986,-117.2436; 52.5323,-117.6446; 52.6644,-117.8835; 52.8731,-118.0822",,"Highway 93N: 232 km from Lake Louise to Jasper, topping out at Bow Summit and passing a hundred-odd glaciers."
+Athabasca Glacier,glacier,medium,"52.1986,-117.2436",,"Toe of the Columbia Icefield, visible from the Parkway; it has retreated well over a kilometre since the 1840s."
+Drumheller,town,medium,"51.4636,-112.7194",,"Badlands town in the Red Deer River valley; hoodoos, dinosaur bones and the Royal Tyrrell Museum."
+Waterton,town,medium,"49.0509,-113.9070",,"Waterton Park townsite, where prairie slams into mountains; boat to Crypt Lake trailhead leaves from here."
+Wapta Traverse,traverse,hard,"51.7269,-116.5219; 51.6658,-116.5457; 51.6346,-116.4897; 51.5919,-116.4604; 51.5283,-116.4029; 51.4575,-116.3878; 51.4392,-116.3500",,"Classic hut-to-hut ski traverse along the Divide: Peyto, Bow, Balfour and Scott Duncan huts, exiting past Sherbrooke Lake."
+Mount Temple,peak,hard,"51.3506,-116.2067",,"At 3,544 m the highest peak in the Lake Louise area; scrambler's route up the SW side, while the north face is a serious alpine test."
+Mount Columbia,peak,hard,"52.1472,-117.4417",,"Highest point in Alberta at 3,747 m, perched on the Divide at the far edge of the Columbia Icefield."
+Mount Alberta,peak,hard,"52.2872,-117.4767",,"First climbed by a Japanese party in 1925, who reportedly left an ice axe on top; still one of the Rockies' hardest summits."
+Mount Edith Cavell,peak,hard,"52.6683,-118.0567",,"Its 1,500 m north face, first climbed in 1961, is one of North America's classic alpine climbs."
+Castle Mountain,peak,hard,"51.3140,-115.9527",,"Crenellated massif over the Bow Valley; Eisenhower Tower anchors its SE end, reached from a popular climbers' hut."
+Ha Ling Peak,peak,hard,"51.0642,-115.3997",,Named for a Chinese cook who reportedly climbed it on a bet in 1896; Canmore's favourite quick hike.
+Mount Sir Douglas,peak,hard,"50.7225,-115.3389",,"Kananaskis's highest summit at 3,406 m, straddling the Divide, with a glaciated approach over the Haig Glacier."
+Yamnuska,climb,hard,"51.1242,-115.1183",,"Mount John Laurie's limestone south face, the first big wall you see driving west; a cradle of Rockies rock climbing."
+Lake Agnes Tea House,poi,hard,"51.4164,-116.2442",,"Built by the CPR in 1901; everything is hauled up on foot or by helicopter, and there's no electricity."
+Skyline Trail,hike,hard,"52.7349,-117.7039; 52.7366,-117.7637; 52.7475,-117.7779; 52.7797,-117.8301; 52.7929,-117.8646; 52.8594,-117.9669; 52.8937,-117.9970",,"44 km from Maligne Lake to Maligne Canyon, with about 25 km above treeline over Big Shovel Pass and the Notch."
+Crypt Lake,hike,hard,"49.0012,-113.8407",,"Boat approach, ladder, and a crawl through a rock tunnel lead to this lake right against the US border."
+Maligne Lake,lake,hard,"52.6644,-117.5336",,Largest natural lake in the Canadian Rockies; Spirit Island is reached by boat from the north end.
+Portland,town,easy,"45.5200,-122.6819",,"City of bridges at the Willamette-Columbia confluence, with Mt Hood on the eastern skyline."
+Mount Hood,peak,easy,"45.3736,-121.6958",,"Oregon's highest peak at 3,429 m; the south side route via the Hogsback is one of the most-climbed glaciated peaks."
+Crater Lake,lake,easy,"42.9415,-122.0988",,"Collapsed caldera of Mount Mazama, about 7,700 years old; at 594 m it's the deepest lake in the US."
+Multnomah Falls,poi,easy,"45.5759,-122.1154",,"Two-tier falls dropping about 189 m, with the Benson Bridge spanning between the tiers."
+Eugene,town,easy,"44.0564,-123.1175",,Track Town USA on the Willamette; the McKenzie River corridor to the Three Sisters starts just east.
+Salem,town,easy,"44.9400,-123.0389",,"Oregon's capital, midway up the Willamette Valley; Silver Falls and its Trail of Ten Falls lie just east."
+Astoria,town,easy,"46.1883,-123.8100",,"Oldest US settlement west of the Rockies, at the Columbia's mouth; Lewis and Clark wintered nearby."
+Smith Rock,climb,medium,"44.3693,-121.1384",,Welded tuff above the Crooked River; Alan Watts' 1986 Chain Reaction helped launch US sport climbing here.
+Bend,town,medium,"44.0581,-121.3153",,"High-desert outdoor town on the Deschutes, 35 km from Mt Bachelor; Pilot Butte is a cinder cone right in town."
+Three Sisters,peak,medium,"44.1484,-121.7841",,"North, Middle and South Sister, all over 3,000 m; South Sister is a popular walk-up with a crater lake on top."
+Mount Jefferson,peak,medium,"44.6743,-121.7996",,"Oregon's second-highest peak, 3,199 m; its exposed summit pinnacle turns back many parties."
+Cannon Beach,town,medium,"45.8819,-123.9594",,Named after a cannon washed ashore from USS Shark in 1846; Haystack Rock towers off the beach.
+Mount Bachelor,peak,medium,"43.9794,-121.6885",,"Young Cascade volcano and big ski area; lifts reach the summit, so skiing 360 degrees off the top is possible."
+Columbia River Gorge,river,medium,"45.5681,-122.4008; 45.5395,-122.2442; 45.6442,-121.9406; 45.7088,-121.5124; 45.6017,-121.1847; 45.6335,-120.9096",,"The Columbia's cut through the Cascades, carved larger by Ice Age Missoula Floods; windsurfing mecca at Hood River."
+Broken Top,peak,hard,"44.0829,-121.6998",,Heavily eroded stratovolcano exposing its layered innards; the Crater Ditch and Green Lakes approaches are classics.
+Three Fingered Jack,peak,hard,"44.4790,-121.8431",,Crumbling volcanic plug; the summit block has a famous exposed step with big air below.
+Mount Thielsen,peak,hard,"43.1528,-122.0665",,The Lightning Rod of the Cascades; fulgurites coat the needle-like summit pinnacle.
+Eagle Cap,peak,hard,"45.1635,-117.3016",,Centerpiece of the Wallowas' granite high country; radiating valleys give the wilderness its name.
+Steens Mountain,peak,hard,"42.6364,-118.5767",,"Huge fault-block mountain; the east face drops about 1,500 m to the Alvord Desert, and a gravel road nearly reaches the top."
+Painted Hills,poi,hard,"44.6481,-120.2654",,"John Day Fossil Beds unit whose red, gold and black bands record ancient soils from a warmer climate."
+Alvord Desert,poi,hard,"42.5377,-118.4651",,"Dry lakebed under Steens' east scarp, flat enough for land-speed records; hot springs on the edge."
+Timberline Trail,hike,hard,"45.3311,-121.7118; 45.3423,-121.7412; 45.3494,-121.7449; 45.3800,-121.7763; 45.4040,-121.7231; 45.4040,-121.6544; 45.3441,-121.6175; 45.3311,-121.7118",,"Roughly 66 km loop around Mt Hood via Paradise Park, Ramona Falls, Cairn Basin and Cloud Cap, with unbridged glacial creek fords."
+Deschutes River,river,hard,"43.9111,-121.7570; 43.7806,-121.8006; 43.6903,-121.6983; 43.9375,-121.4122; 44.0581,-121.3153; 44.5891,-121.3650; 45.1753,-121.0808; 45.6335,-120.9096",,"Rises at Little Lava Lake, loops south through Wickiup, then runs north past Bend and Maupin to the Columbia. Big whitewater."
+Historic Columbia River Highway,road,hard,"45.5393,-122.3873; 45.5396,-122.2444; 45.5759,-122.1154; 45.6442,-121.9406; 45.6695,-121.8904; 45.7088,-121.5124; 45.6850,-121.3950; 45.6017,-121.1847",,"Opened 1916 as America's first planned scenic highway, looping past Vista House and the waterfalls to The Dalles."

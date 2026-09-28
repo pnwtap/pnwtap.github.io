@@ -1,0 +1,62 @@
+# bc_yt.csv coordinate sources
+
+Wikipedia URLs: coordinates from the article {{coord}} via the MediaWiki API (prop=coordinates). Nominatim URLs: OpenStreetMap search results.
+
+- **Vancouver**: https://en.wikipedia.org/wiki/Vancouver
+- **Victoria**: https://en.wikipedia.org/wiki/Victoria,_British_Columbia
+- **Whistler**: https://en.wikipedia.org/wiki/Whistler,_British_Columbia
+- **Stanley Park**: https://en.wikipedia.org/wiki/Stanley_Park
+- **Kelowna**: https://en.wikipedia.org/wiki/Kelowna
+- **Mt Robson**: https://en.wikipedia.org/wiki/Mount_Robson
+- **Whitehorse**: https://en.wikipedia.org/wiki/Whitehorse
+- **Kamloops**: https://en.wikipedia.org/wiki/Kamloops
+- **Nanaimo**: https://en.wikipedia.org/wiki/Nanaimo
+- **Prince George**: https://en.wikipedia.org/wiki/Prince_George,_British_Columbia
+- **Okanagan Lake**: https://en.wikipedia.org/wiki/Okanagan_Lake
+- **Grouse Mountain**: https://en.wikipedia.org/wiki/Grouse_Mountain
+- **Penticton**: https://en.wikipedia.org/wiki/Penticton
+- **Fraser River**: https://en.wikipedia.org/wiki/Fraser_River ; https://en.wikipedia.org/wiki/Tête_Jaune_Cache ; https://en.wikipedia.org/wiki/Prince_George,_British_Columbia ; https://en.wikipedia.org/wiki/Quesnel,_British_Columbia ; https://en.wikipedia.org/wiki/Lillooet ; https://en.wikipedia.org/wiki/Hells_Gate_(British_Columbia) ; https://en.wikipedia.org/wiki/Hope,_British_Columbia ; https://en.wikipedia.org/wiki/Mission,_British_Columbia
+- **Squamish**: https://en.wikipedia.org/wiki/Squamish,_British_Columbia
+- **The Chief**: https://en.wikipedia.org/wiki/Stawamus_Chief
+- **Garibaldi Lake**: https://en.wikipedia.org/wiki/Garibaldi_Lake
+- **Joffre Lakes**: https://en.wikipedia.org/wiki/Joffre_Lakes_Provincial_Park
+- **Tofino**: https://en.wikipedia.org/wiki/Tofino
+- **Revelstoke**: https://en.wikipedia.org/wiki/Revelstoke,_British_Columbia
+- **Golden**: https://en.wikipedia.org/wiki/Golden,_British_Columbia
+- **Sea-to-Sky Hwy**: https://en.wikipedia.org/wiki/Horseshoe_Bay,_West_Vancouver ; https://en.wikipedia.org/wiki/Britannia_Beach ; https://en.wikipedia.org/wiki/Squamish,_British_Columbia ; https://en.wikipedia.org/wiki/Brandywine_Falls_Provincial_Park ; https://en.wikipedia.org/wiki/Whistler,_British_Columbia ; https://en.wikipedia.org/wiki/Pemberton,_British_Columbia
+- **Bugaboos**: https://en.wikipedia.org/wiki/The_Bugaboos
+- **Mt Garibaldi**: https://en.wikipedia.org/wiki/Mount_Garibaldi
+- **Haida Gwaii**: https://en.wikipedia.org/wiki/Haida_Gwaii
+- **Dawson City**: https://en.wikipedia.org/wiki/Dawson_City
+- **Kluane Lake**: https://en.wikipedia.org/wiki/Kluane_Lake
+- **Nelson**: https://en.wikipedia.org/wiki/Nelson,_British_Columbia
+- **Pemberton**: https://en.wikipedia.org/wiki/Pemberton,_British_Columbia
+- **Fernie**: https://en.wikipedia.org/wiki/Fernie,_British_Columbia
+- **Coquihalla Hwy**: https://en.wikipedia.org/wiki/Hope,_British_Columbia ; https://en.wikipedia.org/wiki/Coquihalla_Summit ; https://en.wikipedia.org/wiki/Merritt,_British_Columbia ; https://en.wikipedia.org/wiki/Kamloops
+- **Mt Waddington**: https://en.wikipedia.org/wiki/Mount_Waddington
+- **Wedge Mountain**: https://en.wikipedia.org/wiki/Wedge_Mountain
+- **Sky Pilot**: https://nominatim.openstreetmap.org/search?q=Sky+Pilot+Mountain,+British+Columbia&format=json
+- **Mt Slesse**: https://en.wikipedia.org/wiki/Slesse_Mountain
+- **Spearhead Traverse**: https://en.wikipedia.org/wiki/Blackcomb_Peak ; https://en.wikipedia.org/wiki/Decker_Mountain ; https://nominatim.openstreetmap.org/search?q=Mount+Pattison,+British+Columbia&format=json ; https://en.wikipedia.org/wiki/Mount_Fitzsimmons_(British_Columbia) ; https://en.wikipedia.org/wiki/Overlord_Mountain ; https://en.wikipedia.org/wiki/Whistler_Mountain
+- **Howser Towers**: https://en.wikipedia.org/wiki/Howser_Spire
+- **Rogers Pass**: https://en.wikipedia.org/wiki/Rogers_Pass_(British_Columbia)
+- **Mt Sir Donald**: https://en.wikipedia.org/wiki/Mount_Sir_Donald
+- **Mt Begbie**: https://en.wikipedia.org/wiki/Mount_Begbie
+- **Mt Joffre**: https://en.wikipedia.org/wiki/Joffre_Peak
+- **Tantalus Range**: https://en.wikipedia.org/wiki/Tantalus_Range ; https://en.wikipedia.org/wiki/Mount_Tantalus
+- **Bella Coola**: https://en.wikipedia.org/wiki/Bella_Coola,_British_Columbia
+- **The Lions**: https://en.wikipedia.org/wiki/The_Lions_(peaks)
+- **Skeena River**: https://en.wikipedia.org/wiki/Skeena_River ; https://en.wikipedia.org/wiki/Hazelton,_British_Columbia ; https://en.wikipedia.org/wiki/Kitwanga ; https://en.wikipedia.org/wiki/Terrace,_British_Columbia ; https://en.wikipedia.org/wiki/Exchamsiks_River_Provincial_Park ; https://nominatim.openstreetmap.org/search?q=Port+Essington,+British+Columbia&format=json
+- **Skaha Bluffs**: https://en.wikipedia.org/wiki/Skaha_Bluffs_Provincial_Park
+- **Duffey Lake Rd**: https://en.wikipedia.org/wiki/Mount_Currie,_British_Columbia ; https://en.wikipedia.org/wiki/Cayoosh_Pass ; https://en.wikipedia.org/wiki/Duffey_Lake_Provincial_Park ; https://en.wikipedia.org/wiki/Lillooet
+- **Lake O'Hara**: https://en.wikipedia.org/wiki/Lake_O'Hara
+- **Mt Assiniboine**: https://en.wikipedia.org/wiki/Mount_Assiniboine
+- **Golden Hinde**: https://nominatim.openstreetmap.org/search?q=Golden+Hinde,+British+Columbia&format=json
+- **Cape Scott**: https://en.wikipedia.org/wiki/Cape_Scott_Provincial_Park
+- **Chilkoot Trail**: https://en.wikipedia.org/wiki/Chilkoot_Pass ; https://nominatim.openstreetmap.org/search?q=Lindeman+Lake,+British+Columbia&format=json ; https://en.wikipedia.org/wiki/Bennett,_British_Columbia
+- **Takakkaw Falls**: https://en.wikipedia.org/wiki/Takakkaw_Falls
+- **Mt Logan**: https://en.wikipedia.org/wiki/Mount_Logan
+- **Tombstone Park**: https://en.wikipedia.org/wiki/Tombstone_Territorial_Park
+- **Miles Canyon**: https://nominatim.openstreetmap.org/search?q=Miles+Canyon,+Yukon&format=json
+- **Carcross Desert**: https://en.wikipedia.org/wiki/Carcross_Desert
+- **Yukon River**: https://en.wikipedia.org/wiki/Yukon_River ; https://en.wikipedia.org/wiki/Marsh_Lake ; https://en.wikipedia.org/wiki/Whitehorse ; https://en.wikipedia.org/wiki/Lake_Laberge ; https://en.wikipedia.org/wiki/Carmacks,_Yukon ; https://en.wikipedia.org/wiki/Fort_Selkirk ; https://en.wikipedia.org/wiki/Dawson_City
