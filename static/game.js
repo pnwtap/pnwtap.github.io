@@ -12,6 +12,14 @@
   const helpBtn = document.getElementById("help-btn");
   const setPill = (t) => { roundPill.textContent = t; };
 
+  // Phones: tap the sheet's header to tuck it away and see the whole map. Any new
+  // card content (next round, reveal, results) brings it back.
+  document.getElementById("card-head").addEventListener("click", (e) => {
+    if (e.target.closest("button") || !window.matchMedia("(max-width: 640px)").matches) return;
+    card.classList.toggle("collapsed");
+  });
+  new MutationObserver(() => card.classList.remove("collapsed")).observe(cardBody, { childList: true });
+
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => (
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 

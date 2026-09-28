@@ -334,7 +334,19 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
     animation: sheet-in 0.3s ease both;
   }
   @keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } }
-  #card-head { padding: 7px 14px; }
+  #card-head { position: relative; padding: 11px 14px 7px; cursor: pointer; }
+  #card-head::before {                        /* grab handle */
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    width: 36px;
+    height: 4px;
+    margin-left: -18px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.35);
+  }
+  #card.collapsed #card-body { display: none; }
   #card-body {
     padding: 12px 14px calc(14px + env(safe-area-inset-bottom));
     overflow-y: auto;
