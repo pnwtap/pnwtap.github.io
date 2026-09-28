@@ -115,7 +115,7 @@ GOATCOUNTER = "pnwtap"
 # your e-mail there to get a free access key — it only routes to that inbox, so it's safe
 # to publish). No key → the links open the repo's GitHub issue forms instead
 # (.github/ISSUE_TEMPLATE/), with {puzzle}, {places} and {device} filled in by the page.
-FEEDBACK_ACCESS_KEY = ""
+FEEDBACK_ACCESS_KEY = "aa290fa5-c4d6-4050-8fe0-29e8f1793d90"   # Web3Forms (public: it only delivers to the owner's inbox)
 FEEDBACK_ENDPOINT = "https://api.web3forms.com/submit"
 FEEDBACK_BUG_URL = ("https://github.com/pnwtap/pnwtap.github.io/issues/new"
                     "?template=bug.yml&puzzle={puzzle}&place={places}&device={device}")
