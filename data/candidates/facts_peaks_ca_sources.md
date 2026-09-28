@@ -102,7 +102,8 @@ Parks Canada, GVP) are metric and are copied as whole metres.
 - first_ascent `1915, A. J. Gilmour & E. W. D. Holway`: CRDB 415 and Biv 8.
 - classic `North Face, IV 5.7`:
   - MP https://www.mountainproject.com/route/105941738/north-face-chouinardbeckeydoody ("5.7", "5000 ft (1515 m), 12 pitches, Grade IV", FA Chouinard, Beckey, Doody 1961).
-  - The same "IV 5.7" grade appears in the SummitPost and AAC listings found by web search.
+  - Mont Blanc Lines route poster https://www.montblanclines.com/products/mount-edith-cavell-north-face ("North Face Direct: TD 5.7", FA Beckey, Chouinard, Doody, 07/1961).
+  - WP's route list gives "North Face, East Summit: IV, 5.8". I kept 5.7 because two sources give it.
 
 ### Mount Edziza
 - elevation_m `2786`: WP https://en.wikipedia.org/wiki/Mount_Edziza (citing GVP and Souther 1990). Biv 3083 gives 2793 m.
@@ -148,7 +149,7 @@ Parks Canada, GVP) are metric and are copied as whole metres.
 - first_ascent `1901, James Outram, C. Bohren, C. Hasler`: CRDB 57 (Ascent Party James Outram; Guides C. Bohren, Christian Hasler sr.) and Biv 1479.
 - classic `North Ridge, II 5.5`:
   - WP (infobox "II/5.5"; text "North Ridge and North Face at YDS 5.5").
-  - SummitPost route page https://www.summitpost.org/north-ridge-ii-5-5-via-bc/226304 ("North Ridge, II, 5.5").
+  - SummitPost route page https://www.summitpost.org/north-ridge-ii-5-5-via-bc/226304 (title "North Ridge, II, 5.5 (via BC)"). The title was seen in search results; the page itself is behind Cloudflare.
   - MP https://www.mountainproject.com/route/106995815/north-ridge says 5.4, Grade II.
 - range `Canadian Rockies`: WP.
 - **Blurb note:** the blurb says the summit lies on the BC side. CRDB 57 and WP both place the mountain on the Continental Divide, with Banff to the east and Mount Assiniboine Provincial Park to the west.
@@ -200,7 +201,7 @@ Parks Canada, GVP) are metric and are copied as whole metres.
 - range `Selkirk Mountains (Sir Donald Range)`: Biv 2377 ("Selkirk Mountains / Duncan Ranges / Sir Donald Range"). WP says Selkirk Mountains.
 - first_ascent `1890, Huber, Sulzer & Cooper`: Biv 2377 ("1890 Emil Huber, Carl Sulzer, Harry Cooper (porter)") and WP.
 - classic `Northwest Ridge, III 5.4`:
-  - SummitPost route page https://www.summitpost.org/northwest-ridge-iii-5-4/319779 (title "Northwest Ridge, III, 5.4").
+  - SummitPost route page https://www.summitpost.org/northwest-ridge-iii-5-4/319779 (title "Northwest Ridge, III, 5.4"). The title was seen in search results; the page itself is behind Cloudflare.
   - https://drdirtbag.com/2017/08/01/sir-donald-nw-ridge-iii-5-4-2h24m45-up-4h38-rt/ ("III 5.4").
   - MP https://www.mountainproject.com/route/106090216/northwest-ridge ("5.4", but Grade IV, 2400 ft).
   - WP says the route is in *Fifty Classic Climbs of North America*.

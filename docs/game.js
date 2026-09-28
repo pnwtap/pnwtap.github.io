@@ -299,6 +299,10 @@
 
   puzzleNo.textContent = `#${dayNumber(DATE)}` + (IS_ARCHIVE ? ` · ${prettyDate(DATE)}` : "");
   const game = loadGame(DATE) || { rounds: [], done: false };
+  // saved rounds keep the location's name; look it up by name, since row indices shift
+  // whenever the sheet gains rows (fall back to the index for very old saves)
+  const byName = new Map(DATA.locations.map((l) => [l.name, l]));
+  const locOf = (r) => byName.get(r.name) || DATA.locations[r.i] || { geometry: [r.point] };
   const save = () => store.set(KEY(DATE), game);
 
   function startRound() {
@@ -431,7 +435,7 @@
     const bounds = L.latLngBounds([]);
     game.rounds.forEach((r, n) => {
       if (!r.guess || !r.point) return;                 // saved by the first version: score only
-      const loc = DATA.locations[r.i] || { geometry: [r.point] };
+      const loc = locOf(r);
       drawAnswer(loc, r.point, false);
       L.polyline([r.guess, r.point], { color: "#f4c542", weight: 3, opacity: 0.9, dashArray: "6 6", interactive: false })
         .addTo(roundLayers);
@@ -486,7 +490,7 @@
       li.onclick = () => {
         const r = game.rounds[+li.dataset.n];
         if (!r.guess || !r.point) return;
-        const loc = DATA.locations[r.i] || { geometry: [r.point] };
+        const loc = locOf(r);
         const b = L.latLngBounds([r.guess, r.point]);
         loc.geometry.forEach((p) => b.extend(p));
         frame(b, { maxZoom: 11 });
