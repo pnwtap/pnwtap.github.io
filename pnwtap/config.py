@@ -110,10 +110,13 @@ START_BOUNDS = [[43.0, -125.5], [53.0, -113.0]]
 # shared); no cookies. Nothing is counted in ?playtest or on localhost.
 GOATCOUNTER = "pnwtap"
 
-# Feedback links at the bottom of the results screen. By default they open the repo's
-# GitHub issue forms (.github/ISSUE_TEMPLATE/); point them at e.g. a Google Form to take
-# reports from people without a GitHub account. The page fills in {puzzle} (label + date),
-# {places} (the day's four places) and {device} (the browser's user agent).
+# Feedback: "Suggest a place · Report a bug" at the bottom of the results screen open a
+# small in-page form, delivered to your inbox by Web3Forms (https://web3forms.com: enter
+# your e-mail there to get a free access key — it only routes to that inbox, so it's safe
+# to publish). No key → the links open the repo's GitHub issue forms instead
+# (.github/ISSUE_TEMPLATE/), with {puzzle}, {places} and {device} filled in by the page.
+FEEDBACK_ACCESS_KEY = ""
+FEEDBACK_ENDPOINT = "https://api.web3forms.com/submit"
 FEEDBACK_BUG_URL = ("https://github.com/pnwtap/pnwtap.github.io/issues/new"
                     "?template=bug.yml&puzzle={puzzle}&place={places}&device={device}")
 FEEDBACK_PLACE_URL = "https://github.com/pnwtap/pnwtap.github.io/issues/new?template=place.yml"

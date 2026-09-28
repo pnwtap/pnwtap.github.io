@@ -32,7 +32,10 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
             "scoreNearKm": config.SCORE_NEAR_KM,
             "scoreZeroKm": config.SCORE_ZERO_KM,
             "scoreShape": config.SCORE_SHAPE,
-            "feedback": {"bug": config.FEEDBACK_BUG_URL, "place": config.FEEDBACK_PLACE_URL},
+            "feedback": {
+                "key": config.FEEDBACK_ACCESS_KEY, "endpoint": config.FEEDBACK_ENDPOINT,
+                "bug": config.FEEDBACK_BUG_URL, "place": config.FEEDBACK_PLACE_URL,
+            },
             "multipliers": config.MULTIPLIERS,
             "ramp": config.RAMP,
             "emoji": config.EMOJI,

@@ -289,8 +289,8 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
 .pt-all { display: block; margin-bottom: 10px; font-size: 13px; color: var(--ink-soft); }
 .pt-meta { font-size: 13px; color: var(--ink-soft); }
 
-/* Help overlay */
-#help {
+/* Help + feedback overlays */
+#help, #feedback {
   position: fixed;
   inset: 0;
   z-index: 2000;
@@ -299,7 +299,7 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   padding: 16px;
   background: rgba(20, 28, 22, 0.55);
 }
-#help[hidden] { display: none; }
+#help[hidden], #feedback[hidden] { display: none; }
 .help-card {
   width: min(100%, 400px);
   padding: 20px 20px 18px;
@@ -312,6 +312,32 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
 @keyframes card-in-plain { from { opacity: 0; transform: translateY(-8px); } }
 .help-card h2 { margin: 0 0 8px; font-size: 20px; color: var(--green); }
 .help-lead { margin: 0 0 14px; font-size: 15px; line-height: 1.5; }
+
+/* Feedback form */
+.fb-card { max-height: calc(100vh - 32px); overflow-y: auto; }
+.fb-card fieldset { margin: 0; padding: 0; border: 0; }
+.fb-card fieldset[hidden] { display: none; }
+.fb-card label { display: block; margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+.fb-card .opt { font-weight: 400; }
+.fb-card input, .fb-card textarea, .fb-card select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--tan);
+  border-radius: 8px;
+  background: #fff;
+  font: 15px/1.4 "Open Sans", sans-serif;   /* 15px+ keeps iOS from zooming in */
+  color: var(--ink);
+}
+.fb-card textarea { resize: vertical; }
+.fb-card .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.fb-status { min-height: 1em; margin: 4px 0 8px; font-size: 13px; color: var(--green-soft); }
+.fb-status.error { color: var(--target); }
+.fb-actions { display: flex; gap: 8px; }
+.fb-actions button { flex: 1; }
+button.secondary { background: var(--cream-deep); color: var(--green); }
+button.secondary:hover:not(:disabled) { background: var(--tan); }
 
 .msg { margin: 0; font-size: 16px; line-height: 1.4; }
 

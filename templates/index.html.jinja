@@ -38,6 +38,27 @@
       <button class="primary">Got it</button>
     </div>
   </div>
+  <div id="feedback" hidden>
+    <form class="help-card fb-card" id="fb-form" novalidate>
+      <h2 id="fb-title">Suggest a place</h2>
+      <fieldset data-kind="place">
+        <label>Place<input name="place" maxlength="120" required placeholder="e.g. Mt Shuksan, Exit 32, Leavenworth"></label>
+        <label>Where is it?<input name="where" maxlength="400" placeholder="a Google Maps link, lat,lng, or a description"></label>
+        <label>Why it's a good one <span class="opt">(optional)</span><textarea name="why" rows="3" maxlength="1500" placeholder="a fun fact, elevation, grade…"></textarea></label>
+      </fieldset>
+      <fieldset data-kind="bug">
+        <label>What went wrong?<textarea name="what" rows="4" maxlength="3000" required placeholder="e.g. Crypt Lake is pinned in the wrong valley"></textarea></label>
+        <label>About which place? <span class="opt">(optional)</span><select name="about"></select></label>
+      </fieldset>
+      <label>Your name or email <span class="opt">(optional, if you'd like a reply)</span><input name="contact" maxlength="200" autocomplete="email"></label>
+      <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="fb-status" aria-live="polite"></p>
+      <div class="fb-actions">
+        <button type="button" class="secondary" id="fb-cancel">Cancel</button>
+        <button type="submit" class="primary" id="fb-send">Send</button>
+      </div>
+    </form>
+  </div>
   <script>window.PNWTAP = {{ data_json | safe }};</script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   {% if goatcounter %}

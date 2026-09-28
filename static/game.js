@@ -195,7 +195,8 @@
 
   // ---- keyboard: Enter presses the card's primary button ----
   document.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter" || !helpEl.hidden || e.target.closest?.("button, a, input, select")) return;
+    if (e.key !== "Enter" || !helpEl.hidden || !fbEl.hidden ||
+        e.target.closest?.("button, a, input, select, textarea")) return;
     const btn = cardBody.querySelector("button.primary:not(:disabled)");
     if (btn) { e.preventDefault(); btn.click(); }
   });
@@ -253,6 +254,70 @@
   helpEl.onclick = (e) => { if (e.target === helpEl) closeHelp(); };
   helpBtn.onclick = openHelp;
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !helpEl.hidden) closeHelp(); });
+
+  // ---- feedback dialog: an in-page form delivered by e-mail (Web3Forms), no login ----
+  const fbEl = document.getElementById("feedback");
+  const fbForm = document.getElementById("fb-form");
+  const fbStatus = fbForm.querySelector(".fb-status");
+  const fbSend = document.getElementById("fb-send");
+  let fbKind = "place", fbContext = {};
+  function openFeedback(kind, context) {
+    fbKind = kind;
+    fbContext = context;
+    document.getElementById("fb-title").textContent = kind === "bug" ? "Report a bug" : "Suggest a place";
+    fbForm.querySelectorAll("fieldset").forEach((fs) => {
+      const on = fs.dataset.kind === kind;
+      fs.hidden = !on;
+      fs.disabled = !on;                // hidden fields are neither validated nor sent
+    });
+    fbForm.elements.about.innerHTML = ['<option value="">—</option>']
+      .concat(context.places.map((n) => `<option>${esc(n)}</option>`), ["<option>Something else</option>"]).join("");
+    fbStatus.textContent = "";
+    fbStatus.classList.remove("error");
+    fbSend.disabled = false;
+    fbEl.hidden = false;
+    (kind === "bug" ? fbForm.elements.what : fbForm.elements.place).focus({ preventScroll: true });
+  }
+  const closeFeedback = () => { fbEl.hidden = true; };
+  document.getElementById("fb-cancel").onclick = closeFeedback;
+  fbEl.onclick = (e) => { if (e.target === fbEl) closeFeedback(); };
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !fbEl.hidden) closeFeedback(); });
+  fbForm.onsubmit = async (e) => {
+    e.preventDefault();
+    if (!fbForm.reportValidity()) return;
+    const f = fbForm.elements;
+    const fb = CFG.feedback;
+    const lines = fbKind === "bug"
+      ? [`What went wrong: ${f.what.value}`, `About: ${f.about.value || "—"}`]
+      : [`Place: ${f.place.value}`, `Where: ${f.where.value || "—"}`, `Why: ${f.why.value || "—"}`];
+    lines.push(`From: ${f.contact.value || "(anonymous)"}`, "",
+      `Puzzle: ${fbContext.puzzle}`, `Places that day: ${fbContext.places.join(" · ")}`,
+      `Page: ${location.href}`, `Device: ${navigator.userAgent}`);
+    const subject = fbKind === "bug" ? `pnwtap bug (${fbContext.puzzle})` : `pnwtap place idea: ${f.place.value}`;
+    fbSend.disabled = true;
+    fbStatus.classList.remove("error");
+    fbStatus.textContent = "Sending…";
+    try {
+      const res = await fetch(fb.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: fb.key, subject, from_name: "pnwtap", botcheck: f.botcheck.checked,
+          message: lines.join("\n"), replyto: /@/.test(f.contact.value) ? f.contact.value : undefined,
+        }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || out.success === false) throw new Error(out.message || res.status);
+      fbStatus.textContent = "Thanks — sent!";
+      hit(`/feedback/${fbKind}`, fbKind === "bug" ? "Sent a bug report" : "Suggested a place", true);
+      fbForm.reset();
+      setTimeout(closeFeedback, 1400);
+    } catch (err) {
+      fbStatus.classList.add("error");
+      fbStatus.textContent = "Couldn’t send that — please try again in a bit.";
+      fbSend.disabled = false;
+    }
+  };
 
   // ---- playtest: ?playtest — play any location, check its card, eyeball every answer ----
   const params = new URLSearchParams(location.search);
@@ -532,10 +597,11 @@
       .replace("{places}", encodeURIComponent(todaysIds.map((i) => DATA.locations[i].name).join(" · ")))
       .replace("{device}", encodeURIComponent(navigator.userAgent));
     const fb = CFG.feedback || {};
-    const feedback = fb.place || fb.bug ? '<p class="feedback">' + [
-      fb.place && `<a href="${esc(fill(fb.place))}" target="_blank" rel="noopener">Suggest a place</a>`,
-      fb.bug && `<a href="${esc(fill(fb.bug))}" target="_blank" rel="noopener">Report a bug</a>`,
-    ].filter(Boolean).join(" · ") + "</p>" : "";
+    const link = (kind, label) => (fb.key
+      ? `<a href="#" data-feedback="${kind}">${label}</a>`
+      : fb[kind] && `<a href="${esc(fill(fb[kind]))}" target="_blank" rel="noopener">${label}</a>`);
+    const fbLinks = [link("place", "Suggest a place"), link("bug", "Report a bug")].filter(Boolean);
+    const feedback = fbLinks.length ? `<p class="feedback">${fbLinks.join(" · ")}</p>` : "";
 
     cardBody.innerHTML =
       `<div class="final-head"><div><p class="final">Final score</p>` +
@@ -550,6 +616,16 @@
         `<div><b>${st.streak}</b><span>streak</span></div>` +
       "</div>" + missed + back + feedback;
     if (fresh) countUp(document.getElementById("final-n"), score);
+
+    cardBody.querySelectorAll("[data-feedback]").forEach((a) => {
+      a.onclick = (e) => {
+        e.preventDefault();
+        openFeedback(a.dataset.feedback, {
+          puzzle: `${dayLabel(DATE)} · ${DATE}`,
+          places: todaysIds.map((i) => DATA.locations[i].name),
+        });
+      };
+    });
 
     // tap a row to fly to that round
     cardBody.querySelectorAll(".breakdown li").forEach((li) => {
