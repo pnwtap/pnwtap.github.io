@@ -6,7 +6,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from pnwtap.geometry import decay_km
+from pnwtap.facts import card
 
 
 def build_payload(locations, schedule, image_map, config, region_mask=None) -> dict:
@@ -20,7 +20,7 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
             "image": image_map.get(idx),
             "blurb": loc.blurb,
             "kind": loc.kind,
-            "d_km": round(decay_km(loc.geometry, config.D_KM, config.D_MIN_KM, area=loc.kind == "area"), 2),
+            "facts": card(loc.facts, loc.category, config.FACTS, config.CARDS),
         })
     return {
         "locations": locs,
@@ -28,8 +28,9 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
         "regionMask": region_mask or [],
         "config": {
             "epoch": config.EPOCH,
-            "categories": config.CATEGORIES,
-            "D_km": config.D_KM,
+            "categories": {k: {"icon": icon, "label": label} for k, (icon, label) in config.CATEGORIES.items()},
+            "scoreNearKm": config.SCORE_NEAR_KM,
+            "scoreZeroKm": config.SCORE_ZERO_KM,
             "multipliers": config.MULTIPLIERS,
             "ramp": config.RAMP,
             "emoji": config.EMOJI,

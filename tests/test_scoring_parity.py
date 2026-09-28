@@ -1,6 +1,5 @@
 """The browser scores taps with static/scoring.js; make sure it agrees with pnwtap/geometry.py."""
 import json
-import math
 import random
 import shutil
 import subprocess
@@ -9,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from pnwtap import config
-from pnwtap.geometry import nearest_point_km
+from pnwtap.geometry import nearest_point_km, score
 
 SCORING_JS = Path(__file__).resolve().parent.parent / "static" / "scoring.js"
 
@@ -41,11 +40,12 @@ def test_js_scoring_matches_python():
         f"const S = require({json.dumps(str(SCORING_JS))});"
         f"const cases = {json.dumps(cases)};"
         f"console.log(JSON.stringify(cases.map(([t, p, a]) => {{"
-        f"  const n = S.nearest(t, p, a); return [n.km, S.score(n.km, {config.D_KM})]; }})));"
+        f"  const n = S.nearest(t, p, a);"
+        f"  return [n.km, S.score(n.km, {config.SCORE_NEAR_KM}, {config.SCORE_ZERO_KM})]; }})));"
     )
     out = json.loads(subprocess.run(["node", "-e", script], capture_output=True, text=True, check=True).stdout)
     assert len(out) == len(cases)
     for (tap, path, area), (js_km, js_score) in zip(cases, out):
         py_km = nearest_point_km(tap, path, area=area)
         assert js_km == pytest.approx(py_km, rel=1e-9, abs=1e-9)
-        assert js_score == round(100 * math.exp(-py_km / config.D_KM))
+        assert js_score == score(py_km, config.SCORE_NEAR_KM, config.SCORE_ZERO_KM)

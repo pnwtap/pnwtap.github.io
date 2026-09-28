@@ -76,8 +76,8 @@ def test_in_region_real_mask_contains_sample_places():
     assert not in_region((46.8721, -113.9940), mask)  # Missoula, Montana
 
 
-# ---- areas & size-calibrated decay ----
-from pnwtap.geometry import area_km2, decay_km, is_closed
+# ---- areas & the score curve ----
+from pnwtap.geometry import is_closed, score
 
 SQUARE = [(49.0, -120.0), (49.0, -119.0), (50.0, -119.0), (50.0, -120.0), (49.0, -120.0)]
 
@@ -90,36 +90,24 @@ def test_area_scores_zero_inside_but_a_loop_does_not():
     assert nearest_point_km((49.5, -118.9), SQUARE, area=True) == pytest.approx(7.2, abs=0.3)
 
 
-def test_area_km2_of_one_degree_square():
-    assert area_km2(SQUARE) == pytest.approx(111.2 * 72.9, rel=0.02)
+def test_score_curve_landmarks():
+    s = lambda km: score(km, 5, 1500)
+    assert s(0) == 100
+    assert s(1) == 97
+    assert s(5) == 88
+    assert s(50) == 58
+    assert s(117) == 44          # 'it's in the scablands' still counts
+    assert s(1500) == 0
+    assert s(5000) == 0
 
 
-def test_decay_areas_and_loops():
-    assert decay_km(SQUARE, 40, 10, area=True) == 10          # 8,000 km² dwarfs a point's zone
-    small = [(49.0, -120.0), (49.0, -119.9), (49.1, -119.9), (49.1, -120.0), (49.0, -120.0)]
-    as_loop = decay_km(small, 40, 10)                          # ~40 km loop route
-    as_area = decay_km(small, 40, 10, area=True)               # ~80 km² lake
-    assert 10 < as_loop < as_area < 40
+def test_score_every_halving_is_worth_about_the_same():
+    s = lambda km: score(km, 5, 1500)
+    gains = [s(d / 2) - s(d) for d in (800, 400, 200, 100)]
+    assert max(gains) - min(gains) <= 2
+    assert all(10 <= g <= 13 for g in gains)
 
 
-def test_decay_point_keeps_base():
-    assert decay_km([(48.0, -121.0)], 40, 10) == 40
-
-
-def test_decay_shrinks_with_length_and_hits_floor():
-    short = [(48.0, -121.0), (48.1, -121.0)]              # ~11 km
-    medium = [(48.0, -121.0), (49.0, -121.0)]             # ~111 km
-    long = [(45.0, -121.0), (53.0, -121.0)]               # ~890 km
-    d_short, d_med, d_long = (decay_km(p, 40, 10) for p in (short, medium, long))
-    assert 35 < d_short < 40
-    assert 10 < d_med < d_short
-    assert d_long == 10
-
-
-def test_decay_equalises_the_good_zone():
-    import math
-    line = [(48.0, -121.0), (48.5, -121.0)]
-    d = decay_km(line, 40, 1)
-    from pnwtap.geometry import length_km
-    zone = 2 * length_km(line) * d + math.pi * d * d
-    assert zone == pytest.approx(math.pi * 40 ** 2, rel=1e-6)
+def test_score_is_monotone():
+    vals = [score(d / 4, 5, 1500) for d in range(0, 8000)]
+    assert all(a >= b for a, b in zip(vals, vals[1:]))

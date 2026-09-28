@@ -1,10 +1,11 @@
 """Read and validate the location database (a published-CSV Google Sheet)."""
 import csv
 import io
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import requests
 
+from pnwtap.facts import parse_facts
 from pnwtap.geometry import in_region, is_closed, parse_geometry, within_bbox
 
 DIFFICULTIES = {"easy", "medium", "hard"}
@@ -21,6 +22,7 @@ class Location:
     geometry: list[tuple[float, float]]
     image: str | None
     blurb: str
+    facts: dict[str, str] = field(default_factory=dict)
 
     @property
     def kind(self) -> str:
@@ -32,11 +34,12 @@ class Location:
         return "line"
 
 
-def parse_locations(csv_text: str, bbox, categories=None, region=None) -> list[Location]:
+def parse_locations(csv_text: str, bbox, categories=None, region=None, facts_registry=None) -> list[Location]:
     """Parse CSV text into validated Location records. Raises ValueError naming the offending row.
 
     `categories`, if given, is the set of allowed category values; `region`, if given, is
-    the list of mask rings every point must fall inside (so it's visible on the map).
+    the list of mask rings every point must fall inside (so it's visible on the map);
+    `facts_registry` (config.FACTS), if given, is used to validate the optional facts column.
     """
     reader = csv.DictReader(io.StringIO(csv_text))
     locations: list[Location] = []
@@ -73,7 +76,11 @@ def parse_locations(csv_text: str, bbox, categories=None, region=None) -> list[L
 
         image = (row.get("image") or "").strip() or None
         blurb = (row.get("blurb") or "").strip()
-        locations.append(Location(name, category, difficulty, geometry, image, blurb))
+        try:
+            facts = parse_facts(row.get("facts") or "", facts_registry)
+        except ValueError as exc:
+            raise ValueError(f"row {line_no} ({name}): {exc}") from exc
+        locations.append(Location(name, category, difficulty, geometry, image, blurb, facts))
     return locations
 
 

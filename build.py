@@ -34,6 +34,7 @@ def main() -> None:
 
     locations = sheet.parse_locations(
         load_csv(args.csv), config.BBOX, categories=set(config.CATEGORIES), region=region_mask,
+        facts_registry=config.FACTS,
     )
     tiers = Counter(loc.difficulty for loc in locations)
     print(f"loaded {len(locations)} locations "

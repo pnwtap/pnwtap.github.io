@@ -16,11 +16,11 @@ and worth more. Share your result Wordle-style.
 
 ## The sheet
 
-One tab, columns: `name, category, difficulty, geometry, image, blurb`.
+One tab, columns: `name, category, difficulty, geometry, image, blurb, facts`.
 
 - `name`: must be unique — it's how played days are remembered (see *Schedule* below).
-- `category`: `peak / hike / traverse / road / climb / river / town / poi / lake / glacier / pass / island`
-  (the list and icons live in `CATEGORIES` in `pnwtap/config.py`).
+- `category`: `peak / hike / traverse / road / climb / river / town / poi / lake / glacier / pass /
+  island / ski / waterfall / park` (icons and labels live in `CATEGORIES` in `pnwtap/config.py`).
 - `difficulty`: `easy / medium / hard`. The day is 1 easy, 1 medium, 2 hard, so keep roughly twice
   as many hard rows as easy or medium ones.
 - `geometry`: one or more `lat,lng` points, semicolon-separated. Quote the cell — it contains commas.
@@ -29,15 +29,36 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb`.
   - several with the **last point equal to the first** = an area (lake, island, park): a tap
     inside scores 100. Exception: for routes (`traverse / hike / road / river / climb`) a closed
     ring is just a loop — the Timberline Trail scores along the trail, not across Mt Hood.
-
-  Bigger features get a tighter score decay (`geometry.decay_km`): the zone where you'd score ≥ 37
-  is the same size as for a single peak, so a 900 km river doesn't hand out points for tapping
-  the right province. Points use `D_KM` (40 km); huge features bottom out at `D_MIN_KM` (10 km).
 - `image` (optional): a URL. If set, that round shows the image instead of the name.
 - `blurb`: a line or two shown on the reveal.
+- `facts` (optional): `key: value | key: value`, e.g. `grade: 5.9 | style: sport | pitches: 18`.
+  The reveal shows them as a card laid out for the category (a peak's card leads with elevation
+  and prominence, a climb's with grade, style and pitches, a town's with population). Facts that
+  say *what* a place is rather than *where* (grade, height, population…) also appear as a short
+  clue line on the guess prompt, and `tagline` adds a one-liner there ("Hardest sport route in
+  Washington"). Keys, units and which are clues: `FACTS` / `CARDS` in `pnwtap/config.py`,
+  documented for editors in `data/FACTS_SPEC.md`. Numbers are metric; the page adds ft/mi.
+
+## Scoring
+
+Each round scores on a log scale of how far the tap is from the feature — measured to the
+nearest point of a line and 0 anywhere inside an area (towns, lakes, parks, islands):
+
+    score = 100 × (1 − ln(1 + d / 5 km) / ln(1 + 1500 km / 5 km))
+
+Every halving of the miss is worth the same ~12 points, so knowing the right valley, the right
+region and even the right province all count, and a 0 takes a miss of 1,500 km:
+
+| miss | 1 km | 5 km | 20 km | 50 km | 100 km | 200 km | 500 km | 1000 km |
+|---|---|---|---|---|---|---|---|---|
+| score | 97 | 88 | 72 | 58 | 47 | 35 | 19 | 7 |
+
+Rounds are multiplied ×1 / ×2 / ×3 / ×4 (easy → hard), for a maximum of 1000. Tune with
+`SCORE_NEAR_KM` / `SCORE_ZERO_KM` in `pnwtap/config.py`.
 
 The build fails loudly, naming the row, on: a missing name, a duplicate name, an unknown category
-or difficulty, malformed coordinates, or a point outside the map's region (usually a lat/lng typo).
+or difficulty, malformed coordinates, a point outside the map's region (usually a lat/lng typo),
+or an unknown / non-numeric fact.
 Blank rows are ignored.
 
 Publish the sheet via **File → Share → Publish to web → entire document as CSV**, then paste the
@@ -64,9 +85,9 @@ locations. Add `?date=YYYY-MM-DD` to the URL to play a past day (future days are
 ## Playtesting
 
 Open `?playtest` (e.g. `http://localhost:8000/?playtest`) to play any location on demand: pick
-from the list or step with ◀ ▶ 🎲, see each feature's decay distance and what the score would
-have been under the flat point decay, and tick **show all answers** to overlay every location on
-the map — the quickest way to spot a bad coordinate. Nothing is saved in this mode.
+from the list or step with ◀ ▶ 🎲, check its prompt clues and fact card, and tick **show all
+answers** to overlay every location on the map — the quickest way to spot a bad coordinate.
+Nothing is saved in this mode.
 
 ## Schedule
 
@@ -88,7 +109,8 @@ pretend it's another date.
 
 ## Tuning
 
-All knobs live in `pnwtap/config.py`: score decay `D_KM`, `RAMP`, `MULTIPLIERS`, `EPOCH`,
+All knobs live in `pnwtap/config.py`: the score curve `SCORE_NEAR_KM` / `SCORE_ZERO_KM`, `RAMP`,
+`MULTIPLIERS`, `FACTS` / `CARDS`, `EPOCH`,
 `HORIZON_DAYS`, `SEED`, `EMOJI`, `CATEGORIES`, the `BBOX`, `START_BOUNDS` (initial map framing),
 zoom limits, and the tile URLs. The region stencil is `data/region_mask.json`
 (regenerate with `scripts/build_region_mask.py`, which needs `shapely`).

@@ -91,3 +91,15 @@ def test_kind_point_line_area_and_loop_route():
     )
     kinds = {l.name: l.kind for l in parse_locations(csv, BBOX)}
     assert kinds == {"Pt": "point", "Ln": "line", "Lk": "area", "Loop": "line"}
+
+
+def test_facts_column_is_parsed_and_validated():
+    from pnwtap import config
+    csv = (
+        "name,category,difficulty,geometry,image,blurb,facts\r\n"
+        'BNW,climb,hard,"47.4980,-121.7549",,x,"grade: 5.14d | style: sport"\r\n'
+    )
+    assert parse_locations(csv, BBOX, facts_registry=config.FACTS)[0].facts == {"grade": "5.14d", "style": "sport"}
+    bad = csv.replace("style: sport", "styel: sport")
+    with pytest.raises(ValueError, match="BNW.*unknown fact"):
+        parse_locations(bad, BBOX, facts_registry=config.FACTS)

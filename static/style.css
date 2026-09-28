@@ -96,6 +96,41 @@ html, body {
   text-transform: capitalize;
 }
 .hint { margin: -8px 0 12px; font-size: 13px; color: var(--ink-soft); font-style: italic; }
+.cat + .clues, .pt-meta + .clues { margin-top: -8px; }
+.clues { margin: 0 0 12px; font-size: 14px; font-weight: 600; color: var(--green-soft); }
+.tagline { margin: -6px 0 12px; font-size: 14px; font-style: italic; color: var(--ink); }
+.clues + .tagline { margin-top: -8px; }
+
+/* Reveal fact card: one per landmark type */
+.fact-card {
+  margin: 0 0 10px;
+  border: 1px solid var(--tan);
+  border-radius: 9px;
+  background: #fffdf6;
+  overflow: hidden;
+}
+.fact-head {
+  padding: 6px 10px;
+  background: var(--cream-deep);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.fact-tag { font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-style: italic; }
+.fact-tag::before { content: "· "; font-style: normal; }
+.facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 3px 12px;
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 13.5px;
+  line-height: 1.35;
+}
+.facts dt { color: var(--ink-soft); }
+.facts dd { margin: 0; color: var(--ink); font-weight: 600; }
 .prompt-img + button, .cat + button { margin-top: 0; }
 .prompt-img {
   display: block;
@@ -230,7 +265,7 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
 }
 .pt-btn { width: auto; padding: 6px 10px; font-size: 13px; }
 .pt-all { display: block; margin-bottom: 10px; font-size: 13px; color: var(--ink-soft); }
-.pt-flat { font-size: 13px; color: var(--ink-soft); }
+.pt-meta { font-size: 13px; color: var(--ink-soft); }
 
 /* Help overlay */
 #help {

@@ -18,7 +18,9 @@ def test_payload_shape():
     payload = build_payload(locs, sched, {}, config)
     assert payload["locations"][0]["geometry"] == [[48.0, -121.0]]
     assert payload["locations"][0]["image"] is None
-    assert payload["config"]["D_km"] == config.D_KM
+    assert payload["config"]["scoreNearKm"] == config.SCORE_NEAR_KM
+    assert payload["config"]["categories"]["poi"] == {"icon": "📍", "label": "landmark"}
+    assert payload["locations"][0]["facts"] == {"tagline": None, "clues": [], "rows": []}
     assert 100 * sum(payload["config"]["multipliers"]) == 1000
 
 

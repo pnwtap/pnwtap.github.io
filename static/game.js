@@ -125,14 +125,15 @@
     const r = card.getBoundingClientRect();
     const H = window.innerHeight;
     const m = 36;
+    const controls = compact ? [m, m] : [m + 40, m + 24];   // keep clear of zoom buttons + attribution
     if (r.right < window.innerWidth / 2) {           // wide screens: card docked on the left
-      return { paddingTopLeft: [r.right + m, m], paddingBottomRight: [m, m] };
+      return { paddingTopLeft: [r.right + m, m], paddingBottomRight: controls };
     }
     const sheet = r.bottom >= H - 2;                 // phone bottom sheet vs. floating top card
     const covered = Math.min(sheet ? H - r.top : r.bottom, H - 140);   // always leave some map
     return sheet
-      ? { paddingTopLeft: [m, m], paddingBottomRight: [m, covered + m] }
-      : { paddingTopLeft: [m, covered + m], paddingBottomRight: [m, m] };
+      ? { paddingTopLeft: [m, m + 12], paddingBottomRight: [m, covered + m] }   // attribution sits top-right
+      : { paddingTopLeft: [m, covered + m], paddingBottomRight: controls };
   }
   // a page opened in a background tab can have a 0×0 map, where fitting bounds yields NaN
   const sized = () => map.getSize().x > 0 && map.getSize().y > 0;
@@ -151,19 +152,39 @@
     if (btn) { e.preventDefault(); btn.click(); }
   });
 
-  const CAT_LABEL = { poi: "landmark" };
+  // ---- location presentation: category chip, prompt clues, reveal fact card ----
+  const catOf = (loc) => CFG.categories[loc.category] || { icon: "📍", label: loc.category };
+  const catChip = (loc) => `<span class="cat">${catOf(loc).icon} ${esc(catOf(loc).label)}</span>`;
+  function clueLine(loc) {
+    const f = loc.facts || {};
+    return (f.clues && f.clues.length ? `<p class="clues">${f.clues.map(esc).join(" · ")}</p>` : "") +
+      (f.tagline ? `<p class="tagline">${esc(f.tagline)}</p>` : "");
+  }
+  function factCard(loc) {
+    const f = loc.facts || {};
+    if (!f.rows || !f.rows.length) return f.tagline ? `<p class="tagline">${esc(f.tagline)}</p>` : "";
+    return '<div class="fact-card">' +
+      `<div class="fact-head">${catOf(loc).icon} ${esc(catOf(loc).label)}` +
+        (f.tagline ? ` <span class="fact-tag">${esc(f.tagline)}</span>` : "") + "</div>" +
+      '<dl class="facts">' +
+        f.rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("") +
+      "</dl></div>";
+  }
+  const scoreFor = (km) => S.score(km, CFG.scoreNearKm, CFG.scoreZeroKm);
 
   // ---- scoring helpers ----
   const total = (rounds) => rounds.reduce((s, r) => s + r.score * r.mult, 0);
   const fmtKm = (km) => (km == null ? "–"
     : (km < 1 ? km.toFixed(1) : km < 10 ? km.toFixed(1).replace(/\.0$/, "") : Math.round(km)) + " km");
   const offBy = (km) => (km === 0 ? "<b>Inside it</b>" : `<b>${fmtKm(km)}</b> off`);
+  // bands for the log curve: ≥90 ≈ within 4 km, ≥75 ≈ 16 km, ≥55 ≈ 60 km, ≥35 ≈ 200 km, ≥15 ≈ 630 km
   function verdict(score) {
     if (score >= 99) return "Bullseye! 🎯";
     if (score >= 90) return "Nailed it";
-    if (score >= 70) return "So close";
-    if (score >= 40) return "Right neighbourhood";
-    if (score >= 15) return "In the ballpark";
+    if (score >= 75) return "So close";
+    if (score >= 55) return "Right neighbourhood";
+    if (score >= 35) return "Right region";
+    if (score >= 15) return "Right corner of the map";
     return "Way off";
   }
   const maxScore = 100 * CFG.multipliers.reduce((a, b) => a + b, 0);
@@ -185,7 +206,7 @@
   helpBtn.onclick = openHelp;
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !helpEl.hidden) closeHelp(); });
 
-  // ---- playtest: ?playtest — play any location, see its decay, eyeball every answer ----
+  // ---- playtest: ?playtest — play any location, check its card, eyeball every answer ----
   const params = new URLSearchParams(location.search);
   if (params.has("playtest")) {
     playtest(params.get("loc"));
@@ -227,8 +248,7 @@
         `<button class="pt-btn" id="pt-rand" aria-label="Random">🎲</button></div>` +
         `<label class="pt-all"><input type="checkbox" id="pt-all"${map.hasLayer(allLayer) ? " checked" : ""}> show all answers</label>` +
         `<p class="ask"><strong>${esc(loc.name)}</strong></p>` +
-        `<span class="cat">${CFG.categories[loc.category] || "📍"} ${esc(CAT_LABEL[loc.category] || loc.category)} · ${loc.kind}</span>` +
-        `<span class="pt-flat"> · ${esc(loc.difficulty)} · decay ${loc.d_km} km</span>` +
+        catChip(loc) + `<span class="pt-meta"> · ${loc.kind} · ${esc(loc.difficulty)}</span>` + clueLine(loc) +
         '<div id="pt-out"></div><button class="primary" id="lock" disabled>Tap the map</button>';
       const go = (n) => { pos = (n + all.length) % all.length; show(); };
       document.getElementById("pt-prev").onclick = () => go(pos - 1);
@@ -254,12 +274,12 @@
       lockBtn.onclick = () => {
         offTap();
         const near = S.nearest(tap, loc.geometry, loc.kind === "area");
-        const sc = S.score(near.km, loc.d_km);
-        const flat = S.score(near.km, CFG.D_km);
+        const sc = scoreFor(near.km);
         animateReveal({ guess: tap, point: near.point }, loc);
         document.getElementById("pt-out").innerHTML =
-          `<p class="result-score">${offBy(near.km)} · <b>${sc}</b> / 100` +
-          (loc.d_km !== CFG.D_km ? ` <span class="pt-flat">(${flat} with the point decay)</span>` : "") + "</p>" +
+          `<p class="verdict">${verdict(sc)}</p>` +
+          `<p class="result-score">${offBy(near.km)} · <b>${sc}</b> / 100</p>` +
+          factCard(loc) +
           (loc.blurb ? `<p class="reveal-blurb">${esc(loc.blurb)}</p>` : "");
         lockBtn.textContent = "Next location";
         lockBtn.onclick = () => go(pos + 1);
@@ -288,14 +308,12 @@
     const mult = CFG.multipliers[roundIdx];
     setPill(`${roundIdx + 1} / ${todaysIds.length}`);
 
-    const icon = CFG.categories[loc.category] || "📍";
-    const label = `<span class="cat">${icon} ${esc(CAT_LABEL[loc.category] || loc.category)}</span>`;
-    const line = loc.kind === "area" ? '<p class="hint">Anywhere inside it counts.</p>'
+    const hint = loc.kind === "area" ? '<p class="hint">Anywhere inside it counts.</p>'
       : loc.kind === "line" ? '<p class="hint">Anywhere along it counts.</p>' : "";
     const ask = loc.image
-      ? `<p class="ask">Where is <strong>this place</strong>?</p>${label}` +
+      ? `<p class="ask">Where is <strong>this place</strong>?</p>${catChip(loc)}${clueLine(loc)}` +
         `<img class="prompt-img" src="${esc(loc.image)}" alt="Photo of the mystery location">`
-      : `<p class="ask"><strong>${esc(loc.name)}</strong></p>${label}${line}`;
+      : `<p class="ask"><strong>${esc(loc.name)}</strong></p>${catChip(loc)}${clueLine(loc)}${hint}`;
     cardBody.innerHTML =
       `<div class="round-meta"><span>${CFG.emoji[loc.difficulty]} ${esc(loc.difficulty)} · ×${mult}</span>` +
       `<span>${total(game.rounds)} pts so far</span></div>` + ask +
@@ -324,7 +342,7 @@
       map.off("click", onClick);
       if (marker.dragging) marker.dragging.disable();
       const near = S.nearest(tap, loc.geometry, loc.kind === "area");
-      const score = S.score(near.km, loc.d_km || CFG.D_km);
+      const score = scoreFor(near.km);
       const r = {
         i: todaysIds[roundIdx], name: loc.name, difficulty: loc.difficulty,
         mult, km: near.km, score, guess: tap, point: near.point,
@@ -377,6 +395,7 @@
       `<p class="result-score">${offBy(r.km)} · <b>${r.score}</b> × ${r.mult} = ` +
         `<span class="pts">${r.score * r.mult}</span></p>` +
       (loc.image ? `<img class="reveal-img" src="${esc(loc.image)}" alt="">` : "") +
+      factCard(loc) +
       (loc.blurb ? `<p class="reveal-blurb">${esc(loc.blurb)}</p>` : "") +
       `<button class="primary" id="next">${last ? "See results" : "Next round"}</button>`;
     document.getElementById("next").onclick = () => (last ? renderFinal(true) : startRound());

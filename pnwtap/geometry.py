@@ -21,7 +21,7 @@ def parse_geometry(s: str) -> list[tuple[float, float]]:
 
 
 # NOTE: static/scoring.js mirrors haversine_km / nearest_point_km (incl. the area
-# case). Change both in lockstep — tests/test_scoring_parity.py checks them.
+# case) / score. Change both in lockstep — tests/test_scoring_parity.py checks them.
 def haversine_km(a: tuple[float, float], b: tuple[float, float]) -> float:
     """Great-circle distance in km between two (lat, lng) points."""
     lat1, lat2 = math.radians(a[0]), math.radians(b[0])
@@ -66,41 +66,11 @@ def nearest_point_km(tap: tuple[float, float], path: list[tuple[float, float]], 
     return min(_segment_dist_km(tap, path[i], path[i + 1]) for i in range(len(path) - 1))
 
 
-def _centroid(path):
-    return (sum(p[0] for p in path) / len(path), sum(p[1] for p in path) / len(path))
-
-
-def length_km(path: list[tuple[float, float]]) -> float:
-    """Total length of the polyline (the perimeter, for an area)."""
-    return sum(haversine_km(path[i], path[i + 1]) for i in range(len(path) - 1))
-
-
-def area_km2(path: list[tuple[float, float]]) -> float:
-    """Planar (shoelace) area of a closed ring, in km²; 0 for anything not closed."""
-    if not is_closed(path):
-        return 0.0
-    c = _centroid(path)
-    xy = [_project(c, p) for p in path]
-    return abs(sum(x1 * y2 - x2 * y1 for (x1, y1), (x2, y2) in zip(xy, xy[1:]))) / 2
-
-
-def decay_km(path: list[tuple[float, float]], base_km: float, floor_km: float, area: bool = False) -> float:
-    """Score decay distance for this feature, calibrated so a big feature isn't a freebie.
-
-    The zone where you score >= 37 (within one decay distance) should cover the same
-    area as it does for a single point: pi * base². For a feature with area A and
-    perimeter P that zone is roughly A + P*d + pi*d², so solve for d — clamped to
-    [floor_km, base_km]. A point keeps `base_km`; a 1,000 km river hits the floor.
-    """
-    if len(path) == 1:
-        return base_km
-    a = area_km2(path) if area else 0.0
-    p = length_km(path) if area else 2 * length_km(path)  # a line's zone has two sides
-    target = math.pi * base_km ** 2 - a
-    if target <= 0:
-        return floor_km
-    d = (-p + math.sqrt(p * p + 4 * math.pi * target)) / (2 * math.pi)
-    return max(floor_km, min(base_km, d))
+def score(km: float, near_km: float, zero_km: float) -> int:
+    """Round score for a miss of `km`: 100 at 0, then log-scaled — every halving of the
+    miss is worth the same points — reaching 0 at `zero_km`. See SCORE_* in config."""
+    frac = 1 - math.log1p(km / near_km) / math.log1p(zero_km / near_km)
+    return math.floor(100 * max(0.0, frac) + 0.5)   # round half up, like JS Math.round
 
 
 def within_bbox(pt: tuple[float, float], bbox: tuple[float, float, float, float]) -> bool:
