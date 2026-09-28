@@ -37,9 +37,22 @@
     return [ax + t * dx, ay + t * dy];
   }
 
-  /** {km, point}: distance from `tap` to the nearest point on `path` (a point or polyline). */
+  // a closed ring (first point == last, 4+ points) is an area: a tap inside scores as 0 km
+  const isArea = (path) => path.length >= 4 &&
+    path[0][0] === path[path.length - 1][0] && path[0][1] === path[path.length - 1][1];
+  function inside(pt, ring) {
+    let hit = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const [yi, xi] = ring[i], [yj, xj] = ring[j];
+      if ((yi > pt[0]) !== (yj > pt[0]) && pt[1] < (xj - xi) * (pt[0] - yi) / (yj - yi) + xi) hit = !hit;
+    }
+    return hit;
+  }
+
+  /** {km, point}: distance from `tap` to `path` — a point, a polyline, or an area (0 inside). */
   function nearest(tap, path) {
     if (path.length === 1) return { km: haversine(tap, path[0]), point: path[0] };
+    if (isArea(path) && inside(tap, path)) return { km: 0, point: tap };
     let best = { km: Infinity, point: path[0] };
     for (let i = 0; i < path.length - 1; i++) {
       const [cx, cy] = closestOnSegment(tap, path[i], path[i + 1]);
@@ -51,7 +64,7 @@
 
   const score = (km, dKm) => Math.round(100 * Math.exp(-km / dKm));
 
-  const api = { haversine, nearest, score };
+  const api = { haversine, nearest, score, isArea };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.PNWTAP_SCORING = api;
 })(this);

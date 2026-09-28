@@ -21,6 +21,7 @@ def _cases():
         [(48.09, -121.62), (48.06, -121.47), (47.93, -121.09)],        # Mountain Loop Hwy
         [(51.68, -116.45), (51.60, -116.40), (51.53, -116.34)],        # Wapta
         [(60.72, -135.05), (64.06, -139.43)],                          # long northern line
+        [(49.9, -119.6), (50.3, -119.4), (49.5, -119.5), (49.9, -119.6)],  # area (closed ring)
     ]
     cases = []
     for path in paths:
@@ -28,6 +29,7 @@ def _cases():
             tap = (rng.uniform(42, 62), rng.uniform(-138, -112))
             cases.append((tap, path))
         cases.append((path[0], path))                                   # bullseye
+    cases.append(((49.9, -119.5), paths[-1]))                           # inside the area
     return cases
 
 

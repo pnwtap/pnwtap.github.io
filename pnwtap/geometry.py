@@ -20,8 +20,8 @@ def parse_geometry(s: str) -> list[tuple[float, float]]:
     return points
 
 
-# NOTE: static/game.js contains a JS mirror of the functions below (haversine /
-# projection / nearest-point / score). Change both in lockstep.
+# NOTE: static/scoring.js mirrors haversine_km / nearest_point_km (incl. the area
+# rule). Change both in lockstep — tests/test_scoring_parity.py checks them.
 def haversine_km(a: tuple[float, float], b: tuple[float, float]) -> float:
     """Great-circle distance in km between two (lat, lng) points."""
     lat1, lat2 = math.radians(a[0]), math.radians(b[0])
@@ -50,13 +50,57 @@ def _segment_dist_km(tap: tuple[float, float], a: tuple[float, float], b: tuple[
     return math.hypot(ax + t * dx, ay + t * dy)
 
 
+def is_area(path: list[tuple[float, float]]) -> bool:
+    """A closed ring (first point == last, 4+ points) is an area: a lake, island, or park."""
+    return len(path) >= 4 and tuple(path[0]) == tuple(path[-1])
+
+
 def nearest_point_km(tap: tuple[float, float], path: list[tuple[float, float]]) -> float:
-    """Distance in km from `tap` to the nearest point on `path` (point or polyline)."""
+    """Distance in km from `tap` to `path`: a point, a polyline, or an area (0 inside)."""
     if not path:
         raise ValueError("empty path")
     if len(path) == 1:
         return haversine_km(tap, path[0])
+    if is_area(path) and in_region(tap, [path]):
+        return 0.0
     return min(_segment_dist_km(tap, path[i], path[i + 1]) for i in range(len(path) - 1))
+
+
+def _centroid(path):
+    return (sum(p[0] for p in path) / len(path), sum(p[1] for p in path) / len(path))
+
+
+def length_km(path: list[tuple[float, float]]) -> float:
+    """Total length of the polyline (the perimeter, for an area)."""
+    return sum(haversine_km(path[i], path[i + 1]) for i in range(len(path) - 1))
+
+
+def area_km2(path: list[tuple[float, float]]) -> float:
+    """Planar (shoelace) area of a closed ring, in km²; 0 for points and lines."""
+    if not is_area(path):
+        return 0.0
+    c = _centroid(path)
+    xy = [_project(c, p) for p in path]
+    return abs(sum(x1 * y2 - x2 * y1 for (x1, y1), (x2, y2) in zip(xy, xy[1:]))) / 2
+
+
+def decay_km(path: list[tuple[float, float]], base_km: float, floor_km: float) -> float:
+    """Score decay distance for this feature, calibrated so a big feature isn't a freebie.
+
+    The zone where you score >= 37 (within one decay distance) should cover the same
+    area as it does for a single point: pi * base². For a feature with area A and
+    perimeter P that zone is roughly A + P*d + pi*d², so solve for d — clamped to
+    [floor_km, base_km]. A point keeps `base_km`; a 1,000 km river hits the floor.
+    """
+    if len(path) == 1:
+        return base_km
+    a = area_km2(path)
+    p = length_km(path) if is_area(path) else 2 * length_km(path)  # a line's zone has two sides
+    target = math.pi * base_km ** 2 - a
+    if target <= 0:
+        return floor_km
+    d = (-p + math.sqrt(p * p + 4 * math.pi * target)) / (2 * math.pi)
+    return max(floor_km, min(base_km, d))
 
 
 def within_bbox(pt: tuple[float, float], bbox: tuple[float, float, float, float]) -> bool:

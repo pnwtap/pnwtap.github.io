@@ -5,7 +5,9 @@
 SHEET_CSV_URL = "PASTE_YOUR_PUBLISHED_CSV_URL_HERE"
 
 # Scoring
-D_KM = 40.0                          # distance (km) at which score decays by 1/e
+D_KM = 40.0                          # distance (km) at which score decays by 1/e, for a point
+D_MIN_KM = 10.0                      # floor for long lines / big areas, which get a tighter decay
+                                     # so a 900 km river isn't a freebie (see geometry.decay_km)
 RAMP = ["easy", "medium", "hard", "hard"]   # difficulty of each round, in order
 MULTIPLIERS = [1, 2, 3, 4]           # per-round score multiplier; max score = 100*sum = 1000
 

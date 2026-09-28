@@ -216,6 +216,22 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
 }
 .archive-link { display: block; margin-top: 12px; font-size: 13px; color: var(--green-soft); text-align: center; }
 
+/* Playtest controls */
+.pt-bar { display: flex; gap: 6px; margin-bottom: 8px; }
+.pt-bar select {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--tan);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-size: 14px;
+}
+.pt-btn { width: auto; padding: 6px 10px; font-size: 13px; }
+.pt-all { display: block; margin-bottom: 10px; font-size: 13px; color: var(--ink-soft); }
+.pt-flat { font-size: 13px; color: var(--ink-soft); }
+
 /* Help overlay */
 #help {
   position: fixed;

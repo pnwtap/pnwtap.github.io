@@ -74,3 +74,43 @@ def test_in_region_real_mask_contains_sample_places():
     assert in_region((60.7212, -135.0568), mask)      # Whitehorse
     assert not in_region((40.7608, -111.8910), mask)  # Salt Lake City
     assert not in_region((46.8721, -113.9940), mask)  # Missoula, Montana
+
+
+# ---- areas & size-calibrated decay ----
+from pnwtap.geometry import area_km2, decay_km, is_area
+
+SQUARE = [(49.0, -120.0), (49.0, -119.0), (50.0, -119.0), (50.0, -120.0), (49.0, -120.0)]
+
+
+def test_closed_ring_is_area_and_inside_scores_zero():
+    assert is_area(SQUARE)
+    assert not is_area(SQUARE[:-1])
+    assert nearest_point_km((49.5, -119.5), SQUARE) == 0.0
+    assert nearest_point_km((49.5, -118.9), SQUARE) == pytest.approx(7.2, abs=0.3)
+
+
+def test_area_km2_of_one_degree_square():
+    assert area_km2(SQUARE) == pytest.approx(111.2 * 72.9, rel=0.02)
+
+
+def test_decay_point_keeps_base():
+    assert decay_km([(48.0, -121.0)], 40, 10) == 40
+
+
+def test_decay_shrinks_with_length_and_hits_floor():
+    short = [(48.0, -121.0), (48.1, -121.0)]              # ~11 km
+    medium = [(48.0, -121.0), (49.0, -121.0)]             # ~111 km
+    long = [(45.0, -121.0), (53.0, -121.0)]               # ~890 km
+    d_short, d_med, d_long = (decay_km(p, 40, 10) for p in (short, medium, long))
+    assert 35 < d_short < 40
+    assert 10 < d_med < d_short
+    assert d_long == 10
+
+
+def test_decay_equalises_the_good_zone():
+    import math
+    line = [(48.0, -121.0), (48.5, -121.0)]
+    d = decay_km(line, 40, 1)
+    from pnwtap.geometry import length_km
+    zone = 2 * length_km(line) * d + math.pi * d * d
+    assert zone == pytest.approx(math.pi * 40 ** 2, rel=1e-6)

@@ -126,10 +126,15 @@
       ? { paddingTopLeft: [m, m], paddingBottomRight: [m, covered + m] }
       : { paddingTopLeft: [m, covered + m], paddingBottomRight: [m, m] };
   }
+  // a page opened in a background tab can have a 0×0 map, where fitting bounds yields NaN
+  const sized = () => map.getSize().x > 0 && map.getSize().y > 0;
   function frame(bounds, opts) {
+    if (!sized()) return map.setView(bounds.getCenter(), 6, { animate: false });
     map.flyToBounds(bounds, Object.assign(framePadding(), { duration: 0.7, maxZoom: 10 }, opts));
   }
-  const resetView = () => map.fitBounds(startBounds, Object.assign(framePadding(), { animate: false }));
+  const resetView = () => (sized()
+    ? map.fitBounds(startBounds, Object.assign(framePadding(), { animate: false }))
+    : map.setView(startBounds.getCenter(), 5, { animate: false }));
 
   // ---- keyboard: Enter presses the card's primary button ----
   document.addEventListener("keydown", (e) => {
@@ -170,6 +175,92 @@
   helpBtn.onclick = openHelp;
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !helpEl.hidden) closeHelp(); });
 
+  // ---- playtest: ?playtest — play any location, see its decay, eyeball every answer ----
+  const params = new URLSearchParams(location.search);
+  if (params.has("playtest")) {
+    playtest(params.get("loc"));
+    return;
+  }
+
+  function playtest(startName) {
+    const order = { easy: 0, medium: 1, hard: 2 };
+    const all = DATA.locations.map((loc, i) => ({ loc, i }))
+      .sort((a, b) => order[a.loc.difficulty] - order[b.loc.difficulty] || a.loc.name.localeCompare(b.loc.name));
+    let pos = Math.max(0, all.findIndex((x) => x.loc.name === startName));
+    const allLayer = L.layerGroup();
+    all.forEach(({ loc }, n) => {
+      const opts = { color: "#f4c542", weight: 2, fillOpacity: 0.15 };
+      const shape = loc.geometry.length === 1
+        ? L.circleMarker(loc.geometry[0], { radius: 5, color: "#fff", weight: 1.5, fillColor: "#c0392b", fillOpacity: 1 })
+        : S.isArea(loc.geometry) ? L.polygon(loc.geometry, opts) : L.polyline(loc.geometry, opts);
+      shape.bindTooltip(`${loc.name} · ${loc.difficulty}`).on("click", (e) => {
+        L.DomEvent.stopPropagation(e);
+        pos = n;
+        show();
+      }).addTo(allLayer);
+    });
+    puzzleNo.textContent = "playtest";
+    helpBtn.hidden = true;
+    let offTap = null;
+
+    function show() {
+      if (offTap) offTap();
+      roundLayers.clearLayers();
+      const { loc } = all[pos];
+      setPill(`${pos + 1} / ${all.length}`);
+      const opts = all.map(({ loc: l }, n) =>
+        `<option value="${n}"${n === pos ? " selected" : ""}>${CFG.emoji[l.difficulty]} ${esc(l.name)}</option>`).join("");
+      const kind = S.isArea(loc.geometry) ? "area" : loc.geometry.length > 1 ? "line" : "point";
+      cardBody.innerHTML =
+        `<div class="pt-bar"><button class="pt-btn" id="pt-prev" aria-label="Previous">◀</button>` +
+        `<select id="pt-pick">${opts}</select>` +
+        `<button class="pt-btn" id="pt-next" aria-label="Next">▶</button>` +
+        `<button class="pt-btn" id="pt-rand" aria-label="Random">🎲</button></div>` +
+        `<label class="pt-all"><input type="checkbox" id="pt-all"${map.hasLayer(allLayer) ? " checked" : ""}> show all answers</label>` +
+        `<p class="ask"><strong>${esc(loc.name)}</strong></p>` +
+        `<span class="cat">${CFG.categories[loc.category] || "📍"} ${esc(CAT_LABEL[loc.category] || loc.category)} · ${kind}</span>` +
+        `<span class="pt-flat"> · ${esc(loc.difficulty)} · decay ${loc.d_km} km</span>` +
+        '<div id="pt-out"></div><button class="primary" id="lock" disabled>Tap the map</button>';
+      const go = (n) => { pos = (n + all.length) % all.length; show(); };
+      document.getElementById("pt-prev").onclick = () => go(pos - 1);
+      document.getElementById("pt-next").onclick = () => go(pos + 1);
+      document.getElementById("pt-rand").onclick = () => go(Math.floor(Math.random() * all.length));
+      document.getElementById("pt-pick").onchange = (e) => go(+e.target.value);
+      document.getElementById("pt-all").onchange = (e) => {
+        if (e.target.checked) allLayer.addTo(map); else map.removeLayer(allLayer);
+      };
+      history.replaceState(null, "", `?playtest&loc=${encodeURIComponent(loc.name)}`);
+
+      const lockBtn = document.getElementById("lock");
+      let tap = null, marker = null;
+      const onClick = (e) => {
+        tap = [e.latlng.lat, e.latlng.lng];
+        if (!marker) marker = L.marker(e.latlng, { icon: guessIcon() }).addTo(roundLayers);
+        else marker.setLatLng(e.latlng);
+        lockBtn.disabled = false;
+        lockBtn.textContent = "Lock in guess";
+      };
+      map.on("click", onClick);
+      offTap = () => map.off("click", onClick);
+      lockBtn.onclick = () => {
+        offTap();
+        const near = S.nearest(tap, loc.geometry);
+        const sc = S.score(near.km, loc.d_km);
+        const flat = S.score(near.km, CFG.D_km);
+        animateReveal({ guess: tap, point: near.point }, loc);
+        document.getElementById("pt-out").innerHTML =
+          `<p class="result-score"><b>${fmtKm(near.km)}</b> off · <b>${sc}</b> / 100` +
+          (loc.d_km !== CFG.D_km ? ` <span class="pt-flat">(${flat} with the point decay)</span>` : "") + "</p>" +
+          (loc.blurb ? `<p class="reveal-blurb">${esc(loc.blurb)}</p>` : "");
+        lockBtn.textContent = "Next location";
+        lockBtn.onclick = () => go(pos + 1);
+        lockBtn.focus({ preventScroll: true });
+      };
+    }
+    resetView();
+    show();
+  }
+
   // ---- game ----
   if (!todaysIds) {
     resetView();
@@ -190,7 +281,8 @@
 
     const icon = CFG.categories[loc.category] || "📍";
     const label = `<span class="cat">${icon} ${esc(CAT_LABEL[loc.category] || loc.category)}</span>`;
-    const line = loc.geometry.length > 1 ? '<p class="hint">Anywhere along it counts.</p>' : "";
+    const line = S.isArea(loc.geometry) ? '<p class="hint">Anywhere inside it counts.</p>'
+      : loc.geometry.length > 1 ? '<p class="hint">Anywhere along it counts.</p>' : "";
     const ask = loc.image
       ? `<p class="ask">Where is <strong>this place</strong>?</p>${label}` +
         `<img class="prompt-img" src="${esc(loc.image)}" alt="Photo of the mystery location">`
@@ -223,7 +315,7 @@
       map.off("click", onClick);
       if (marker.dragging) marker.dragging.disable();
       const near = S.nearest(tap, loc.geometry);
-      const score = S.score(near.km, CFG.D_km);
+      const score = S.score(near.km, loc.d_km || CFG.D_km);
       const r = {
         i: todaysIds[roundIdx], name: loc.name, difficulty: loc.difficulty,
         mult, km: near.km, score, guess: tap, point: near.point,
@@ -238,7 +330,9 @@
 
   // ---- reveal: a line that draws from the guess to the truth ----
   function drawAnswer(loc, point, pulse) {
-    if (loc.geometry.length > 1) {
+    if (S.isArea(loc.geometry)) {
+      L.polygon(loc.geometry, { color: "#c0392b", weight: 2, fillOpacity: 0.25, interactive: false }).addTo(roundLayers);
+    } else if (loc.geometry.length > 1) {
       L.polyline(loc.geometry, { color: "#c0392b", weight: 4, opacity: 0.9, interactive: false }).addTo(roundLayers);
     }
     L.marker(point, { icon: answerIcon(pulse), interactive: false, zIndexOffset: 1000 }).addTo(roundLayers);
