@@ -192,3 +192,38 @@ def test_a_batch_of_new_locations_is_introduced_one_a_day():
             firsts[n] = day
     assert set(firsts) == new                            # ...and every one does debut
     assert max(firsts.values()) <= "2026-09-12"          # within about ten days
+
+
+# ---- curated days ----
+from pnwtap.schedule import parse_curated
+
+
+def test_parse_curated_reads_names_and_flags_off_ramp_days():
+    locs = _big_pool()
+    text = ("date,round_1,round_2,round_3,round_4\n"
+            "2026-09-28,easy0,medium0,hard0,hard1\n"
+            "2026-09-27,easy1,easy2,medium1,hard2\n")
+    curated, warnings = parse_curated(text, locs, RAMP)
+    names = {d: [locs[i].name for i in ids] for d, ids in curated.items()}
+    assert names["2026-09-28"] == ["easy0", "medium0", "hard0", "hard1"]
+    assert len(warnings) == 1 and "2026-09-27" in warnings[0]      # easy/easy/medium/hard
+
+
+@pytest.mark.parametrize("row, msg", [
+    ("2026-09-28,easy0,medium0,hard0,nope", "unknown"),
+    ("2026-09-28,easy0,medium0,hard0", "3 rounds"),
+    ("2026-09-28,easy0,easy0,hard0,hard1", "twice"),
+    ("28/09/2026,easy0,medium0,hard0,hard1", "bad date"),
+])
+def test_parse_curated_rejects(row, msg):
+    with pytest.raises(ValueError, match=msg):
+        parse_curated("date,round_1,round_2,round_3,round_4\n" + row + "\n", _big_pool(), RAMP)
+
+
+def test_curated_days_are_pinned_and_respected_by_spacing():
+    locs = _big_pool()
+    curated, _ = parse_curated("2026-09-28,easy0,medium0,hard0,hard1\n", locs, RAMP)
+    sched = build_schedule(locs, date(2026, 9, 28), 30, RAMP, seed=0, locked=curated)
+    assert sched["2026-09-28"] == curated["2026-09-28"]
+    # the curated places count as used, so they don't come straight back
+    assert not set(curated["2026-09-28"]) & set(sched["2026-09-29"])

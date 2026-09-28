@@ -41,20 +41,21 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb, facts`.
 
 ## Scoring
 
-Each round scores on a log scale of how far the tap is from the feature — measured to the
-nearest point of a line and 0 anywhere inside an area (towns, lakes, parks, islands):
+Each round scores on how far the tap is from the feature — measured to the nearest point of a
+line, and 0 anywhere inside an area (towns, lakes, parks, islands):
 
-    score = 100 × (1 − ln(1 + d / 5 km) / ln(1 + 1500 km / 5 km))
+    score = 100 × (1 − ln(1 + (d / 10 km)²) / ln(1 + (1500 km / 10 km)²))
 
-Every halving of the miss is worth the same ~12 points, so knowing the right valley, the right
-region and even the right province all count, and a 0 takes a miss of 1,500 km:
+A near miss costs almost nothing; further out every halving of the miss is worth the same ~14
+points, so knowing the right valley, the right region and even the right province all count,
+and a 0 takes a miss of 1,500 km:
 
-| miss | 1 km | 5 km | 20 km | 50 km | 100 km | 200 km | 500 km | 1000 km |
+| miss | 3 km | 10 km | 20 km | 50 km | 100 km | 200 km | 500 km | 1000 km |
 |---|---|---|---|---|---|---|---|---|
-| score | 97 | 88 | 72 | 58 | 47 | 35 | 19 | 7 |
+| score | 99 | 93 | 84 | 67 | 54 | 40 | 22 | 8 |
 
 Rounds are multiplied ×1 / ×2 / ×3 / ×4 (easy → hard), for a maximum of 1000. Tune with
-`SCORE_NEAR_KM` / `SCORE_ZERO_KM` in `pnwtap/config.py`.
+`SCORE_NEAR_KM` / `SCORE_ZERO_KM` / `SCORE_SHAPE` in `pnwtap/config.py`.
 
 The build fails loudly, naming the row, on: a missing name, a duplicate name, an unknown category
 or difficulty, malformed coordinates, a point outside the map's region (usually a lat/lng typo),
@@ -94,9 +95,19 @@ from the list or step with ◀ ▶ 🎲, check its prompt clues and fact card, a
 answers** to overlay every location on the map — the quickest way to spot a bad coordinate.
 Nothing is saved in this mode.
 
+## Curated days
+
+`data/curated.csv` pins hand-picked puzzles to dates — `date,round_1,round_2,round_3,round_4`,
+by location name, in play order (round 1 is ×1 … round 4 is ×4). Curated days win over the
+auto-picker and over the lock, so you can re-curate a day even after it's been played (players'
+saves for the old puzzle are ignored, so they get the new one). A day whose difficulties don't
+follow the easy/medium/hard/hard ramp is allowed and noted in the build output. Curated days
+before `EPOCH` are "practice" puzzles (reachable with `?date=`; they don't get a number and the
+"missed yesterday?" link never points at them).
+
 ## Schedule
 
-Puzzle #1 is `EPOCH` (2026-07-07). Each slot draws from the least-recently-used half of its
+Puzzle #1 is `EPOCH` (2026-09-28, launch day). Each slot draws from the least-recently-used half of its
 difficulty tier, seeded by the date — so nothing repeats until at least half its tier has been
 played. On top of that:
 
@@ -111,6 +122,14 @@ location name) and honours that lock on the next build. So you can add, remove, 
 rows at any time without changing a puzzle someone has already played — only future days move.
 **Commit the lock file.** Use `--no-lock` for throwaway experiments and `--today YYYY-MM-DD` to
 pretend it's another date.
+
+## Hit counting
+
+Set `GOATCOUNTER` in `pnwtap/config.py` to a [GoatCounter](https://www.goatcounter.com) site
+code (currently `pnwtap` → pnwtap.goatcounter.com). The page then counts views (`/`, `/archive`)
+and a few events: `/start/<n>`, `/finish/<n>`, `/share/<n>` and `/score/<n>/<band>` (final score
+in 50-point bands, per puzzle — enough to draw a score histogram later). No cookies; nothing is
+counted in `?playtest` or on localhost. Empty string = no counting.
 
 ## Tuning
 

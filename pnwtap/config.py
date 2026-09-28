@@ -4,19 +4,21 @@
 # For local development you can bypass this with `python build.py --csv data/sample_locations.csv`.
 SHEET_CSV_URL = "PASTE_YOUR_PUBLISHED_CSV_URL_HERE"
 
-# Scoring. A round scores on a log scale of how far the tap lands from the feature
-# (0 km inside an area or on a line): 100 * (1 - ln(1 + d/NEAR) / ln(1 + ZERO/NEAR)).
-# Every halving of the miss is worth the same ~12 points, so knowing the right
-# valley, the right region and the right province all count, and 0 takes a miss
-# of SCORE_ZERO_KM. With these values: 1 km → 97, 5 → 88, 20 → 72, 50 → 58,
-# 100 → 47, 200 → 35, 500 → 19, 1000 → 7.
-SCORE_NEAR_KM = 5.0
+# Scoring. A round scores on how far the tap lands from the feature (0 km inside an
+# area or on a line):  100 * (1 - ln(1 + (d/NEAR)^SHAPE) / ln(1 + (ZERO/NEAR)^SHAPE)).
+# Within about NEAR a miss costs almost nothing; beyond it the curve is log-scale, so
+# every halving of the miss is worth the same ~14 points — the right valley, the right
+# region and the right province all count — and 0 takes a miss of SCORE_ZERO_KM.
+# With these values: 3 km → 99, 10 → 93, 20 → 84, 50 → 67, 100 → 54, 200 → 40,
+# 500 → 22, 1000 → 8.
+SCORE_NEAR_KM = 10.0
 SCORE_ZERO_KM = 1500.0
+SCORE_SHAPE = 2.0
 RAMP = ["easy", "medium", "hard", "hard"]   # difficulty of each round, in order
 MULTIPLIERS = [1, 2, 3, 4]           # per-round score multiplier; max score = 100*sum = 1000
 
 # Scheduling
-EPOCH = "2026-07-07"                 # puzzle #1; the schedule is always built from here
+EPOCH = "2026-09-28"                 # puzzle #1 (launch day); curated days before it are "practice"
 HORIZON_DAYS = 400                   # days of puzzles to bake ahead of the build date
 SEED = 0                             # change to reshuffle all *future* days (played days are locked)
 SPREAD_KM = 80                       # a day's places prefer to be at least this far apart...
@@ -102,6 +104,11 @@ BBOX = (41.5, -141.5, 70.0, -109.5)
 # Each round opens framed on this box [[south, west], [north, east]] — the populated
 # south of the region (OR → southern BC/AB); players zoom out for the far north.
 START_BOUNDS = [[43.0, -125.5], [53.0, -113.0]]
+
+# Hit counting: a GoatCounter site code (https://<code>.goatcounter.com). Empty = no
+# counting. Counts page views plus a few events (started / finished / score band /
+# shared); no cookies. Nothing is counted in ?playtest or on localhost.
+GOATCOUNTER = "pnwtap"
 
 # Map tiles (Esri, unlabeled, no API key): satellite imagery — naturally
 # colourful (forest, snow, rock, water), deep zoom, and no place-name labels

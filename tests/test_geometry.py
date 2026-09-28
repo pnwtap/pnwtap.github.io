@@ -91,23 +91,27 @@ def test_area_scores_zero_inside_but_a_loop_does_not():
 
 
 def test_score_curve_landmarks():
-    s = lambda km: score(km, 5, 1500)
+    s = lambda km: score(km, 10, 1500, 2)
     assert s(0) == 100
-    assert s(1) == 97
-    assert s(5) == 88
-    assert s(50) == 58
-    assert s(117) == 44          # 'it's in the scablands' still counts
+    assert s(3) == 99            # a near miss costs almost nothing
+    assert s(10) == 93
+    assert s(20) == 84
+    assert s(117) == 51          # 'it's in the scablands' still counts
     assert s(1500) == 0
     assert s(5000) == 0
 
 
-def test_score_every_halving_is_worth_about_the_same():
-    s = lambda km: score(km, 5, 1500)
-    gains = [s(d / 2) - s(d) for d in (800, 400, 200, 100)]
+def test_score_every_halving_is_worth_about_the_same_far_out():
+    s = lambda km: score(km, 10, 1500, 2)
+    gains = [s(d / 2) - s(d) for d in (1200, 800, 400, 200, 100)]
     assert max(gains) - min(gains) <= 2
-    assert all(10 <= g <= 13 for g in gains)
+    assert all(12 <= g <= 16 for g in gains)
+
+
+def test_score_shape_one_is_plain_log():
+    assert score(5, 5, 1500) == 88 and score(50, 5, 1500) == 58
 
 
 def test_score_is_monotone():
-    vals = [score(d / 4, 5, 1500) for d in range(0, 8000)]
+    vals = [score(d / 4, 10, 1500, 2) for d in range(0, 8000)]
     assert all(a >= b for a, b in zip(vals, vals[1:]))

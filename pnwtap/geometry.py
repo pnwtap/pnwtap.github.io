@@ -66,10 +66,10 @@ def nearest_point_km(tap: tuple[float, float], path: list[tuple[float, float]], 
     return min(_segment_dist_km(tap, path[i], path[i + 1]) for i in range(len(path) - 1))
 
 
-def score(km: float, near_km: float, zero_km: float) -> int:
-    """Round score for a miss of `km`: 100 at 0, then log-scaled — every halving of the
-    miss is worth the same points — reaching 0 at `zero_km`. See SCORE_* in config."""
-    frac = 1 - math.log1p(km / near_km) / math.log1p(zero_km / near_km)
+def score(km: float, near_km: float, zero_km: float, shape: float = 1.0) -> int:
+    """Round score for a miss of `km`: 100 at 0, nearly flat out to ~`near_km`, then
+    log-scaled (every halving of the miss is worth the same points), 0 at `zero_km`."""
+    frac = 1 - math.log1p((km / near_km) ** shape) / math.log1p((zero_km / near_km) ** shape)
     return math.floor(100 * max(0.0, frac) + 0.5)   # round half up, like JS Math.round
 
 

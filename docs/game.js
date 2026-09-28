@@ -12,13 +12,56 @@
   const helpBtn = document.getElementById("help-btn");
   const setPill = (t) => { roundPill.textContent = t; };
 
-  // Phones: tap the sheet's header to tuck it away and see the whole map. Any new
-  // card content (next round, reveal, results) brings it back.
-  document.getElementById("card-head").addEventListener("click", (e) => {
-    if (e.target.closest("button") || !window.matchMedia("(max-width: 640px)").matches) return;
-    card.classList.toggle("collapsed");
+  // ---- phones: the card is a bottom sheet. Drag its header down to tuck it away (up to
+  // bring it back; a tap toggles). While tucked away the header carries the card's main
+  // button, so a whole round can be played with the full map in view. New content
+  // (a reveal, the next round, the results) brings the sheet back up.
+  const head = document.getElementById("card-head");
+  const headAction = document.getElementById("head-action");
+  const isPhone = () => window.matchMedia("(max-width: 640px)").matches;
+  function syncHeadAction() {
+    const btn = cardBody.querySelector("button.primary");
+    const show = card.classList.contains("collapsed") && btn && !btn.disabled;
+    headAction.hidden = !show;
+    if (show) headAction.textContent = btn.textContent;
+  }
+  const setCollapsed = (on) => { card.classList.toggle("collapsed", on); syncHeadAction(); };
+  headAction.onclick = () => { const b = cardBody.querySelector("button.primary:not(:disabled)"); if (b) b.click(); };
+  let dragY = null, dragDy = 0, dragMoved = false;
+  head.addEventListener("pointerdown", (e) => {
+    if (!isPhone() || e.target.closest("button")) return;
+    dragY = e.clientY; dragDy = 0; dragMoved = false;
+    head.setPointerCapture(e.pointerId);
+    card.classList.add("dragging");
   });
-  new MutationObserver(() => card.classList.remove("collapsed")).observe(cardBody, { childList: true });
+  head.addEventListener("pointermove", (e) => {
+    if (dragY === null) return;
+    dragDy = e.clientY - dragY;
+    if (Math.abs(dragDy) > 6) dragMoved = true;
+    if (!card.classList.contains("collapsed")) card.style.transform = `translateY(${Math.max(0, dragDy)}px)`;
+  });
+  const dragEnd = () => {
+    if (dragY === null) return;
+    const collapsed = card.classList.contains("collapsed");
+    card.classList.remove("dragging");
+    card.style.transform = "";
+    if (!dragMoved) setCollapsed(!collapsed);                 // a tap
+    else if (!collapsed && dragDy > 40) setCollapsed(true);   // swiped down
+    else if (collapsed && dragDy < -20) setCollapsed(false);  // swiped up
+    dragY = null;
+  };
+  head.addEventListener("pointerup", dragEnd);
+  head.addEventListener("pointercancel", dragEnd);
+  new MutationObserver(() => setCollapsed(false)).observe(cardBody, { childList: true });
+  new MutationObserver(syncHeadAction).observe(cardBody, { subtree: true, childList: true, attributes: true, characterData: true });
+
+  // ---- hit counting (GoatCounter, when configured): page views plus a few game events ----
+  function hit(path, title, event) {
+    const send = () => window.goatcounter.count({ path, title: title || path, event: !!event });
+    if (window.goatcounter && window.goatcounter.count) return send();
+    const tag = document.querySelector("script[data-goatcounter]");
+    if (tag) tag.addEventListener("load", () => window.goatcounter && window.goatcounter.count && send(), { once: true });
+  }
 
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => (
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -31,6 +74,7 @@
   const parseISO = (s) => new Date(s + "T00:00:00");
   const addDays = (s, n) => { const d = parseISO(s); d.setDate(d.getDate() + n); return iso(d); };
   const dayNumber = (s) => Math.round((parseISO(s) - parseISO(CFG.epoch)) / 864e5) + 1;
+  const dayLabel = (s) => (dayNumber(s) >= 1 ? `#${dayNumber(s)}` : "practice");
   const prettyDate = (s) => parseISO(s).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
   const TODAY = iso(new Date());
@@ -48,9 +92,13 @@
   };
   const KEY = (d) => "pnwtap:" + d;
   function loadGame(d) {
-    const g = store.get(KEY(d));
-    if (Array.isArray(g)) return { rounds: g, done: true, playedOn: d };   // v1 format
-    return g && Array.isArray(g.rounds) ? g : null;
+    let g = store.get(KEY(d));
+    if (Array.isArray(g)) g = { rounds: g, done: true, playedOn: d };      // v1 format
+    if (!g || !Array.isArray(g.rounds)) return null;
+    // only a save for the puzzle scheduled for that day now counts — a day can be
+    // re-curated, and a stale save shouldn't pose as today's result
+    const names = (DATA.schedule[d] || []).map((i) => DATA.locations[i].name);
+    return names.length && g.rounds.every((r, k) => r.name === names[k]) ? g : null;
   }
 
   // ---- map ----
@@ -170,14 +218,15 @@
         f.rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("") +
       "</dl></div>";
   }
-  const scoreFor = (km) => S.score(km, CFG.scoreNearKm, CFG.scoreZeroKm);
+  const scoreFor = (km) => S.score(km, CFG.scoreNearKm, CFG.scoreZeroKm, CFG.scoreShape);
 
   // ---- scoring helpers ----
   const total = (rounds) => rounds.reduce((s, r) => s + r.score * r.mult, 0);
   const fmtKm = (km) => (km == null ? "–"
     : (km < 1 ? km.toFixed(1) : km < 10 ? km.toFixed(1).replace(/\.0$/, "") : Math.round(km)) + " km");
   const offBy = (km) => (km === 0 ? "<b>Inside it</b>" : `<b>${fmtKm(km)}</b> off`);
-  // bands for the log curve: ≥90 ≈ within 4 km, ≥75 ≈ 16 km, ≥55 ≈ 60 km, ≥35 ≈ 200 km, ≥15 ≈ 630 km
+  // bands on the score curve: ≥99 ≈ within 3 km, ≥90 ≈ 13 km, ≥75 ≈ 34 km, ≥55 ≈ 95 km,
+  // ≥35 ≈ 260 km, ≥15 ≈ 700 km
   function verdict(score) {
     if (score >= 99) return "Bullseye! 🎯";
     if (score >= 90) return "Nailed it";
@@ -197,7 +246,6 @@
   }
   function closeHelp() {
     helpEl.hidden = true;
-    store.set("pnwtap-help-seen", 1);
   }
   document.getElementById("help-tiers").textContent =
     CFG.ramp.map((t, i) => `${CFG.emoji[t]} ×${CFG.multipliers[i]}`).join("  ");
@@ -297,7 +345,7 @@
     return;
   }
 
-  puzzleNo.textContent = `#${dayNumber(DATE)}` + (IS_ARCHIVE ? ` · ${prettyDate(DATE)}` : "");
+  puzzleNo.textContent = dayLabel(DATE) + (IS_ARCHIVE ? ` · ${prettyDate(DATE)}` : "");
   const game = loadGame(DATE) || { rounds: [], done: false };
   // saved rounds keep the location's name; look it up by name, since row indices shift
   // whenever the sheet gains rows (fall back to the index for very old saves)
@@ -352,7 +400,16 @@
         mult, km: near.km, score, guess: tap, point: near.point,
       };
       game.rounds.push(r);
-      if (game.rounds.length === todaysIds.length) { game.done = true; game.playedOn = TODAY; }
+      const day = dayNumber(DATE) >= 1 ? dayNumber(DATE) : "practice";
+      if (game.rounds.length === 1) hit(`/start/${day}`, `Started ${dayLabel(DATE)}`, true);
+      if (game.rounds.length === todaysIds.length) {
+        game.done = true;
+        game.playedOn = TODAY;
+        // 50-point bands per day: enough to draw a score histogram later
+        const band = Math.min(950, Math.floor(total(game.rounds) / 50) * 50);
+        hit(`/finish/${day}`, `Finished ${dayLabel(DATE)}`, true);
+        hit(`/score/${day}/${band}`, `${dayLabel(DATE)}: final score ${band}–${band + 49}`, true);
+      }
       save();
       animateReveal(r, loc);
       renderResult(r, loc);
@@ -409,7 +466,7 @@
   // ---- finish: summary map, breakdown, stats, share ----
   function shareText() {
     const parts = game.rounds.map((r) => `${r.score}${CFG.emoji[r.difficulty]}`).join(" ");
-    return `pnwtap #${dayNumber(DATE)} · ${prettyDate(DATE)}\n${parts}\nFinal ${total(game.rounds)}/${maxScore}\n` +
+    return `pnwtap ${dayLabel(DATE)} · ${prettyDate(DATE)}\n${parts}\nFinal ${total(game.rounds)}/${maxScore}\n` +
       location.origin + location.pathname;
   }
 
@@ -467,7 +524,7 @@
       `<li data-n="${n}"><span class="rn">${n + 1}</span><span class="rname">${CFG.emoji[r.difficulty]} ${esc(r.name)}</span>` +
       `<span class="rkm">${fmtKm(r.km)}</span><span class="rpts">${r.score * r.mult}</span></li>`).join("");
     const yesterday = addDays(DATE, -1);
-    const missed = !IS_ARCHIVE && DATA.schedule[yesterday] && !(loadGame(yesterday) || {}).done
+    const missed = !IS_ARCHIVE && DATA.schedule[yesterday] && dayNumber(yesterday) >= 1 && !(loadGame(yesterday) || {}).done
       ? `<a class="archive-link" href="?date=${yesterday}">Missed yesterday? Play #${dayNumber(yesterday)} →</a>` : "";
     const back = IS_ARCHIVE ? '<a class="archive-link" href="./">Back to today’s puzzle →</a>' : "";
 
@@ -500,6 +557,7 @@
     const shareBtn = document.getElementById("share");
     shareBtn.onclick = async () => {
       const text = shareText();
+      hit(`/share/${dayNumber(DATE) >= 1 ? dayNumber(DATE) : "practice"}`, `Shared ${dayLabel(DATE)}`, true);
       const touch = window.matchMedia("(pointer: coarse)").matches;
       try {
         if (touch && navigator.share) { await navigator.share({ text }); return; }
@@ -535,5 +593,5 @@
   resetView();
   if (game.done) renderFinal(false);
   else startRound();
-  if (!store.get("pnwtap-help-seen") && !game.rounds.length) openHelp();
+  hit(IS_ARCHIVE ? "/archive" : "/", `pnwtap ${dayLabel(DATE)}`);
 })();

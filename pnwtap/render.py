@@ -31,6 +31,7 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
             "categories": {k: {"icon": icon, "label": label} for k, (icon, label) in config.CATEGORIES.items()},
             "scoreNearKm": config.SCORE_NEAR_KM,
             "scoreZeroKm": config.SCORE_ZERO_KM,
+            "scoreShape": config.SCORE_SHAPE,
             "multipliers": config.MULTIPLIERS,
             "ramp": config.RAMP,
             "emoji": config.EMOJI,
@@ -63,7 +64,9 @@ def render_site(locations, schedule, image_map, config, *, docs_dir, template_di
     for src in sorted(Path(static_dir).iterdir()):
         if src.is_file():
             digest.update(src.read_bytes())
-    html = env.get_template("index.html.jinja").render(data_json=data_json, v=digest.hexdigest()[:10])
+    html = env.get_template("index.html.jinja").render(
+        data_json=data_json, v=digest.hexdigest()[:10], goatcounter=getattr(config, "GOATCOUNTER", ""),
+    )
 
     index_path = docs_dir / "index.html"
     index_path.write_text(html, encoding="utf-8")

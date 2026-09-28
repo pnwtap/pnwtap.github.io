@@ -18,6 +18,8 @@ pool. That gives:
   apart and no more than `max_per_category` of one category. These are soft —
   if nothing eligible satisfies them they're dropped, never the rules above.
 """
+import csv
+import io
 import random
 import zlib
 from collections import Counter
@@ -111,6 +113,42 @@ def build_schedule(
             last_used[i] = offset
         schedule[day] = ids
     return schedule
+
+
+def parse_curated(csv_text: str, locations, ramp: list[str]) -> tuple[dict[str, list[int]], list[str]]:
+    """Read hand-picked days (`date,round_1,...,round_N` by location name) into {date: [indices]}.
+
+    Raises ValueError on a bad date, an unknown or repeated name, or the wrong number of
+    rounds. A day whose difficulties don't follow the ramp is allowed — curation is a
+    deliberate choice — but comes back as a warning.
+    """
+    index = {loc.name: i for i, loc in enumerate(locations)}
+    curated: dict[str, list[int]] = {}
+    warnings: list[str] = []
+    for line_no, row in enumerate(csv.reader(io.StringIO(csv_text)), start=1):
+        cells = [c.strip() for c in row]
+        if not any(cells) or cells[0] == "date":
+            continue
+        day, names = cells[0], [c for c in cells[1:] if c]
+        try:
+            date.fromisoformat(day)
+        except ValueError:
+            raise ValueError(f"curated line {line_no}: bad date {day!r}") from None
+        if day in curated:
+            raise ValueError(f"curated line {line_no}: {day} listed twice")
+        if len(names) != len(ramp):
+            raise ValueError(f"curated {day}: {len(names)} rounds, the game has {len(ramp)}")
+        missing = [n for n in names if n not in index]
+        if missing:
+            raise ValueError(f"curated {day}: unknown location(s) {', '.join(map(repr, missing))}")
+        if len(set(names)) != len(names):
+            raise ValueError(f"curated {day}: a location appears twice")
+        ids = [index[n] for n in names]
+        tiers = [locations[i].difficulty for i in ids]
+        if tiers != list(ramp):
+            warnings.append(f"curated {day}: difficulties {'/'.join(tiers)} (the ramp is {'/'.join(ramp)})")
+        curated[day] = ids
+    return curated, warnings
 
 
 def resolve_lock(lock: dict[str, list[str]], locations) -> tuple[dict[str, list[int]], list[str]]:

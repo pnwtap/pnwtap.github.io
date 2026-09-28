@@ -59,9 +59,10 @@
     return best;
   }
 
-  // 100 at 0 km, log-scaled (each halving of the miss is worth the same points), 0 at zeroKm
-  const score = (km, nearKm, zeroKm) =>
-    Math.round(100 * Math.max(0, 1 - Math.log1p(km / nearKm) / Math.log1p(zeroKm / nearKm)));
+  // 100 at 0 km, nearly flat out to ~nearKm, then log-scaled (each halving of the miss is
+  // worth the same points), 0 at zeroKm
+  const score = (km, nearKm, zeroKm, shape = 1) =>
+    Math.round(100 * Math.max(0, 1 - Math.log1p((km / nearKm) ** shape) / Math.log1p((zeroKm / nearKm) ** shape)));
 
   const api = { haversine, nearest, score };
   if (typeof module !== "undefined" && module.exports) module.exports = api;

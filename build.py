@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parent
 LOCAL_CSV = ROOT / "data" / "locations.csv"
 MASK_PATH = ROOT / "data" / "region_mask.json"
 LOCK_PATH = ROOT / "data" / "schedule_lock.json"
+CURATED_PATH = ROOT / "data" / "curated.csv"
 
 
 def load_csv(csv_arg: str | None) -> str:
@@ -48,22 +49,42 @@ def main() -> None:
     today = date.fromisoformat(args.today) if args.today else date.today()
     epoch = date.fromisoformat(config.EPOCH)
 
+    # Hand-picked days (data/curated.csv) win over the auto-picker and over the lock.
+    curated, warnings = {}, []
+    if CURATED_PATH.exists():
+        curated, warnings = schedule.parse_curated(CURATED_PATH.read_text(encoding="utf-8"), locations, config.RAMP)
+    for w in warnings:
+        print(f"note: {w}")
+
+    # The schedule starts at puzzle #1 (EPOCH), or earlier if a curated practice day precedes it.
+    start = min([epoch] + [date.fromisoformat(d) for d in curated])
+
     lock: dict[str, list[str]] = {}
     if not args.no_lock and LOCK_PATH.exists():
         lock = json.loads(LOCK_PATH.read_text(encoding="utf-8"))
+    stale = [d for d in lock if d < start.isoformat()]
+    for d in stale:                      # history from before the game (re)started
+        del lock[d]
+    if stale:
+        print(f"dropped {len(stale)} locked day(s) from before {start.isoformat()}")
     locked, dropped = schedule.resolve_lock(lock, locations)
     if dropped:
         print(f"warning: {len(dropped)} locked day(s) reference removed/renamed locations and were "
               f"re-rolled: {', '.join(dropped[-5:])}{' …' if len(dropped) > 5 else ''}")
+    for d, ids in curated.items():
+        if d in locked and locked[d] != ids and d <= today.isoformat():
+            print(f"warning: curated {d} replaces an already-played puzzle "
+                  f"({', '.join(lock[d])}) — players who'd played it get the new one")
+    locked.update(curated)
 
-    horizon = (today - epoch).days + config.HORIZON_DAYS + 1
+    horizon = (today - start).days + config.HORIZON_DAYS + 1
     sched = schedule.build_schedule(
-        locations, epoch, horizon, config.RAMP, config.SEED, locked=locked,
+        locations, start, horizon, config.RAMP, config.SEED, locked=locked,
         spread_km=config.SPREAD_KM, max_per_category=config.MAX_PER_CATEGORY,
     )
-    last = epoch + timedelta(days=horizon - 1)
-    print(f"scheduled {len(sched)} days, {epoch.isoformat()} → {last.isoformat()} "
-          f"({len(locked)} locked)")
+    last = start + timedelta(days=horizon - 1)
+    print(f"scheduled {len(sched)} days, {start.isoformat()} → {last.isoformat()} "
+          f"({len(curated)} curated, {len(locked) - len(curated)} locked)")
 
     if not args.no_lock:
         lock.update(schedule.lock_through(sched, locations, today))

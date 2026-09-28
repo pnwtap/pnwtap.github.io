@@ -61,9 +61,19 @@ html, body {
   background: var(--green);
   color: #fff;
 }
-.wordmark { font-weight: 700; letter-spacing: 0.4px; font-size: 16px; }
+.wordmark {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  font-size: 16px;
+}
 #puzzle-no { font-weight: 600; opacity: 0.7; margin-left: 4px; font-size: 14px; }
-.head-right { display: flex; align-items: center; gap: 8px; }
+.head-right { display: flex; flex-shrink: 0; align-items: center; gap: 8px; }
+.round-pill, .head-action { white-space: nowrap; }
+#card-head { gap: 10px; }
 .round-pill {
   font-size: 12px;
   font-weight: 600;
@@ -169,6 +179,15 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   background: rgba(255, 255, 255, 0.18);
 }
 .icon-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.32); }
+.head-action {
+  width: auto;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 13px;
+  background: var(--cream);
+  color: var(--green);
+}
+.head-action:hover:not(:disabled) { background: #fff; }
 
 /* Result view */
 .verdict {
@@ -289,9 +308,7 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
 }
 @keyframes card-in-plain { from { opacity: 0; transform: translateY(-8px); } }
 .help-card h2 { margin: 0 0 8px; font-size: 20px; color: var(--green); }
-.help-lead { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
-.help-list { margin: 0 0 16px; padding-left: 18px; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
-.help-list li { margin-bottom: 4px; }
+.help-lead { margin: 0 0 14px; font-size: 15px; line-height: 1.5; }
 
 .msg { margin: 0; font-size: 16px; line-height: 1.4; }
 
@@ -369,7 +386,9 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
     animation: sheet-in 0.3s ease both;
   }
   @keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } }
-  #card-head { position: relative; padding: 11px 14px 7px; cursor: pointer; }
+  #card { transition: transform 0.2s ease; }
+  #card.dragging { transition: none; }
+  #card-head { position: relative; padding: 11px 14px 7px; cursor: grab; touch-action: none; user-select: none; }
   #card-head::before {                        /* grab handle */
     content: "";
     position: absolute;
