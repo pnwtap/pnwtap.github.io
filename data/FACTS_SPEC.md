@@ -1,4 +1,4 @@
-# pnwtap facts spec
+# pnwtap facts reference
 
 Each location gets an optional `facts` cell: `key: value | key: value | ...`
 (first `:` splits key from value; ` | ` separates pairs; no `|` inside values).
@@ -54,8 +54,9 @@ The game shows **clue** facts in a short line on the guess prompt (they must not
 | mouth | no | rivers: where it ends | `Strait of Georgia` |
 | road | no | passes: highway over it | `I-90` |
 
-## Output
+## Where facts live
 
-`data/candidates/facts_<group>.csv` with header `name,facts` (exact `name` values from
-`data/locations.csv`, the `facts` field quoted), plus `facts_<group>_sources.md`.
-Don't edit any other project file.
+In the sheet's `facts` column (or `data/locations.csv`). The build validates every key against
+`FACTS` in `pnwtap/config.py` and fails naming the row on an unknown key or a non-numeric number.
+The research behind the current facts, with a source for every figure, is in
+`data/candidates/facts_*_sources.md`.
