@@ -110,6 +110,14 @@ START_BOUNDS = [[43.0, -125.5], [53.0, -113.0]]
 # shared); no cookies. Nothing is counted in ?playtest or on localhost.
 GOATCOUNTER = "pnwtap"
 
+# Feedback links at the bottom of the results screen. By default they open the repo's
+# GitHub issue forms (.github/ISSUE_TEMPLATE/); point them at e.g. a Google Form to take
+# reports from people without a GitHub account. The page fills in {puzzle} (label + date),
+# {places} (the day's four places) and {device} (the browser's user agent).
+FEEDBACK_BUG_URL = ("https://github.com/pnwtap/pnwtap.github.io/issues/new"
+                    "?template=bug.yml&puzzle={puzzle}&place={places}&device={device}")
+FEEDBACK_PLACE_URL = "https://github.com/pnwtap/pnwtap.github.io/issues/new?template=place.yml"
+
 # Map tiles (Esri, unlabeled, no API key): satellite imagery — naturally
 # colourful (forest, snow, rock, water), deep zoom, and no place-name labels
 # so answers aren't given away. Set HILLSHADE_URL to overlay shaded relief;

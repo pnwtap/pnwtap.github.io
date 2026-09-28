@@ -268,6 +268,9 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   font: 14px/1.5 "Open Sans", sans-serif;
   resize: none;
 }
+.feedback { margin: 12px 0 0; text-align: center; font-size: 12px; color: var(--ink-soft); }
+.feedback a { color: inherit; text-decoration: underline dotted; text-underline-offset: 2px; }
+.feedback a:hover { color: var(--green); }
 .archive-link { display: block; margin-top: 12px; font-size: 13px; color: var(--green-soft); text-align: center; }
 
 /* Playtest controls */

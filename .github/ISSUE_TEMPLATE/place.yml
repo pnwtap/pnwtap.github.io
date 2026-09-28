@@ -1,0 +1,34 @@
+name: Suggest a place
+description: A peak, crag, trail, town or landmark that would make a good round.
+title: "Place: "
+labels: [place suggestion]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: As people actually say it (e.g. "Mt Shuksan", "Exit 32").
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where is it?
+      description: A Google Maps / Caltopo / Mountain Project link, or lat,lng. For a river, road or route, where it starts and ends.
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: What kind of place
+      options: [peak, climb, traverse, hike, pass, glacier, lake, river, road, town, island, ski area, waterfall, park, landmark, other]
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: How hard to find on an unlabelled map?
+      options: ["easy — most people in the PNW know it", "medium — outdoorsy folks know it", "hard — a deep cut"]
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it's a good one (optional)
+      description: A fun fact or two for the reveal card — elevation, grade, pitches, first ascent…

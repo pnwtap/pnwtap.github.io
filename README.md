@@ -131,6 +131,14 @@ and a few events: `/start/<n>`, `/finish/<n>`, `/share/<n>` and `/score/<n>/<ban
 in 50-point bands, per puzzle — enough to draw a score histogram later). No cookies; nothing is
 counted in `?playtest` or on localhost. Empty string = no counting.
 
+## Feedback
+
+The results screen ends with two small links, **Suggest a place** and **Report a bug**. They open
+the repo's GitHub issue forms (`.github/ISSUE_TEMPLATE/place.yml` and `bug.yml`); the bug form
+arrives pre-filled with the puzzle, its four places and the player's browser. To take reports from
+people without a GitHub account, point `FEEDBACK_PLACE_URL` / `FEEDBACK_BUG_URL` in
+`pnwtap/config.py` at a Google Form (or anything else) instead.
+
 ## Tuning
 
 All knobs live in `pnwtap/config.py`: the score curve `SCORE_NEAR_KM` / `SCORE_ZERO_KM`, `RAMP`,

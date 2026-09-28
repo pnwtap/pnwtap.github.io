@@ -1,0 +1,26 @@
+name: Report a bug
+description: Something's broken, or a place is in the wrong spot / has a wrong fact.
+labels: [bug]
+body:
+  - type: input
+    id: puzzle
+    attributes:
+      label: Puzzle
+      description: Filled in for you when you come from the game.
+  - type: input
+    id: place
+    attributes:
+      label: Which place (if it's about one)
+      description: Filled in with the day's four places when you come from the game — delete the ones that are fine.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you expected vs. what you saw. For a wrong location, where it really is (a Google Maps link is perfect).
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device / browser
+      description: Filled in for you when you come from the game.

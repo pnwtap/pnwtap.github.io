@@ -527,6 +527,15 @@
     const missed = !IS_ARCHIVE && DATA.schedule[yesterday] && dayNumber(yesterday) >= 1 && !(loadGame(yesterday) || {}).done
       ? `<a class="archive-link" href="?date=${yesterday}">Missed yesterday? Play #${dayNumber(yesterday)} →</a>` : "";
     const back = IS_ARCHIVE ? '<a class="archive-link" href="./">Back to today’s puzzle →</a>' : "";
+    const fill = (url) => url
+      .replace("{puzzle}", encodeURIComponent(`${dayLabel(DATE)} · ${DATE}`))
+      .replace("{places}", encodeURIComponent(todaysIds.map((i) => DATA.locations[i].name).join(" · ")))
+      .replace("{device}", encodeURIComponent(navigator.userAgent));
+    const fb = CFG.feedback || {};
+    const feedback = fb.place || fb.bug ? '<p class="feedback">' + [
+      fb.place && `<a href="${esc(fill(fb.place))}" target="_blank" rel="noopener">Suggest a place</a>`,
+      fb.bug && `<a href="${esc(fill(fb.bug))}" target="_blank" rel="noopener">Report a bug</a>`,
+    ].filter(Boolean).join(" · ") + "</p>" : "";
 
     cardBody.innerHTML =
       `<div class="final-head"><div><p class="final">Final score</p>` +
@@ -539,7 +548,7 @@
         `<div><b>${st.avg}</b><span>average</span></div>` +
         `<div><b>${st.top}</b><span>best</span></div>` +
         `<div><b>${st.streak}</b><span>streak</span></div>` +
-      "</div>" + missed + back;
+      "</div>" + missed + back + feedback;
     if (fresh) countUp(document.getElementById("final-n"), score);
 
     // tap a row to fly to that round
