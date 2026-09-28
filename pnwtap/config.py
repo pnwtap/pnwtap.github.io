@@ -15,6 +15,8 @@ MULTIPLIERS = [1, 2, 3, 4]           # per-round score multiplier; max score = 1
 EPOCH = "2026-07-07"                 # puzzle #1; the schedule is always built from here
 HORIZON_DAYS = 400                   # days of puzzles to bake ahead of the build date
 SEED = 0                             # change to reshuffle all *future* days (played days are locked)
+SPREAD_KM = 80                       # a day's places prefer to be at least this far apart...
+MAX_PER_CATEGORY = 2                 # ...and to repeat a category at most this often (both soft)
 
 # Share-string emoji per difficulty tier
 EMOJI = {"easy": "🏅", "medium": "🔥", "hard": "🏆"}

@@ -10,19 +10,31 @@ pool. That gives:
 - stability: randomness and tie-breaks are keyed on location *names*, not sheet
   row order, and already-played days can be pinned with `locked` so adding or
   reordering sheet rows never rewrites a puzzle someone has already seen;
-- freshness: never-used locations are drawn first, so the first pass through
-  a tier is a permutation and newly added locations appear right away.
+- freshness: a never-used location is drawn first, one per day — so a new
+  addition appears the next day, and a big batch of additions is blended in
+  over the following weeks instead of taking over; the very first pass through
+  a tier (everything new) is still a permutation;
+- variety: within the eligible set, a day prefers places at least `spread_km`
+  apart and no more than `max_per_category` of one category. These are soft —
+  if nothing eligible satisfies them they're dropped, never the rules above.
 """
 import random
 import zlib
 from collections import Counter
 from datetime import date, timedelta
 
+from pnwtap.geometry import haversine_km
+
 NEVER = -10**9
 
 
 def _key(*parts) -> int:
     return zlib.crc32(":".join(str(p) for p in parts).encode())
+
+
+def _centroid(loc) -> tuple[float, float]:
+    pts = loc.geometry
+    return (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
 
 
 def build_schedule(
@@ -32,9 +44,31 @@ def build_schedule(
     ramp: list[str],
     seed: int = 0,
     locked: dict[str, list[int]] | None = None,
+    spread_km: float = 0.0,
+    max_per_category: int | None = None,
 ) -> dict[str, list[int]]:
     """Map each ISO date in [start_date, start_date + horizon_days) to location indices, one per ramp slot."""
     locked = locked or {}
+    centroids = [_centroid(loc) for loc in locations]
+
+    def far(c: int, today: list[int]) -> bool:
+        return all(haversine_km(centroids[c], centroids[t]) >= spread_km for t in today)
+
+    def cat_ok(c: int, today: list[int]) -> bool:
+        if max_per_category is None:
+            return True
+        return sum(locations[t].category == locations[c].category for t in today) < max_per_category
+
+    def pick(options: list[list[int]], today: list[int], rng: random.Random) -> int:
+        """Choose from the first candidate set that keeps today varied; else relax the soft rules."""
+        for cands in options:
+            good = [c for c in cands if far(c, today) and cat_ok(c, today)]
+            if good:
+                return rng.choice(good)
+        widest = options[-1]
+        spread = [c for c in widest if far(c, today)]
+        return rng.choice(spread or widest)
+
     by_tier: dict[str, list[int]] = {"easy": [], "medium": [], "hard": []}
     for idx, loc in enumerate(locations):
         by_tier[loc.difficulty].append(idx)
@@ -53,23 +87,26 @@ def build_schedule(
         if day in locked:
             ids = list(locked[day])
         else:
-            picks = {}
-            for tier, count in need.items():
+            ids = []
+            for slot, tier in enumerate(ramp):
                 pool = sorted(
-                    by_tier[tier],
+                    (i for i in by_tier[tier] if i not in ids),
                     key=lambda i: (last_used.get(i, NEVER), _key(seed, locations[i].name)),
                 )
-                rng = random.Random(_key(seed, day, tier))
+                # Candidates come from the least-recently-used half of the tier (never-used
+                # ones sort first). One never-used place a day gets priority; once today has
+                # one, prefer played ones — unless never-used places fill the whole half.
                 fresh = [i for i in pool if i not in last_used]
-                if len(fresh) >= count:
-                    chosen = rng.sample(fresh, count)
+                stale_half = pool[: max(1, len(by_tier[tier]) // 2)]
+                old = [i for i in stale_half if i in last_used]
+                new_today = any(t not in last_used for t in ids)
+                if fresh and not new_today:
+                    options = [fresh, stale_half]
+                elif fresh and old:
+                    options = [old, stale_half]
                 else:
-                    stale = pool[len(fresh):]
-                    eligible = stale[: max(count - len(fresh), len(pool) // 2)]
-                    chosen = fresh + rng.sample(eligible, count - len(fresh))
-                    rng.shuffle(chosen)
-                picks[tier] = iter(chosen)
-            ids = [next(picks[tier]) for tier in ramp]
+                    options = [stale_half]
+                ids.append(pick(options, ids, random.Random(_key(seed, day, slot))))
         for i in ids:
             last_used[i] = offset
         schedule[day] = ids

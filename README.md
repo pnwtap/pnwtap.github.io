@@ -70,9 +70,15 @@ the map — the quickest way to spot a bad coordinate. Nothing is saved in this 
 
 ## Schedule
 
-Puzzle #1 is `EPOCH` (2026-07-07). Each day draws, per difficulty tier, from the least-recently-used
-half of that tier, seeded by the date — so nothing repeats until at least half its tier has been
-played, and newly added locations are used first.
+Puzzle #1 is `EPOCH` (2026-07-07). Each slot draws from the least-recently-used half of its
+difficulty tier, seeded by the date — so nothing repeats until at least half its tier has been
+played. On top of that:
+
+- **new locations debut one per day** — add one and it shows up tomorrow; add forty and they're
+  blended in over the next forty days rather than taking over;
+- **days are varied** — places on the same day prefer to be `SPREAD_KM` (80 km) apart, with at most
+  `MAX_PER_CATEGORY` (2) of one category. Both are soft rules that relax only when nothing
+  eligible satisfies them (on the current data they always hold).
 
 Every build writes the puzzles for **today and earlier** into `data/schedule_lock.json` (by
 location name) and honours that lock on the next build. So you can add, remove, or reorder sheet

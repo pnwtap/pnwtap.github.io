@@ -130,3 +130,65 @@ def test_resolve_lock_reports_missing_names():
     locked, dropped = resolve_lock({"2026-07-07": ["easy0", "gone", "hard0", "hard1"]}, locs)
     assert locked == {}
     assert dropped == ["2026-07-07"]
+
+
+
+# ---- same-day variety ----
+from pnwtap.geometry import haversine_km
+
+
+def _grid_pool():
+    """Locations on a 1-degree grid (~75-110 km apart), cycling through three categories."""
+    locs, n = [], 0
+    for diff, count in (("easy", 12), ("medium", 12), ("hard", 24)):
+        for k in range(count):
+            lat, lng = 45.0 + (n % 8), -124.0 + (n // 8)
+            locs.append(Location(f"{diff}{k}", ["peak", "town", "lake"][n % 3], diff, [(lat, lng)], None, ""))
+            n += 1
+    return locs
+
+
+def test_days_are_spread_out_when_possible():
+    locs = _grid_pool()
+    sched = build_schedule(locs, date(2026, 7, 7), 120, RAMP, seed=0, spread_km=70)
+    for ids in sched.values():
+        pts = [locs[i].geometry[0] for i in ids]
+        assert min(haversine_km(a, b) for k, a in enumerate(pts) for b in pts[k + 1:]) >= 70
+
+
+def test_category_cap_when_possible():
+    locs = _grid_pool()
+    sched = build_schedule(locs, date(2026, 7, 7), 120, RAMP, seed=0, max_per_category=2)
+    from collections import Counter
+    for ids in sched.values():
+        assert max(Counter(locs[i].category for i in ids).values()) <= 2
+
+
+def test_variety_rules_relax_instead_of_failing():
+    locs = _big_pool()          # everything within a few km: spread can never be met
+    sched = build_schedule(locs, date(2026, 7, 7), 60, RAMP, seed=0, spread_km=500, max_per_category=1)
+    assert len(sched) == 60
+    for ids in sched.values():
+        assert len(set(ids)) == len(ids)
+
+
+
+def test_a_batch_of_new_locations_is_introduced_one_a_day():
+    locs = _big_pool()
+    before = build_schedule(locs, date(2026, 7, 7), 60, RAMP, seed=0)
+    lock = lock_through(before, locs, date(2026, 8, 31))
+    batch = [_loc("medium", 100 + i) for i in range(4)] + [_loc("hard", 100 + i) for i in range(6)]
+    grown = locs + batch
+    locked, _ = resolve_lock(lock, grown)
+    after = _names(grown, build_schedule(grown, date(2026, 7, 7), 120, RAMP, seed=0, locked=locked))
+    new = {l.name for l in batch}
+    firsts = {}
+    for day in sorted(after):
+        if day <= "2026-08-31":
+            continue
+        fresh_today = [n for n in after[day] if n in new and n not in firsts]
+        assert len(fresh_today) <= 1                     # never more than one debut a day
+        for n in fresh_today:
+            firsts[n] = day
+    assert set(firsts) == new                            # ...and every one does debut
+    assert max(firsts.values()) <= "2026-09-12"          # within about ten days

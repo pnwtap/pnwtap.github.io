@@ -56,7 +56,10 @@ def main() -> None:
               f"re-rolled: {', '.join(dropped[-5:])}{' …' if len(dropped) > 5 else ''}")
 
     horizon = (today - epoch).days + config.HORIZON_DAYS + 1
-    sched = schedule.build_schedule(locations, epoch, horizon, config.RAMP, config.SEED, locked=locked)
+    sched = schedule.build_schedule(
+        locations, epoch, horizon, config.RAMP, config.SEED, locked=locked,
+        spread_km=config.SPREAD_KM, max_per_category=config.MAX_PER_CATEGORY,
+    )
     last = epoch + timedelta(days=horizon - 1)
     print(f"scheduled {len(sched)} days, {epoch.isoformat()} → {last.isoformat()} "
           f"({len(locked)} locked)")
