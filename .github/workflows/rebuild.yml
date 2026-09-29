@@ -1,7 +1,14 @@
-# Rebuild the site nightly (and on every push to main) and commit docs/ plus the
-# schedule lock. Nightly matters even with no data changes: each build locks
-# "today" into data/schedule_lock.json, so later edits to the sheet can never
-# rewrite a puzzle someone has already played.
+# Rebuild the site nightly and on every push to main, and deploy it to GitHub Pages.
+#
+# Nightly matters even with no data changes: each build locks "today" into
+# data/schedule_lock.json (committed here), so later edits to the sheet can never rewrite
+# a puzzle someone has already played. Once SHEET_CSV_URL is set, sheet edits go live the
+# next morning, or at once via Actions → Rebuild site → Run workflow.
+#
+# Pages deploys from this workflow (Settings → Pages → Source: GitHub Actions), and only
+# when the built page differs from the live one: every deploy re-stamps all files' ETags,
+# so skipping no-op deploys keeps returning players' browser caches warm. (Each asset URL
+# carries a content hash, so an identical index.html means an identical site.)
 name: Rebuild site
 
 on:
@@ -9,10 +16,7 @@ on:
     - cron: "15 9 * * *"   # 02:15 PDT / 01:15 PST: just after midnight Pacific
   push:
     branches: [main]
-  workflow_dispatch:       # "Run workflow" button, e.g. right after editing the sheet
-
-permissions:
-  contents: write
+  workflow_dispatch:       # "Run workflow": rebuild and deploy now
 
 concurrency:
   group: rebuild
@@ -21,11 +25,16 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write      # commit the lock (and docs/)
+      pages: read          # read the site's URL
+    outputs:
+      deploy: ${{ steps.check.outputs.deploy }}
     env:
       TZ: America/Los_Angeles   # the puzzle day is a Pacific day
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
@@ -33,10 +42,46 @@ jobs:
       - run: python -m pytest -q
       - run: python build.py
       - name: Commit the rebuilt site and schedule lock
+        id: commit
         run: |
           git add docs data/schedule_lock.json
           if git diff --cached --quiet; then echo "nothing changed"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Rebuild $(date +%F)"
-          git push
+          if ! git push; then
+            echo "::notice::main moved during the build; the run for the newer commit rebuilds and deploys"
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/configure-pages@v6
+        id: pages
+      - name: Deploy only if the page changed
+        id: check
+        run: |
+          url="${{ steps.pages.outputs.base_url }}"
+          if [ "${{ steps.commit.outputs.stale }}" = true ]; then deploy=false
+          elif [ "$GITHUB_EVENT_NAME" = workflow_dispatch ]; then deploy=true
+          elif curl -fsSL --max-time 30 "${url%/}/?rebuild=$GITHUB_RUN_ID" -o "$RUNNER_TEMP/live.html" \
+               && cmp -s "$RUNNER_TEMP/live.html" docs/index.html; then deploy=false
+          else deploy=true; fi
+          echo "deploy=$deploy" >> "$GITHUB_OUTPUT"
+          echo "deploy: $deploy"
+      - uses: actions/upload-pages-artifact@v5
+        if: steps.check.outputs.deploy == 'true'
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.deploy == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write         # deploy to Pages
+      id-token: write      # ...which authenticates with an OIDC token
+      actions: read        # ...and reads the uploaded artifact
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v5
+        id: deployment

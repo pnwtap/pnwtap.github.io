@@ -83,14 +83,15 @@ python3 -m venv .venv
 git add docs data/schedule_lock.json && git commit -m "Rebuild" && git push
 ```
 
-Enable GitHub Pages on the repo with **Settings → Pages → Source: Deploy from branch → main, /docs**.
+Enable GitHub Pages on the repo with **Settings → Pages → Source: GitHub Actions**.
 
-`.github/workflows/rebuild.yml` then runs every night (just after midnight Pacific) and on every
-push to `main`: it runs the tests, rebuilds from the sheet, and commits `data/schedule_lock.json`
-(plus `docs/` when the page changed). One catch: GitHub doesn't deploy commits the Action pushes
-itself, so a page the Action rebuilt goes live with your next push. Build locally and push `docs/`
-yourself (as above) — or, to make sheet edits go live on their own, switch Pages to deploy from the
-Action (Settings → Pages → Source: GitHub Actions, plus a deploy step in the workflow).
+`.github/workflows/rebuild.yml` then does the rest, every night (just after midnight Pacific) and on
+every push to `main`: it runs the tests, rebuilds from the sheet, commits
+`data/schedule_lock.json` (plus `docs/` when the page changed), and deploys `docs/` to Pages —
+only when the page differs from the live one, so unchanged nights don't redeploy and returning
+players' browsers keep their cached files. So once the sheet URL is set, editing the sheet is all
+it takes: new places are live the next morning, or immediately via **Actions → Rebuild site → Run
+workflow** (which always deploys).
 
 The site keeps working with no rebuilds for `HORIZON_DAYS` (400) days (the schedule is extended in
 100-day steps, so most nightly rebuilds leave `docs/` untouched); rebuild whenever you add locations. Add `?date=YYYY-MM-DD` to the URL to play a past day (future days are refused).
