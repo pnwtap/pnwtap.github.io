@@ -7,11 +7,11 @@ SHEET_CSV_URL = "PASTE_YOUR_PUBLISHED_CSV_URL_HERE"
 # Scoring. A round scores on how far the tap lands from the feature (0 km inside an
 # area or on a line):  100 * (1 - ln(1 + (d/NEAR)^SHAPE) / ln(1 + (ZERO/NEAR)^SHAPE)).
 # Within about NEAR a miss costs almost nothing; beyond it the curve is log-scale, so
-# every halving of the miss is worth the same ~14 points — the right valley, the right
+# every halving of the miss is worth the same ~16 points — the right valley, the right
 # region and the right province all count — and 0 takes a miss of SCORE_ZERO_KM.
-# With these values: 3 km → 99, 10 → 93, 20 → 84, 50 → 67, 100 → 54, 200 → 40,
-# 500 → 22, 1000 → 8.
-SCORE_NEAR_KM = 10.0
+# With these values: 10 km → 98, 25 → 92 (a tap that looks spot-on from the opening view
+# scores in the 90s), 50 → 80, 100 → 65, 200 → 49, 500 → 27, 1000 → 10.
+SCORE_NEAR_KM = 25.0
 SCORE_ZERO_KM = 1500.0
 SCORE_SHAPE = 2.0
 RAMP = ["easy", "medium", "hard", "hard"]   # difficulty of each round, in order

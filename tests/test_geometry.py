@@ -127,3 +127,11 @@ def test_polyline_round_trips_exactly():
     for path in paths:
         assert decode_polyline(encode_polyline(path)) == [list(p) for p in path]
     assert encode_polyline([(38.5, -120.2), (40.7, -120.95), (43.252, -126.453)], 1e5) == "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
+
+
+def test_the_game_curve_is_generous_near_and_still_hard_to_zero():
+    from pnwtap import config
+    s = lambda km: score(km, config.SCORE_NEAR_KM, config.SCORE_ZERO_KM, config.SCORE_SHAPE)
+    assert s(25) >= 90                  # within 25 km is a 90+ (a spot-on tap from the opening view)
+    assert s(100) >= 60 and s(250) >= 40   # regional knowledge still counts
+    assert s(config.SCORE_ZERO_KM) == 0 and s(1000) <= 12

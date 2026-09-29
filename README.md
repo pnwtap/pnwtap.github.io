@@ -49,15 +49,15 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb, facts`.
 Each round scores on how far the tap is from the feature — measured to the nearest point of a
 line, and 0 anywhere inside an area (towns, lakes, parks, islands):
 
-    score = 100 × (1 − ln(1 + (d / 10 km)²) / ln(1 + (1500 km / 10 km)²))
+    score = 100 × (1 − ln(1 + (d / 25 km)²) / ln(1 + (1500 km / 25 km)²))
 
-A near miss costs almost nothing; further out every halving of the miss is worth the same ~14
+A near miss costs almost nothing; further out every halving of the miss is worth the same ~16
 points, so knowing the right valley, the right region and even the right province all count,
 and a 0 takes a miss of 1,500 km:
 
-| miss | 3 km | 10 km | 20 km | 50 km | 100 km | 200 km | 500 km | 1000 km |
+| miss | 10 km | 25 km | 50 km | 100 km | 200 km | 500 km | 1000 km | 1500 km |
 |---|---|---|---|---|---|---|---|---|
-| score | 99 | 93 | 84 | 67 | 54 | 40 | 22 | 8 |
+| score | 98 | 92 | 80 | 65 | 49 | 27 | 10 | 0 |
 
 Rounds are multiplied ×1 / ×2 / ×3 / ×4 (easy → hard), for a maximum of 1000. Tune with
 `SCORE_NEAR_KM` / `SCORE_ZERO_KM` / `SCORE_SHAPE` in `pnwtap/config.py`.
