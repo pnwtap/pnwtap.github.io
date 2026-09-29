@@ -14,24 +14,62 @@ DIFFICULTIES = {"easy", "medium", "hard"}
 ROUTE_CATEGORIES = {"traverse", "hike", "road", "river", "climb"}
 
 
+def shape_kind(geometry, category: str) -> str:
+    """"point", "line" or "area": how a geometry is scored and drawn."""
+    if len(geometry) == 1:
+        return "point"
+    if is_closed(geometry) and category not in ROUTE_CATEGORIES:
+        return "area"
+    return "line"
+
+
+@dataclass
+class Member:
+    """One target of an "any of" place (any growing glacier...): a tap scores by the nearest."""
+    name: str
+    geometry: list[tuple[float, float]]
+    kind: str
+
+
 @dataclass
 class Location:
     name: str
     category: str
     difficulty: str
-    geometry: list[tuple[float, float]]
+    geometry: list[tuple[float, float]]    # for an "any of" place: every member's points
     image: str | None
     blurb: str
     facts: dict[str, str] = field(default_factory=dict)
+    members: list[Member] = field(default_factory=list)
 
     @property
     def kind(self) -> str:
-        """"point", "line", or "area" — how the location is scored and drawn."""
-        if len(self.geometry) == 1:
-            return "point"
-        if is_closed(self.geometry) and self.category not in ROUTE_CATEGORIES:
-            return "area"
-        return "line"
+        """"point", "line", "area", or "any" (several targets) — how it is scored and drawn."""
+        return "any" if self.members else shape_kind(self.geometry, self.category)
+
+
+def _coords(text: str) -> list[tuple[float, float]]:
+    # 4 decimals (~10 m) is what the page ships (an encoded polyline at 1e4)
+    return [(round(lat, 4), round(lng, 4)) for lat, lng in parse_geometry(text)]
+
+
+def parse_members(text: str, category: str) -> list[Member]:
+    """The members of an "any of" geometry cell: "Name: lat,lng; ... | Name: lat,lng; ...".
+    A cell without "|" is an ordinary single place and has no members."""
+    parts = [p.strip() for p in text.split("|")]
+    if len(parts) < 2:
+        return []
+    members = []
+    for k, part in enumerate(parts, start=1):
+        label, sep, coords = part.partition(":")
+        if not sep or not label.strip():
+            raise ValueError(f"member {k} needs a name, as 'Name: lat,lng; ...'")
+        points = _coords(coords)
+        members.append(Member(label.strip(), points, shape_kind(points, category)))
+    names = [m.name for m in members]
+    if len(set(names)) != len(names):
+        raise ValueError("two members share a name")
+    return members
 
 
 def parse_locations(csv_text: str, bbox, categories=None, region=None, facts_registry=None) -> list[Location]:
@@ -65,8 +103,9 @@ def parse_locations(csv_text: str, bbox, categories=None, region=None, facts_reg
             )
 
         try:
-            # 4 decimals (~10 m) is what the page ships (an encoded polyline at 1e4)
-            geometry = [(round(lat, 4), round(lng, 4)) for lat, lng in parse_geometry(row.get("geometry") or "")]
+            cell = row.get("geometry") or ""
+            members = parse_members(cell, category)
+            geometry = [pt for m in members for pt in m.geometry] if members else _coords(cell)
         except ValueError as exc:
             raise ValueError(f"row {line_no} ({name}): {exc}") from exc
         for pt in geometry:
@@ -76,12 +115,14 @@ def parse_locations(csv_text: str, bbox, categories=None, region=None, facts_reg
                 raise ValueError(f"row {line_no} ({name}): point {pt} outside the map region (lat/lng typo?)")
 
         image = (row.get("image") or "").strip() or None
+        if members and image:
+            raise ValueError(f"row {line_no} ({name}): an 'any of' place can't have an image (a photo shows one place)")
         blurb = (row.get("blurb") or "").strip()
         try:
             facts = parse_facts(row.get("facts") or "", facts_registry)
         except ValueError as exc:
             raise ValueError(f"row {line_no} ({name}): {exc}") from exc
-        locations.append(Location(name, category, difficulty, geometry, image, blurb, facts))
+        locations.append(Location(name, category, difficulty, geometry, image, blurb, facts, members))
     return locations
 
 

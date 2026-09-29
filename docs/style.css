@@ -285,6 +285,8 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
 }
 .result-score b { color: var(--ink); }
 .result-score .pts { color: var(--green-soft); font-weight: 700; }
+.result-member { margin: -6px 0 10px; font-size: 14px; color: var(--ink-soft); }
+.result-member b { color: var(--target); }
 .reveal-img {
   display: block;
   width: 100%;
@@ -450,6 +452,7 @@ button.secondary { background: var(--cream-deep); color: var(--green); }
   border: 2px solid var(--target);
   animation: pulse 1.6s ease-out 3 forwards;   /* a few beats, then still: no endless repaints */
 }
+.answer-marker.minor .answer-dot { width: 11px; height: 11px; border-width: 2px; opacity: 0.75; }   /* the other members of an "any of" place */
 @keyframes pop { from { transform: translate(-50%, -50%) scale(0); } }
 @keyframes pulse {
   from { opacity: 0.7; transform: scale(1); }

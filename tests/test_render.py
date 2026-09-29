@@ -121,3 +121,18 @@ def test_phone_start_tiles_are_preloaded(tmp_path):
     assert set(hrefs) == expected and len(hrefs) == 6
     origin = "/".join(config.TILE_URL.split("/")[:3])
     assert f'<link rel="preconnect" href="{origin}">' in html
+
+
+def test_any_of_places_ship_their_members(tmp_path):
+    from pnwtap.geometry import decode_polyline
+    from pnwtap.sheet import Member
+    locs = _pool()
+    locs[3] = Location("Any growing glacier", "glacier", "hard", [(46.2, -122.19), (60.02, -139.5)], None, "b",
+                       members=[Member("Crater Glacier", [(46.2, -122.19)], "point"),
+                                Member("Hubbard Glacier", [(60.02, -139.5)], "point")])
+    _, html = _render(tmp_path, locs)
+    payload = json.loads(html.split("window.PNWTAP = ", 1)[1].split(";</script>", 1)[0])
+    loc = payload["locations"][3]
+    assert loc["kind"] == "any" and loc["geometry"] == ""
+    assert [(m["name"], decode_polyline(m["geometry"]), m["kind"]) for m in loc["members"]] == [
+        ("Crater Glacier", [[46.2, -122.19]], "point"), ("Hubbard Glacier", [[60.02, -139.5]], "point")]

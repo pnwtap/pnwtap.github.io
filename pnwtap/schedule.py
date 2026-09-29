@@ -37,9 +37,10 @@ def _key(*parts) -> int:
     return zlib.crc32(":".join(str(p) for p in parts).encode())
 
 
-def _centroid(loc) -> tuple[float, float]:
-    pts = loc.geometry
-    return (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
+def _centroids(loc) -> list[tuple[float, float]]:
+    """Where a place is, for the variety rules: one point, or one per member of an "any of" place."""
+    parts = [m.geometry for m in loc.members] if getattr(loc, "members", None) else [loc.geometry]
+    return [(sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)) for pts in parts]
 
 
 def build_schedule(
@@ -56,10 +57,14 @@ def build_schedule(
 ) -> dict[str, list[int]]:
     """Map each ISO date in [start_date, start_date + horizon_days) to location indices, one per ramp slot."""
     locked = locked or {}
-    centroids = [_centroid(loc) for loc in locations]
+    centroids = [_centroids(loc) for loc in locations]
+
+    def gap(a: int, b: int) -> float:
+        """How far apart two places are (an "any of" place is as close as its nearest member)."""
+        return min(haversine_km(p, q) for p in centroids[a] for q in centroids[b])
 
     def far(c: int, today: list[int]) -> bool:
-        return all(haversine_km(centroids[c], centroids[t]) >= spread_km for t in today)
+        return all(gap(c, t) >= spread_km for t in today)
 
     def cat_ok(c: int, today: list[int]) -> bool:
         if max_per_category is None:
@@ -67,7 +72,7 @@ def build_schedule(
         return sum(locations[t].category == locations[c].category for t in today) < max_per_category
 
     def away(c: int, recent: list[int]) -> bool:
-        return all(haversine_km(centroids[c], centroids[r]) >= recent_km for r in recent)
+        return all(gap(c, r) >= recent_km for r in recent)
 
     def pick(options: list[list[int]], today: list[int], recent: list[int], rng: random.Random) -> int:
         """Choose from the first candidate set that keeps today (and the last few days) varied;

@@ -23,6 +23,10 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
             "kind": loc.kind,
             "facts": card(loc.facts, loc.category, config.FACTS, config.CARDS),
         })
+        if loc.members:                     # an "any of" place: its targets carry the geometry
+            locs[-1]["geometry"] = []
+            locs[-1]["members"] = [{"name": m.name, "geometry": [[lat, lng] for (lat, lng) in m.geometry],
+                                    "kind": m.kind} for m in loc.members]
     return {
         "locations": locs,
         "schedule": schedule,
@@ -73,6 +77,8 @@ def render_site(locations, schedule, image_map, config, *, docs_dir, template_di
     payload = build_payload(locations, schedule, image_map, config, region_mask)
     for loc in payload["locations"]:                  # paths travel as encoded polylines
         loc["geometry"] = encode_polyline(loc["geometry"])
+        for m in loc.get("members", []):
+            m["geometry"] = encode_polyline(m["geometry"])
     payload["regionMask"] = [encode_polyline(ring) for ring in payload["regionMask"]]
     data_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     data_json = data_json.replace("<", "\\u003c")  # keep any "</script>" in blurbs safe

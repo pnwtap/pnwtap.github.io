@@ -6,7 +6,10 @@
   const S = window.PNWTAP_SCORING;
   // geometry arrives polyline-encoded; decode it once, up front, so every consumer
   // (scoring, reveal, playtest, results) sees plain [lat, lng] arrays
-  DATA.locations.forEach((l) => { if (typeof l.geometry === "string") l.geometry = S.decode(l.geometry); });
+  DATA.locations.forEach((l) => {
+    if (typeof l.geometry === "string") l.geometry = S.decode(l.geometry);
+    (l.members || []).forEach((m) => { if (typeof m.geometry === "string") m.geometry = S.decode(m.geometry); });
+  });
   DATA.regionMask = (DATA.regionMask || []).map((r) => (typeof r === "string" ? S.decode(r) : r));
 
   const card = document.getElementById("card");
@@ -259,8 +262,8 @@
     html: `<span class="guess-dot">${label || ""}</span>`,
     iconSize: [22, 22], iconAnchor: [11, 11],
   });
-  const answerIcon = (pulse) => L.divIcon({
-    className: "answer-marker",
+  const answerIcon = (pulse, minor) => L.divIcon({
+    className: "answer-marker" + (minor ? " minor" : ""),
     html: (pulse ? '<span class="answer-ring"></span>' : "") + '<span class="answer-dot"></span>',
     iconSize: [22, 22], iconAnchor: [11, 11],
   });
@@ -424,6 +427,30 @@
       "</dl></div>";
   }
   const scoreFor = (km) => S.score(km, CFG.scoreNearKm, CFG.scoreZeroKm, CFG.scoreShape);
+  // Every place as a list of targets: one for most, several for an "any of" place (any
+  // growing glacier...), where a tap scores by the nearest.
+  const targets = (loc) => loc.members || [{ name: null, geometry: loc.geometry, kind: loc.kind }];
+  const targetOf = (loc, mi) => targets(loc)[mi] || targets(loc)[0];
+  // which member a saved round hit: by name (a member list can be reordered after the
+  // day is played), else by index, else whichever the stored answer point lies on
+  const miOf = (loc, r) => {
+    if (!loc.members) return 0;
+    const k = loc.members.findIndex((m) => m.name === r.member);
+    return k >= 0 ? k : loc.members[r.mi] ? r.mi : nearestTo(loc, r.point).mi;
+  };
+  function nearestTo(loc, tap) {
+    const ts = targets(loc);
+    const n = S.nearestAny(tap, ts.map((t) => ({ geometry: t.geometry, area: t.kind === "area" })));
+    return { km: n.km, point: n.point, mi: n.index, member: ts[n.index].name };
+  }
+  // "Nearest of 2: Crater Glacier · also Hubbard Glacier" under an "any of" result (a big
+  // set: "· and 36 others")
+  const memberLine = (loc, mi) => {
+    if (!loc.members) return "";
+    const others = loc.members.filter((m, k) => k !== mi).map((m) => esc(m.name));
+    const rest = others.length > 4 ? ` · and ${others.length} others` : others.length ? ` · also ${others.join(", ")}` : "";
+    return `<p class="result-member">Nearest of ${loc.members.length}: <b>${esc(targetOf(loc, mi).name)}</b>${rest}</p>`;
+  };
 
   // ---- scoring helpers ----
   const total = (rounds) => rounds.reduce((s, r) => s + r.score * r.mult, 0);
@@ -445,17 +472,22 @@
   const maxScore = 100 * CFG.multipliers.reduce((a, b) => a + b, 0);
 
   // ---- reveal: the answer, then a line drawn from the guess to it once the camera arrives ----
-  function drawAnswer(loc, point, pulse) {
-    if (loc.kind === "area") {
-      L.polygon(loc.geometry, { color: "#c0392b", weight: 2, fillOpacity: 0.25, interactive: false }).addTo(roundLayers);
-    } else if (loc.geometry.length > 1) {
-      L.polyline(loc.geometry, { color: "#c0392b", weight: 4, opacity: 0.9, interactive: false }).addTo(roundLayers);
-    }
+  function drawAnswer(loc, point, pulse, mi = 0) {
+    targets(loc).forEach((t, k) => {
+      const main = k === mi || !loc.members;               // an "any of" place: the nearest stands out
+      if (t.kind === "area") {
+        L.polygon(t.geometry, { color: "#c0392b", weight: 2, opacity: main ? 1 : 0.6, fillOpacity: main ? 0.25 : 0.12, interactive: false }).addTo(roundLayers);
+      } else if (t.geometry.length > 1) {
+        L.polyline(t.geometry, { color: "#c0392b", weight: main ? 4 : 3, opacity: main ? 0.9 : 0.5, interactive: false }).addTo(roundLayers);
+      } else if (!main) {
+        L.marker(t.geometry[0], { icon: answerIcon(false, true), interactive: false }).addTo(roundLayers);
+      }
+    });
     L.marker(point, { icon: answerIcon(pulse), interactive: false, zIndexOffset: 1000 }).addTo(roundLayers);
   }
   function animateReveal(r, loc) {
     const seq = ++revealSeq;
-    drawAnswer(loc, r.point, true);
+    drawAnswer(loc, r.point, true, r.mi);
     const from = r.guess, to = r.point;
     const line = L.polyline([from, from], {
       color: "#f4c542", weight: 4, opacity: 0.95, lineCap: "round", interactive: false,
@@ -463,7 +495,8 @@
     const live = () => seq === revealSeq && roundLayers.hasLayer(line);
 
     const bounds = L.latLngBounds([from, to]);
-    if (loc.geometry.length > 1) loc.geometry.forEach((p) => bounds.extend(p));
+    const shape = targetOf(loc, r.mi).geometry;             // frame the nearest target, not all of them
+    if (shape.length > 1) shape.forEach((p) => bounds.extend(p));
     moveTo(bounds, {}, () => {
       if (!live()) return;
       const px = map.latLngToContainerPoint(from).distanceTo(map.latLngToContainerPoint(to));
@@ -605,14 +638,16 @@
     const allLayer = L.layerGroup();
     all.forEach(({ loc }, n) => {
       const opts = { color: "#f4c542", weight: 2, fillOpacity: 0.15 };
-      const shape = loc.geometry.length === 1
-        ? L.circleMarker(loc.geometry[0], { radius: 5, color: "#fff", weight: 1.5, fillColor: "#c0392b", fillOpacity: 1 })
-        : loc.kind === "area" ? L.polygon(loc.geometry, opts) : L.polyline(loc.geometry, opts);
-      shape.bindTooltip(`${loc.name} · ${loc.difficulty}`).on("click", (e) => {
-        L.DomEvent.stopPropagation(e);
-        pos = n;
-        show();
-      }).addTo(allLayer);
+      targets(loc).forEach((t) => {
+        const shape = t.geometry.length === 1
+          ? L.circleMarker(t.geometry[0], { radius: 5, color: "#fff", weight: 1.5, fillColor: "#c0392b", fillOpacity: 1 })
+          : t.kind === "area" ? L.polygon(t.geometry, opts) : L.polyline(t.geometry, opts);
+        shape.bindTooltip(`${loc.name}${t.name ? ": " + t.name : ""} · ${loc.difficulty}`).on("click", (e) => {
+          L.DomEvent.stopPropagation(e);
+          pos = n;
+          show();
+        }).addTo(allLayer);
+      });
     });
     puzzleNo.textContent = "playtest";
     helpBtn.hidden = true;
@@ -633,7 +668,7 @@
         `<button class="pt-btn" id="pt-rand" aria-label="Random">🎲</button></div>` +
         `<label class="pt-all"><input type="checkbox" id="pt-all"${map.hasLayer(allLayer) ? " checked" : ""}> show all answers</label>` +
         `<p class="ask"><strong>${esc(loc.name)}</strong></p>` +
-        catChip(loc) + `<span class="pt-meta"> · ${loc.kind} · ${esc(loc.difficulty)}</span>` + clueLine(loc) +
+        catChip(loc) + `<span class="pt-meta"> · ${loc.members ? "any of " + loc.members.length : loc.kind} · ${esc(loc.difficulty)}</span>` + clueLine(loc) +
         '<div id="pt-out"></div><button class="primary" id="lock" disabled>Tap the map</button>');
       const go = (n) => { pos = (n + all.length) % all.length; show(); };
       document.getElementById("pt-prev").onclick = () => go(pos - 1);
@@ -658,7 +693,7 @@
       offTap = () => map.off("click", onClick);
       lockBtn.onclick = () => {
         offTap();
-        const near = S.nearest(tap, loc.geometry, loc.kind === "area");
+        const near = nearestTo(loc, tap);
         const sc = scoreFor(near.km);
         setCollapsed(false);
         armedAt = performance.now() + 350;
@@ -666,13 +701,13 @@
         document.getElementById("pt-out").innerHTML =
           `<p class="verdict">${verdict(sc)}</p>` +
           `<p class="result-score">${offBy(near.km)} · <b>${sc}</b> / 100</p>` +
-          factCard(loc) +
+          memberLine(loc, near.mi) + factCard(loc) +
           (loc.blurb ? `<p class="reveal-blurb">${esc(loc.blurb)}</p>` : "");
         lockBtn.textContent = "Next location";
         lockBtn.onclick = () => go(pos + 1);
         moreBelow();
         lockBtn.focus({ preventScroll: true });
-        animateReveal({ guess: tap, point: near.point }, loc);
+        animateReveal({ guess: tap, point: near.point, mi: near.mi }, loc);
       };
     }
     show();
@@ -707,7 +742,8 @@
     const mult = CFG.multipliers[roundIdx];
     setPill(`${roundIdx + 1} / ${todaysIds.length}`);
 
-    const hint = loc.kind === "area" ? '<p class="hint">Anywhere inside it counts.</p>'
+    const hint = loc.members ? '<p class="hint">Whichever is nearest your tap counts.</p>'   // how many: revealed after
+      : loc.kind === "area" ? '<p class="hint">Anywhere inside it counts.</p>'
       : loc.kind === "line" ? '<p class="hint">Anywhere along it counts.</p>' : "";
     const ask = loc.image
       ? `<p class="ask">Where is <strong>this place</strong>?</p>${catChip(loc)}${clueLine(loc)}` +
@@ -740,11 +776,12 @@
       if (!tap) return;
       map.off("click", onClick);
       if (marker.dragging) marker.dragging.disable();
-      const near = S.nearest(tap, loc.geometry, loc.kind === "area");
+      const near = nearestTo(loc, tap);
       const score = scoreFor(near.km);
       const r = {
         i: todaysIds[roundIdx], name: loc.name, difficulty: loc.difficulty,
         mult, km: near.km, score, guess: tap, point: near.point,
+        ...(loc.members ? { mi: near.mi, member: near.member } : {}),
       };
       game.rounds.push(r);
       const day = dayNumber(DATE) >= 1 ? dayNumber(DATE) : "practice";
@@ -770,7 +807,7 @@
       `<p class="verdict">${verdict(r.score)}</p>` +
       `<p class="result-name">${esc(loc.name)} <span class="tier">${CFG.emoji[loc.difficulty] || ""}</span></p>` +
       `<p class="result-score">${offBy(r.km)} · <b>${r.score}</b> × ${r.mult} = ` +
-        `<span class="pts">${r.score * r.mult}</span></p>` +
+        `<span class="pts">${r.score * r.mult}</span></p>` + memberLine(loc, r.mi) +
       (loc.image ? `<img class="reveal-img" src="${esc(loc.image)}" alt="">` : "") +
       factCard(loc) +
       (loc.blurb ? `<p class="reveal-blurb">${esc(loc.blurb)}</p>` : "") +
@@ -810,7 +847,7 @@
     game.rounds.forEach((r, n) => {
       if (!r.guess || !r.point) return;                 // saved by the first version: score only
       const loc = locOf(r);
-      drawAnswer(loc, r.point, false);
+      drawAnswer(loc, r.point, false, miOf(loc, r));
       L.polyline([r.guess, r.point], { color: "#f4c542", weight: 3, opacity: 0.9, dashArray: "6 6", interactive: false })
         .addTo(roundLayers);
       L.marker(r.guess, { icon: guessIcon(n + 1), interactive: false }).addTo(roundLayers);
@@ -887,7 +924,7 @@
         if (!r.guess || !r.point) return;
         const loc = locOf(r);
         const b = L.latLngBounds([r.guess, r.point]);
-        loc.geometry.forEach((p) => b.extend(p));
+        targetOf(loc, miOf(loc, r)).geometry.forEach((p) => b.extend(p));
         moveTo(b, { maxZoom: 11 });
       };
     });

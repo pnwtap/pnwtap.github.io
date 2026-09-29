@@ -95,3 +95,24 @@ def test_puzzle_day_is_pacific_whatever_the_device_zone(host_tz):
         assert ms == int(start.timestamp() * 1000), day
     # the fall-back day (Nov 1) is 25 hours long, spring-forward (Mar 14) 23
     assert out["s"][3] - out["s"][2] == 25 * 3600e3 and out["s"][5] - out["s"][4] == 23 * 3600e3
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_js_nearest_member_matches_python():
+    from pnwtap.geometry import nearest_member_km
+    rng = random.Random(11)
+    members = [
+        ([(46.20, -122.19), (46.21, -122.18), (46.205, -122.17), (46.20, -122.19)], True),   # an area
+        ([(60.02, -139.5)], False),                                                           # a point
+        ([(48.09, -121.62), (48.06, -121.47), (47.93, -121.09)], False),                      # a line
+    ]
+    taps = [(rng.uniform(42, 62), rng.uniform(-138, -112)) for _ in range(60)] + [(46.205, -122.18)]
+    script = (
+        f"const S = require({json.dumps(str(SCORING_JS))});"
+        f"const ms = {json.dumps([{'geometry': p, 'area': a} for p, a in members])};"
+        f"console.log(JSON.stringify({json.dumps(taps)}.map((t) => {{ const n = S.nearestAny(t, ms); return [n.km, n.index]; }})));"
+    )
+    out = json.loads(subprocess.run(["node", "-e", script], capture_output=True, text=True, check=True).stdout)
+    for tap, (js_km, js_i) in zip(taps, out):
+        py_km, py_i = nearest_member_km(tap, members)
+        assert js_i == py_i and js_km == pytest.approx(py_km, rel=1e-9, abs=1e-9)

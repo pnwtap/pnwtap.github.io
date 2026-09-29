@@ -34,6 +34,10 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb, facts`.
   - several with the **last point equal to the first** = an area (lake, island, park): a tap
     inside scores 100. Exception: for routes (`traverse / hike / road / river / climb`) a closed
     ring is just a loop — the Timberline Trail scores along the trail, not across Mt Hood.
+  - **"any of" places** (Any growing glacier...): several named members separated by `|`, each a
+    point, line or area as above — `Crater Glacier: 46.20,-122.19; … | Hubbard Glacier: 60.02,-139.49; …`.
+    A tap scores by the nearest member; the prompt doesn't say how many there are — the reveal
+    does, naming the nearest and showing the rest.
 - `image` (optional): a URL. If set, that round shows the image instead of the name.
 - `blurb`: a line or two shown on the reveal.
 - `facts` (optional): `key: value | key: value`, e.g. `grade: 5.9 | style: sport | pitches: 18`.

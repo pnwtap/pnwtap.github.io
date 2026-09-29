@@ -111,3 +111,37 @@ def test_coordinates_are_kept_to_four_decimals():
     csv_text = "name,category,difficulty,geometry,image,blurb\nX,peak,easy,\"47.433612,-121.773598\",,b\n"
     loc = parse_locations(csv_text, config.BBOX)[0]
     assert loc.geometry == [(47.4336, -121.7736)]
+
+
+ANY_ROW = ('name,category,difficulty,geometry,image,blurb\n'
+           'Any growing glacier,glacier,hard,"Crater Glacier: 46.2000,-122.1900; 46.2100,-122.1800; 46.2050,-122.1700; 46.2000,-122.1900 | '
+           'Hubbard Glacier: 60.0200,-139.5000",,b\n')
+
+
+def test_an_any_of_row_has_named_members():
+    from pnwtap.sheet import parse_locations
+    from pnwtap import config
+    loc = parse_locations(ANY_ROW, config.BBOX)[0]
+    assert loc.kind == "any"
+    assert [(m.name, m.kind) for m in loc.members] == [("Crater Glacier", "area"), ("Hubbard Glacier", "point")]
+    assert len(loc.geometry) == 5                      # every member's points, for validation
+
+
+@pytest.mark.parametrize("cell, msg", [
+    ("46.2,-122.19 | Hubbard Glacier: 60.02,-139.5", "needs a name"),
+    ("A: 46.2,-122.19 | A: 60.02,-139.5", "share a name"),
+    ("A: 46.2,-122.19 | B: 10.0,-139.5", "outside"),
+])
+def test_bad_any_of_rows_name_the_problem(cell, msg):
+    from pnwtap.sheet import parse_locations
+    from pnwtap import config
+    with pytest.raises(ValueError, match=msg):
+        parse_locations(f'name,category,difficulty,geometry,image,blurb\nX,glacier,hard,"{cell}",,b\n', config.BBOX)
+
+
+def test_an_any_of_row_cannot_have_an_image():
+    from pnwtap.sheet import parse_locations
+    from pnwtap import config
+    row = ANY_ROW.replace('",,b', '",https://example.com/x.jpg,b')
+    with pytest.raises(ValueError, match="can't have an image"):
+        parse_locations(row, config.BBOX)

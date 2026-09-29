@@ -135,3 +135,14 @@ def test_the_game_curve_is_generous_near_and_still_hard_to_zero():
     assert s(25) >= 90                  # within 25 km is a 90+ (a spot-on tap from the opening view)
     assert s(100) >= 60 and s(250) >= 40   # regional knowledge still counts
     assert s(config.SCORE_ZERO_KM) == 0 and s(1000) <= 12
+
+
+def test_nearest_member_picks_the_closest_target():
+    from pnwtap.geometry import nearest_member_km
+    crater = [(46.20, -122.19), (46.21, -122.18), (46.205, -122.17), (46.20, -122.19)]
+    hubbard = [(60.02, -139.5)]
+    km, i = nearest_member_km((46.3, -122.2), [(crater, True), (hubbard, False)])
+    assert i == 0 and 5 < km < 15
+    km, i = nearest_member_km((59.9, -139.4), [(crater, True), (hubbard, False)])
+    assert i == 1 and km < 20
+    assert nearest_member_km((46.205, -122.18), [(crater, True), (hubbard, False)]) == (0.0, 0)   # inside the ring

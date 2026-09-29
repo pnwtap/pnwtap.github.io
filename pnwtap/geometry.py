@@ -66,6 +66,11 @@ def nearest_point_km(tap: tuple[float, float], path: list[tuple[float, float]], 
     return min(_segment_dist_km(tap, path[i], path[i + 1]) for i in range(len(path) - 1))
 
 
+def nearest_member_km(tap: tuple[float, float], members) -> tuple[float, int]:
+    """(km, index) of the nearest of several (path, area) targets: an "any of" place."""
+    return min((nearest_point_km(tap, path, area), i) for i, (path, area) in enumerate(members))
+
+
 def score(km: float, near_km: float, zero_km: float, shape: float = 1.0) -> int:
     """Round score for a miss of `km`: 100 at 0, nearly flat out to ~`near_km`, then
     log-scaled (every halving of the miss is worth the same points), 0 at `zero_km`."""

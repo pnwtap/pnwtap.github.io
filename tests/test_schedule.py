@@ -247,3 +247,17 @@ def test_cross_day_variety_relaxes_instead_of_failing():
     sched = build_schedule(locs, date(2026, 7, 7), 60, RAMP, seed=0, recent_days=3, recent_km=500)
     assert len(sched) == 60
     assert {i for ids in sched.values() for i in ids} == set(range(len(locs)))
+
+
+def test_an_any_of_place_is_near_everything_near_any_member():
+    from pnwtap.sheet import Member
+    locs = _grid_pool()
+    # a two-member place: one member sits right on top of hard0, the other far away
+    target = locs[[l.name for l in locs].index("hard0")]
+    far_pt = (60.0, -139.5)
+    locs.append(Location("anyof", "glacier", "hard", [target.geometry[0], far_pt], None, "",
+                         members=[Member("a", [target.geometry[0]], "point"), Member("b", [far_pt], "point")]))
+    sched = build_schedule(locs, date(2026, 7, 7), 200, RAMP, seed=0, spread_km=70)
+    together = [d for d, ids in sched.items() if {len(locs) - 1, locs.index(target)} <= set(ids)]
+    assert not together                       # never on the same day as its neighbour
+    assert any(len(locs) - 1 in ids for ids in sched.values())

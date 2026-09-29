@@ -59,6 +59,16 @@
     return best;
   }
 
+  /** {km, point, index}: the nearest of several targets [{geometry, area}] — an "any of" place. */
+  function nearestAny(tap, targets) {
+    let best = null;
+    targets.forEach((t, index) => {
+      const n = nearest(tap, t.geometry, t.area);
+      if (!best || n.km < best.km) best = { km: n.km, point: n.point, index };
+    });
+    return best;
+  }
+
   // 100 at 0 km, nearly flat out to ~nearKm, then log-scaled (each halving of the miss is
   // worth the same points), 0 at zeroKm
   const score = (km, nearKm, zeroKm, shape = 1) =>
@@ -114,7 +124,7 @@
     return midnightUTC - offset(t);     // again at the answer, in case a DST change lies between
   }
 
-  const api = { haversine, nearest, score, decode, dayIn, dayStart };
+  const api = { haversine, nearest, nearestAny, score, decode, dayIn, dayStart };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.PNWTAP_SCORING = api;
 })(this);
