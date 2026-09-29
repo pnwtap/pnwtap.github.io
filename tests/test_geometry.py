@@ -115,3 +115,15 @@ def test_score_shape_one_is_plain_log():
 def test_score_is_monotone():
     vals = [score(d / 4, 10, 1500, 2) for d in range(0, 8000)]
     assert all(a >= b for a, b in zip(vals, vals[1:]))
+
+
+def test_polyline_round_trips_exactly():
+    from pnwtap.geometry import encode_polyline, decode_polyline
+    paths = [
+        [(48.7767, -121.8144)],
+        [(48.09, -121.62), (48.06, -121.47), (47.93, -121.09)],
+        [(60.2576, -141.9), (69.7396, -141.8977), (41.5, -109.5), (0.0, 0.0), (-0.0001, 0.0001)],
+    ]
+    for path in paths:
+        assert decode_polyline(encode_polyline(path)) == [list(p) for p in path]
+    assert encode_polyline([(38.5, -120.2), (40.7, -120.95), (43.252, -126.453)], 1e5) == "_p~iF~ps|U_ulLnnqC_mqNvxq`@"

@@ -64,7 +64,27 @@
   const score = (km, nearKm, zeroKm, shape = 1) =>
     Math.round(100 * Math.max(0, 1 - Math.log1p((km / nearKm) ** shape) / Math.log1p((zeroKm / nearKm) ** shape)));
 
-  const api = { haversine, nearest, score };
+  // [[lat, lng], ...] from an encoded polyline (Google's algorithm at 1e4 precision) —
+  // mirrors decode_polyline in pnwtap/geometry.py; the build encodes every path this way
+  function decode(str, precision = 1e4) {
+    const out = [], acc = [0, 0];
+    let i = 0;
+    while (i < str.length) {
+      for (let k = 0; k < 2; k++) {
+        let shift = 0, result = 0, b;
+        do {
+          b = str.charCodeAt(i++) - 63;
+          result += (b & 0x1f) * 2 ** shift;   // multiply, not <<: stays exact past 31 bits
+          shift += 5;
+        } while (b >= 0x20);
+        acc[k] += result % 2 ? -(result + 1) / 2 : result / 2;
+      }
+      out.push([acc[0] / precision, acc[1] / precision]);
+    }
+    return out;
+  }
+
+  const api = { haversine, nearest, score, decode };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.PNWTAP_SCORING = api;
 })(this);

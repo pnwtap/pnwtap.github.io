@@ -104,6 +104,10 @@ BBOX = (41.5, -141.5, 70.0, -109.5)
 # Each round opens framed on this box [[south, west], [north, east]] — the populated
 # south of the region (OR → southern BC/AB); players zoom out for the far north.
 START_BOUNDS = [[43.0, -125.5], [53.0, -113.0]]
+# The imagery tiles a phone's opening view shows (START_BOUNDS above a filled prompt
+# sheet, 360–430 px wide and 600+ px tall): the page asks for them while it's still
+# loading. Re-check them in a phone-sized browser if START_BOUNDS or the sheet changes.
+PHONE_START_TILES = {"z": 5, "x": (4, 6), "y": (10, 11)}
 
 # Hit counting: a GoatCounter site code (https://<code>.goatcounter.com). Empty = no
 # counting. Counts page views plus a few events (started / finished / score band /

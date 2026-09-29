@@ -71,3 +71,53 @@ def test_payload_carries_epoch_and_categories():
     assert payload["config"]["epoch"] == config.EPOCH
     assert payload["config"]["categories"]["peak"]
     assert payload["config"]["startBounds"] == config.START_BOUNDS
+
+
+def _render(tmp_path, locs=None):
+    import pathlib
+    root = pathlib.Path(__file__).resolve().parent.parent
+    locs = locs or _pool()
+    sched = build_schedule(locs, date(2026, 7, 7), 3, config.RAMP, seed=0)
+    html = render_site(locs, sched, {}, config, docs_dir=tmp_path,
+                       template_dir=root / "templates", static_dir=root / "static").read_text()
+    return root, html
+
+
+def test_geometry_ships_as_polylines(tmp_path):
+    from pnwtap.geometry import decode_polyline
+    locs = [Location("Loop" + d, "hike", d, [(48.09, -121.62), (48.06, -121.47), (48.09, -121.62)], None, "b")
+            for d in ["easy", "medium", "hard", "hard"]]
+    _, html = _render(tmp_path, locs)
+    payload = json.loads(html.split("window.PNWTAP = ", 1)[1].split(";</script>", 1)[0])
+    geom = payload["locations"][0]["geometry"]
+    assert isinstance(geom, str)
+    assert decode_polyline(geom) == [[48.09, -121.62], [48.06, -121.47], [48.09, -121.62]]
+
+
+def test_page_loads_only_first_party_code_in_order(tmp_path):
+    import re
+    root, html = _render(tmp_path)
+    head = html.split("</head>", 1)[0]
+    scripts = re.findall(r'<script defer src="([^"?]+)\?v=[0-9a-f]{10}"></script>', head)
+    assert scripts == ["leaflet.js", "scoring.js", "game.js"]      # deferred, so they run in this order
+    assert "unpkg.com" not in html and "fonts.googleapis" not in html and "fonts.gstatic" not in html
+    for sheet in ("leaflet.css", "style.css"):
+        assert re.search(rf'<link rel="stylesheet" href="{sheet}\?v=[0-9a-f]{{10}}">', head), sheet
+    # every self-hosted font the stylesheet names exists, and the preload matches one exactly
+    css = (root / "static" / "style.css").read_text()
+    fonts = re.findall(r'url\("([^"]+\.woff2)"\)', css)
+    assert fonts and all((root / "static" / f).exists() and (tmp_path / f).exists() for f in fonts)
+    preload = re.search(r'<link rel="preload" href="([^"]+)" as="font" type="font/woff2" crossorigin>', head)
+    assert preload and preload.group(1) in fonts
+
+
+def test_phone_start_tiles_are_preloaded(tmp_path):
+    import re
+    _, html = _render(tmp_path)
+    hrefs = re.findall(r'<link rel="preload" as="image" href="([^"]+)" media="[^"]+">', html)
+    t = config.PHONE_START_TILES
+    expected = {config.TILE_URL.format(z=t["z"], x=x, y=y)
+                for x in range(t["x"][0], t["x"][1] + 1) for y in range(t["y"][0], t["y"][1] + 1)}
+    assert set(hrefs) == expected and len(hrefs) == 6
+    origin = "/".join(config.TILE_URL.split("/")[:3])
+    assert f'<link rel="preconnect" href="{origin}">' in html

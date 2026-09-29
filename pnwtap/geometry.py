@@ -93,3 +93,40 @@ def in_region(pt: tuple[float, float], rings: list[list[list[float]]]) -> bool:
         if inside:
             return True
     return False
+
+
+# The page carries every path as an encoded polyline (Google's algorithm, 1e4 precision:
+# ~10 m, which is all the source data has): about a fifth the size of JSON arrays.
+# static/scoring.js decodes it; keep the two in lockstep.
+POLYLINE_PRECISION = 1e4
+
+
+def encode_polyline(path, precision: float = POLYLINE_PRECISION) -> str:
+    out, prev = [], (0, 0)
+    for lat, lng in path:
+        cur = (round(lat * precision), round(lng * precision))
+        for d in (cur[0] - prev[0], cur[1] - prev[1]):
+            v = ~(d << 1) if d < 0 else d << 1
+            while v >= 0x20:
+                out.append(chr((0x20 | (v & 0x1F)) + 63))
+                v >>= 5
+            out.append(chr(v + 63))
+        prev = cur
+    return "".join(out)
+
+
+def decode_polyline(s: str, precision: float = POLYLINE_PRECISION) -> list[list[float]]:
+    out, i, acc = [], 0, [0, 0]
+    while i < len(s):
+        for k in (0, 1):
+            shift = result = 0
+            while True:
+                b = ord(s[i]) - 63
+                i += 1
+                result |= (b & 0x1F) << shift
+                shift += 5
+                if b < 0x20:
+                    break
+            acc[k] += ~(result >> 1) if result & 1 else result >> 1
+        out.append([acc[0] / precision, acc[1] / precision])
+    return out

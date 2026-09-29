@@ -49,3 +49,23 @@ def test_js_scoring_matches_python():
         py_km = nearest_point_km(tap, path, area=area)
         assert js_km == pytest.approx(py_km, rel=1e-9, abs=1e-9)
         assert js_score == score(py_km, config.SCORE_NEAR_KM, config.SCORE_ZERO_KM, config.SCORE_SHAPE)
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_js_decodes_every_path_exactly():
+    import csv
+    from pnwtap.geometry import decode_polyline, encode_polyline, parse_geometry
+    root = Path(__file__).resolve().parent.parent
+    rows = csv.DictReader((root / "data" / "locations.csv").open(encoding="utf-8"))
+    paths = [[list(p) for p in parse_geometry(r["geometry"])] for r in rows]
+    paths += json.loads((root / "data" / "region_mask.json").read_text())
+    paths.append([[47.433612, -121.773598], [-0.00005, 179.99995]])   # finer than the page carries
+    encoded = [encode_polyline(p) for p in paths]
+    script = (
+        f"const S = require({json.dumps(str(SCORING_JS))});"
+        f"const encoded = JSON.parse(require('fs').readFileSync(0, 'utf8'));"
+        f"console.log(JSON.stringify(encoded.map((e) => S.decode(e))));"
+    )
+    out = subprocess.run(["node", "-e", script], input=json.dumps(encoded),
+                         capture_output=True, text=True, check=True).stdout
+    assert json.loads(out) == [decode_polyline(e) for e in encoded]   # the browser sees what Python encoded

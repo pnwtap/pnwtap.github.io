@@ -77,7 +77,10 @@ def main() -> None:
                   f"({', '.join(lock[d])}) — players who'd played it get the new one")
     locked.update(curated)
 
-    horizon = (today - start).days + config.HORIZON_DAYS + 1
+    # At least HORIZON_DAYS ahead, ending on a 100-day boundary, so an ordinary night's
+    # rebuild leaves docs/ byte-identical (the Action then commits just the lock) instead
+    # of committing a fresh copy of the ~140 KB page every day.
+    horizon = -(-((today - start).days + config.HORIZON_DAYS + 1) // 100) * 100
     sched = schedule.build_schedule(
         locations, start, horizon, config.RAMP, config.SEED, locked=locked,
         spread_km=config.SPREAD_KM, max_per_category=config.MAX_PER_CATEGORY,

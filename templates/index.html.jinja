@@ -10,11 +10,19 @@
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#2f523e">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%232f523e'/><path d='M8 50 26 20l9 14 6-8 15 24z' fill='%23faf6ea'/><circle cx='44' cy='18' r='6' fill='%23c0392b'/></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="style.css?v={{ v }}">
+  <link rel="preconnect" href="{{ tile_origin }}">
+  <link rel="dns-prefetch" href="{{ tile_origin }}">
+  <link rel="preload" href="open-sans-1.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ asset('leaflet.css') }}">
+  <link rel="stylesheet" href="{{ asset('style.css') }}">
+  {% for href in phone_tiles %}
+  <link rel="preload" as="image" href="{{ href }}" media="(max-width: 640px) and (min-height: 600px)">
+  {% endfor %}
+  <script defer src="{{ asset('leaflet.js') }}"></script>
+  <script defer src="{{ asset('scoring.js') }}"></script>
+  <script defer src="{{ asset('game.js') }}"></script>
+  {# the card fades in once the game has filled it; show it anyway if that never happens #}
+  <script>setTimeout(function () { document.documentElement.classList.add("slow"); }, 1200);</script>
 </head>
 <body>
   <div id="map"></div>
@@ -27,10 +35,10 @@
         <button id="help-btn" class="icon-btn" aria-label="How to play">?</button>
       </span>
     </div>
-    <div id="card-body" aria-live="polite"></div>
+    <div id="card-body" aria-live="polite"><noscript><style>#card { opacity: 1 !important; }</style><p class="msg">pnwtap needs JavaScript to run.</p></noscript></div>
   </div>
   <div id="help" hidden>
-    <div class="help-card" role="dialog" aria-labelledby="help-title">
+    <div class="help-card" role="dialog" aria-modal="true" aria-labelledby="help-title">
       <h2 id="help-title">How to play</h2>
       <p class="help-lead">Tap where each place is. Closer scores more (up to 100); later rounds
         count for more: <span id="help-tiers"></span>. Lines and areas count anywhere along or inside.
@@ -39,8 +47,8 @@
     </div>
   </div>
   <div id="feedback" hidden>
-    <form class="help-card fb-card" id="fb-form" novalidate>
-      <h2 id="fb-title">Suggest a place</h2>
+    <form class="help-card fb-card" id="fb-form" role="dialog" aria-modal="true" aria-labelledby="fb-title" novalidate>
+      <h2 id="fb-title" tabindex="-1">Suggest a place</h2>
       <fieldset data-kind="place">
         <label>Place<input name="place" maxlength="120" required placeholder="e.g. Mt Shuksan, Exit 32, Leavenworth"></label>
         <label>Where is it?<input name="where" maxlength="400" placeholder="a Google Maps link, lat,lng, or a description"></label>
@@ -60,12 +68,9 @@
     </form>
   </div>
   <script>window.PNWTAP = {{ data_json | safe }};</script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   {% if goatcounter %}
   <script>window.goatcounter = { no_onload: true };</script>
   <script data-goatcounter="https://{{ goatcounter }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
   {% endif %}
-  <script src="scoring.js?v={{ v }}"></script>
-  <script src="game.js?v={{ v }}"></script>
 </body>
 </html>

@@ -11,15 +11,42 @@
   --ink-soft: #55605a;
   --target: #c0392b;
   --guess: #f4c542;
+  --card-bg: rgb(250, 246, 234);
+}
+
+/* Open Sans, self-hosted and subset (scripts/subset_fonts.py; licence: LICENSE-open-sans.txt).
+   Keep unicode-range in sync with that script. */
+@font-face {
+  font-family: "Open Sans";
+  src: url("open-sans-1.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212, U+2248, U+2260, U+2264-2265;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url("open-sans-italic-1.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212, U+2248, U+2260, U+2264-2265;
 }
 
 * { box-sizing: border-box; }
 
+html {
+  overscroll-behavior-y: none;              /* no pull-to-refresh or rubber-banding around the map */
+  -webkit-tap-highlight-color: transparent; /* :active styles below give the feedback instead */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
   font-family: "Open Sans", system-ui, -apple-system, sans-serif;
+  line-height: 1.362;   /* Open Sans' own "normal", fixed so the font swapping in can't reflow the card */
   color: var(--ink);
 }
 
@@ -41,16 +68,22 @@ html, body {
   left: 50%;
   transform: translateX(-50%);
   width: min(92vw, 380px);
+  max-height: calc(100vh - 28px);
+  max-height: calc(100dvh - 28px);
+  display: flex;
+  flex-direction: column;
   z-index: 1000;
-  background: rgba(250, 246, 234, 0.94);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  /* opaque rather than frosted glass: a backdrop blur re-renders under every map frame */
+  background: var(--card-bg);
   border: 1px solid var(--tan);
   border-radius: 14px;
   box-shadow: 0 8px 28px rgba(30, 40, 30, 0.28);
   overflow: hidden;
-  animation: card-in 0.35s ease both;
 }
+/* the card comes in once the game has filled it (.ready), or after a while regardless */
+#card:not(.ready) { opacity: 0; }
+html.slow #card { opacity: 1; }
+#card.ready, html.slow #card { animation: card-in 0.3s ease backwards; }
 @keyframes card-in { from { opacity: 0; transform: translate(-50%, -8px); } }
 
 #card-head {
@@ -83,7 +116,8 @@ html, body {
 }
 .round-pill:empty { display: none; }
 
-#card-body { padding: 14px 16px 16px; }
+#card-body { padding: 14px 16px 16px; overflow-y: auto; overscroll-behavior: contain; }
+#card-body, #help, #feedback { touch-action: manipulation; }
 
 /* Guess prompt */
 .round-meta {
@@ -165,9 +199,47 @@ button {
   cursor: pointer;
   transition: background 0.15s ease, transform 0.05s ease;
 }
-button:hover:not(:disabled) { background: var(--green-bright); }
-button:active:not(:disabled) { transform: translateY(1px); }
+@media (hover: hover) { button:hover:not(:disabled) { background: var(--green-bright); } }
+button:active:not(:disabled) { transform: scale(0.98); filter: brightness(0.92); transition-duration: 0s; }
+a:active { opacity: 0.6; }
 button:disabled { background: #b9c3bb; cursor: default; }
+/* a round's main button stays in reach when a long result card scrolls (short phones,
+   landscape); the halo in the card colour keeps scrolled text from peeking round it */
+#card-body > button.primary:last-child {
+  position: sticky;
+  bottom: 0;
+  /* card colour at its sides and down through the body's bottom padding (sticky stops at
+     the padding edge), hiding text scrolled behind it; clipped by the card, so invisible
+     unless the button is stuck */
+  box-shadow: 0 8px 0 8px var(--card-bg), 0 48px 0 8px var(--card-bg);
+}
+#card-body > button.primary:last-child:active:not(:disabled) { filter: none; background: #26443a; }
+/* content continues below: fade it out just above the stuck button */
+#card-body.more > button.primary:last-child::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  bottom: 100%;
+  height: 30px;
+  background: linear-gradient(rgba(250, 246, 234, 0), rgba(250, 246, 234, 0.88));
+  pointer-events: none;
+}
+#card-body.more > button.primary:last-child::after {
+  content: "more \2193";
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 5px);
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--card-bg);
+  box-shadow: 0 0 0 1px var(--cream-deep);
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  pointer-events: none;   /* a label, not part of the button: taps go to the text beneath */
+}
 button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
 
 .icon-btn {
@@ -178,7 +250,7 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   line-height: 24px;
   background: rgba(255, 255, 255, 0.18);
 }
-.icon-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.32); }
+@media (hover: hover) { .icon-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.32); } }
 .head-action {
   width: auto;
   padding: 4px 11px;
@@ -187,7 +259,7 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   background: var(--cream);
   color: var(--green);
 }
-.head-action:hover:not(:disabled) { background: #fff; }
+@media (hover: hover) { .head-action:hover:not(:disabled) { background: #fff; } }
 
 /* Result view */
 .verdict {
@@ -238,6 +310,7 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
 .final-score small { font-size: 18px; color: var(--ink-soft); font-weight: 600; }
 .next-in { text-align: right; }
 #countdown { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+#countdown a { display: inline-block; padding: 4px 0; font-size: 14px; color: var(--green-soft); }
 
 .breakdown { list-style: none; margin: 0 0 12px; padding: 0; border-top: 1px solid var(--cream-deep); }
 .breakdown li {
@@ -250,7 +323,8 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   font-size: 14px;
   cursor: pointer;
 }
-.breakdown li:hover { background: var(--cream-deep); }
+@media (hover: hover) { .breakdown li:hover { background: var(--cream-deep); } }
+.breakdown li:active { background: var(--cream-deep); }
 .rn { font-weight: 700; color: var(--green-soft); }
 .rname { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rkm { color: var(--ink-soft); font-size: 13px; }
@@ -265,13 +339,13 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   border: 1px solid var(--tan);
   border-radius: 9px;
   background: var(--cream-deep);
-  font: 14px/1.5 "Open Sans", sans-serif;
+  font: 16px/1.5 "Open Sans", sans-serif;   /* 16px+ keeps iOS from zooming in on focus */
   resize: none;
 }
-.feedback { margin: 12px 0 0; text-align: center; font-size: 12px; color: var(--ink-soft); }
-.feedback a { color: inherit; text-decoration: underline dotted; text-underline-offset: 2px; }
-.feedback a:hover { color: var(--green); }
-.archive-link { display: block; margin-top: 12px; font-size: 13px; color: var(--green-soft); text-align: center; }
+.feedback { margin: 2px 0 -8px; text-align: center; font-size: 12px; color: var(--ink-soft); }
+.feedback a { display: inline-block; padding: 10px 2px; color: inherit; text-decoration: underline dotted; text-underline-offset: 2px; }
+@media (hover: hover) { .feedback a:hover { color: var(--green); } }
+.archive-link { display: block; margin-top: 4px; padding: 8px 0; font-size: 13px; color: var(--green-soft); text-align: center; }
 
 /* Playtest controls */
 .pt-bar { display: flex; gap: 6px; margin-bottom: 8px; }
@@ -283,7 +357,7 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   border-radius: 8px;
   background: #fff;
   font: inherit;
-  font-size: 14px;
+  font-size: 16px;
 }
 .pt-btn { width: auto; padding: 6px 10px; font-size: 13px; }
 .pt-all { display: block; margin-bottom: 10px; font-size: 13px; color: var(--ink-soft); }
@@ -307,14 +381,14 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   border: 1px solid var(--tan);
   border-radius: 14px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-  animation: card-in-plain 0.25s ease both;
+  animation: card-in-plain 0.2s ease backwards;
 }
 @keyframes card-in-plain { from { opacity: 0; transform: translateY(-8px); } }
 .help-card h2 { margin: 0 0 8px; font-size: 20px; color: var(--green); }
 .help-lead { margin: 0 0 14px; font-size: 15px; line-height: 1.5; }
 
 /* Feedback form */
-.fb-card { max-height: calc(100vh - 32px); overflow-y: auto; }
+.fb-card { max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; }
 .fb-card fieldset { margin: 0; padding: 0; border: 0; }
 .fb-card fieldset[hidden] { display: none; }
 .fb-card label { display: block; margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--ink-soft); }
@@ -327,7 +401,7 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
   border: 1px solid var(--tan);
   border-radius: 8px;
   background: #fff;
-  font: 15px/1.4 "Open Sans", sans-serif;   /* 15px+ keeps iOS from zooming in */
+  font: 16px/1.4 "Open Sans", sans-serif;   /* 16px+ keeps iOS from zooming in on focus */
   color: var(--ink);
 }
 .fb-card textarea { resize: vertical; }
@@ -337,7 +411,7 @@ button:focus-visible { outline: 3px solid var(--tan); outline-offset: 2px; }
 .fb-actions { display: flex; gap: 8px; }
 .fb-actions button { flex: 1; }
 button.secondary { background: var(--cream-deep); color: var(--green); }
-button.secondary:hover:not(:disabled) { background: var(--tan); }
+@media (hover: hover) { button.secondary:hover:not(:disabled) { background: var(--tan); } }
 
 .msg { margin: 0; font-size: 16px; line-height: 1.4; }
 
@@ -366,7 +440,7 @@ button.secondary:hover:not(:disabled) { background: var(--tan); }
   background: var(--target);
   border: 2.5px solid #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-  animation: pop 0.3s ease both;
+  animation: pop 0.2s ease backwards;
 }
 .answer-marker .answer-ring {
   position: absolute;
@@ -375,7 +449,7 @@ button.secondary:hover:not(:disabled) { background: var(--tan); }
   margin: -7.5px 0 0 -7.5px;
   border-radius: 50%;
   border: 2px solid var(--target);
-  animation: pulse 1.6s ease-out infinite;
+  animation: pulse 1.6s ease-out 3 forwards;   /* a few beats, then still: no endless repaints */
 }
 @keyframes pop { from { transform: translate(-50%, -50%) scale(0); } }
 @keyframes pulse {
@@ -391,12 +465,25 @@ button.secondary:hover:not(:disabled) { background: var(--tan); }
     top: 20px;
     left: 20px;
     transform: none;
-    animation-name: card-in-plain;
     max-height: calc(100vh - 40px);
-    display: flex;
-    flex-direction: column;
+    max-height: calc(100dvh - 40px);
   }
-  #card-body { overflow-y: auto; }
+  #card.ready, html.slow #card { animation-name: card-in-plain; }
+}
+
+/* ---- Phones on their side: dock a narrow card on the left, as on wide screens ---- */
+@media (min-width: 641px) and (max-width: 999px) and (max-height: 500px) {
+  #card {
+    top: 8px;
+    left: calc(8px + env(safe-area-inset-left, 0px));
+    width: min(340px, calc(45vw - env(safe-area-inset-left, 0px)));
+    transform: none;
+    max-height: calc(100vh - 16px - env(safe-area-inset-bottom, 0px));
+    max-height: calc(100dvh - 16px - env(safe-area-inset-bottom, 0px));
+  }
+  #card.ready, html.slow #card { animation-name: card-in-plain; }
+  #card-body { padding: 10px 14px 12px; }
+  .ask { font-size: 20px; }
 }
 
 /* ---- Phones: the card becomes a bottom sheet so the map up top stays clear ---- */
@@ -410,12 +497,10 @@ button.secondary:hover:not(:disabled) { background: var(--tan); }
     border-radius: 16px 16px 0 0;
     border-width: 1px 0 0;
     max-height: 62vh;
-    display: flex;
-    flex-direction: column;
-    animation: sheet-in 0.3s ease both;
+    transition: transform 0.2s ease;
   }
+  #card.ready, html.slow #card { animation-name: sheet-in; }
   @keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } }
-  #card { transition: transform 0.2s ease; }
   #card.dragging { transition: none; }
   #card-head { position: relative; padding: 11px 14px 7px; cursor: grab; touch-action: none; user-select: none; }
   #card-head::before {                        /* grab handle */
@@ -430,12 +515,21 @@ button.secondary:hover:not(:disabled) { background: var(--tan); }
     background: rgba(255, 255, 255, 0.35);
   }
   #card.collapsed #card-body { display: none; }
-  #card-body {
-    padding: 12px 14px calc(14px + env(safe-area-inset-bottom));
-    overflow-y: auto;
-  }
+  #card-body { padding: 12px 14px calc(14px + env(safe-area-inset-bottom)); }
+  /* bigger touch targets than the header's small buttons show */
+  .icon-btn, .head-action { position: relative; }
+  .icon-btn::after { content: ""; position: absolute; top: -11px; bottom: -7px; left: -4px; right: -14px; }
+  .head-action::after { content: ""; position: absolute; top: -8px; bottom: -6px; left: -4px; right: -4px; }
   .ask { font-size: 21px; }
   .reveal-blurb { font-size: 13.5px; }
   .reveal-img, .prompt-img { max-height: 140px; }
   .final-score { font-size: 34px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

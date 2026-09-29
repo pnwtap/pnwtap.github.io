@@ -65,7 +65,8 @@ def parse_locations(csv_text: str, bbox, categories=None, region=None, facts_reg
             )
 
         try:
-            geometry = parse_geometry(row.get("geometry") or "")
+            # 4 decimals (~10 m) is what the page ships (an encoded polyline at 1e4)
+            geometry = [(round(lat, 4), round(lng, 4)) for lat, lng in parse_geometry(row.get("geometry") or "")]
         except ValueError as exc:
             raise ValueError(f"row {line_no} ({name}): {exc}") from exc
         for pt in geometry:

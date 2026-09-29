@@ -103,3 +103,11 @@ def test_facts_column_is_parsed_and_validated():
     bad = csv.replace("style: sport", "styel: sport")
     with pytest.raises(ValueError, match="BNW.*unknown fact"):
         parse_locations(bad, BBOX, facts_registry=config.FACTS)
+
+
+def test_coordinates_are_kept_to_four_decimals():
+    from pnwtap.sheet import parse_locations
+    from pnwtap import config
+    csv_text = "name,category,difficulty,geometry,image,blurb\nX,peak,easy,\"47.433612,-121.773598\",,b\n"
+    loc = parse_locations(csv_text, config.BBOX)[0]
+    assert loc.geometry == [(47.4336, -121.7736)]

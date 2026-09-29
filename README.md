@@ -13,6 +13,10 @@ and worth more. Share your result Wordle-style.
   `date → puzzle` schedule, and renders a self-contained static site into `docs/`.
 - `docs/` is served by **GitHub Pages**. The browser only renders the map, handles taps, and scores
   them (`static/scoring.js`, a mirror of `pnwtap/geometry.py` — a test keeps them in sync).
+- Everything the page needs is served from the site itself: Leaflet 1.9.4 and a subset of Open Sans
+  are vendored in `static/` (fonts made with `scripts/subset_fonts.py`), each linked with a content
+  hash (`?v=`) so browsers cache them until they actually change. Only the map imagery (Esri) and
+  the hit counter come from elsewhere.
 
 ## The sheet
 
@@ -24,6 +28,7 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb, facts`.
 - `difficulty`: `easy / medium / hard`. The day is 1 easy, 1 medium, 2 hard, so keep roughly twice
   as many hard rows as easy or medium ones.
 - `geometry`: one or more `lat,lng` points, semicolon-separated. Quote the cell — it contains commas.
+  Coordinates are kept to 4 decimals (~10 m).
   - one point = a point (peak, town, crag);
   - several = a line (river, road, traverse) scored by distance to its nearest part;
   - several with the **last point equal to the first** = an area (lake, island, park): a tap
@@ -80,13 +85,15 @@ git add docs data/schedule_lock.json && git commit -m "Rebuild" && git push
 
 Enable GitHub Pages on the repo with **Settings → Pages → Source: Deploy from branch → main, /docs**.
 
-`.github/workflows/rebuild.yml` then keeps it fresh: every night (just after midnight Pacific) and on
-every push to `main` it runs the tests, rebuilds from the sheet, and commits `docs/` and
-`data/schedule_lock.json`. So once the sheet URL is set, editing the sheet is all it takes — new
-places are live the next morning, or immediately via **Actions → Rebuild site → Run workflow**.
+`.github/workflows/rebuild.yml` then runs every night (just after midnight Pacific) and on every
+push to `main`: it runs the tests, rebuilds from the sheet, and commits `data/schedule_lock.json`
+(plus `docs/` when the page changed). One catch: GitHub doesn't deploy commits the Action pushes
+itself, so a page the Action rebuilt goes live with your next push. Build locally and push `docs/`
+yourself (as above) — or, to make sheet edits go live on their own, switch Pages to deploy from the
+Action (Settings → Pages → Source: GitHub Actions, plus a deploy step in the workflow).
 
-The site keeps working with no rebuilds for `HORIZON_DAYS` (400) days; rebuild whenever you add
-locations. Add `?date=YYYY-MM-DD` to the URL to play a past day (future days are refused).
+The site keeps working with no rebuilds for `HORIZON_DAYS` (400) days (the schedule is extended in
+100-day steps, so most nightly rebuilds leave `docs/` untouched); rebuild whenever you add locations. Add `?date=YYYY-MM-DD` to the URL to play a past day (future days are refused).
 
 ## Playtesting
 
@@ -144,6 +151,7 @@ people without a GitHub account, point `FEEDBACK_PLACE_URL` / `FEEDBACK_BUG_URL`
 All knobs live in `pnwtap/config.py`: the score curve `SCORE_NEAR_KM` / `SCORE_ZERO_KM`, `RAMP`,
 `MULTIPLIERS`, `FACTS` / `CARDS`, `EPOCH`,
 `HORIZON_DAYS`, `SEED`, `EMOJI`, `CATEGORIES`, the `BBOX`, `START_BOUNDS` (initial map framing),
+`PHONE_START_TILES` (imagery a phone's first view preloads — re-check if you change the framing),
 zoom limits, and the tile URLs. The region stencil is `data/region_mask.json`
 (regenerate with `scripts/build_region_mask.py`, which needs `shapely`).
 

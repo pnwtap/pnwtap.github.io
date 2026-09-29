@@ -1,0 +1,9 @@
+# Vendored files keep their upstream bytes (Leaflet ships CRLF), so the content hashes
+# the build puts in ?v= are the same in a fresh CI checkout as in a working copy.
+static/leaflet.css -text
+static/leaflet.js -text
+static/LICENSE-leaflet.txt -text
+docs/leaflet.css -text
+docs/leaflet.js -text
+docs/LICENSE-leaflet.txt -text
+*.woff2 binary
