@@ -21,8 +21,6 @@
   <script defer src="{{ asset('leaflet.js') }}"></script>
   <script defer src="{{ asset('scoring.js') }}"></script>
   <script defer src="{{ asset('game.js') }}"></script>
-  {# the card fades in once the game has filled it; show it anyway if that never happens #}
-  <script>setTimeout(function () { document.documentElement.classList.add("slow"); }, 1200);</script>
 </head>
 <body>
   <div id="map"></div>
@@ -35,7 +33,7 @@
         <button id="help-btn" class="icon-btn" aria-label="How to play">?</button>
       </span>
     </div>
-    <div id="card-body" aria-live="polite"><noscript><style>#card { opacity: 1 !important; }</style><p class="msg">pnwtap needs JavaScript to run.</p></noscript></div>
+    <div id="card-body" aria-live="polite"><p class="msg loading">Loading today’s puzzle…</p><noscript><style>.loading { display: none; }</style><p class="msg">pnwtap needs JavaScript to run.</p></noscript></div>
   </div>
   <div id="help" hidden>
     <div class="help-card" role="dialog" aria-modal="true" aria-labelledby="help-title">

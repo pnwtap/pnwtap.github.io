@@ -80,10 +80,8 @@ html, body {
   box-shadow: 0 8px 28px rgba(30, 40, 30, 0.28);
   overflow: hidden;
 }
-/* the card comes in once the game has filled it (.ready), or after a while regardless */
-#card:not(.ready) { opacity: 0; }
-html.slow #card { opacity: 1; }
-#card.ready, html.slow #card { animation: card-in 0.3s ease backwards; }
+/* the card is up from the first paint (with a loading line) and the game fills it in */
+#card { animation: card-in 0.3s ease backwards; }
 @keyframes card-in { from { opacity: 0; transform: translate(-50%, -8px); } }
 
 #card-head {
@@ -414,6 +412,7 @@ button.secondary { background: var(--cream-deep); color: var(--green); }
 @media (hover: hover) { button.secondary:hover:not(:disabled) { background: var(--tan); } }
 
 .msg { margin: 0; font-size: 16px; line-height: 1.4; }
+.loading { min-height: 150px; color: var(--ink-soft); }   /* about a prompt's height, so the card barely grows */
 
 /* ---- Map markers & reveal animation ---- */
 .guess-marker .guess-dot,
@@ -468,7 +467,7 @@ button.secondary { background: var(--cream-deep); color: var(--green); }
     max-height: calc(100vh - 40px);
     max-height: calc(100dvh - 40px);
   }
-  #card.ready, html.slow #card { animation-name: card-in-plain; }
+  #card { animation-name: card-in-plain; }
 }
 
 /* ---- Phones on their side: dock a narrow card on the left, as on wide screens ---- */
@@ -481,7 +480,7 @@ button.secondary { background: var(--cream-deep); color: var(--green); }
     max-height: calc(100vh - 16px - env(safe-area-inset-bottom, 0px));
     max-height: calc(100dvh - 16px - env(safe-area-inset-bottom, 0px));
   }
-  #card.ready, html.slow #card { animation-name: card-in-plain; }
+  #card { animation-name: card-in-plain; }
   #card-body { padding: 10px 14px 12px; }
   .ask { font-size: 20px; }
 }
@@ -499,7 +498,7 @@ button.secondary { background: var(--cream-deep); color: var(--green); }
     max-height: 62vh;
     transition: transform 0.2s ease;
   }
-  #card.ready, html.slow #card { animation-name: sheet-in; }
+  #card { animation-name: sheet-in; }
   @keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } }
   #card.dragging { transition: none; }
   #card-head { position: relative; padding: 11px 14px 7px; cursor: grab; touch-action: none; user-select: none; }

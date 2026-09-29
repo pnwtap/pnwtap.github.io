@@ -582,7 +582,6 @@
   const params = new URLSearchParams(location.search);
   if (params.has("playtest")) {
     playtest(params.get("loc"));
-    card.classList.add("ready");
     return;
   }
 
@@ -672,7 +671,6 @@
   if (!todaysIds) {
     setBody('<p class="msg">No puzzle scheduled for today — check back another day!</p>');
     resetView();
-    card.classList.add("ready");
     return;
   }
 
@@ -942,7 +940,6 @@
     else startRound();
   } finally {
     if (!map._loaded) resetView();                    // every path must leave the map with a view
-    card.classList.add("ready");
   }
   hit(IS_ARCHIVE ? "/archive" : "/", `pnwtap ${dayLabel(DATE)}`);
 })();
