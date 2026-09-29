@@ -29,6 +29,7 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
         "regionMask": region_mask or [],
         "config": {
             "epoch": config.EPOCH,
+            "timeZone": config.TIME_ZONE,
             "categories": {k: {"icon": icon, "label": label} for k, (icon, label) in config.CATEGORIES.items()},
             "scoreNearKm": config.SCORE_NEAR_KM,
             "scoreZeroKm": config.SCORE_ZERO_KM,

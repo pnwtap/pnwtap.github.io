@@ -125,7 +125,11 @@
   const dayLabel = (s) => (dayNumber(s) >= 1 ? `#${dayNumber(s)}` : "practice");
   const prettyDate = (s) => parseISO(s).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
-  const TODAY = iso(new Date());
+  // One puzzle day for everyone: the game's clock (Pacific), whatever the device's zone.
+  const TZ = CFG.timeZone || "America/Los_Angeles";
+  const today = () => { try { return S.dayIn(Date.now(), TZ); } catch (e) { return iso(new Date()); } };
+  const dayBegins = (d) => { try { return S.dayStart(d, TZ); } catch (e) { return parseISO(d).getTime(); } };
+  const TODAY = today();
   // ?date=YYYY-MM-DD plays a past puzzle (never a future one)
   const requested = new URLSearchParams(location.search).get("date");
   const DATE = requested && requested <= TODAY && DATA.schedule[requested] ? requested : TODAY;
@@ -159,20 +163,22 @@
   }
   const startBounds = L.latLngBounds(CFG.startBounds);
 
-  // How far the view may roam: the region plus a margin. On phones the sheet covers up to
-  // ~62% of the screen, so a southern answer needs room below the region to sit above it
-  // (otherwise Leaflet pans back once a flight lands). That room is a height on screen, so
-  // the bound is worked out per zoom: a fixed latitude would let the map drift screens away.
+  // How far the view may roam: the region plus a margin. On phones the bottom sheet hides
+  // the bottom of the map, so a southern answer needs room below the region to be lifted
+  // above it (otherwise Leaflet pans back once a flight lands) — as much room as the sheet
+  // covers right now, in screen pixels at the zoom in use. No more: extra room lets a pinch
+  // or a fling park the view south of the region, over nothing but the dark frame.
   const baseRoam = regionBounds.pad(0.35);
-  let sheetMax = 0;   // the bottom sheet's tallest (its CSS max-height: 62vh follows iOS's larger viewport)
-  const measureSheet = () => { sheetMax = isPhone() ? parseFloat(getComputedStyle(card).maxHeight) || 0.62 * window.innerHeight : 0; };
+  let sheetCover = 0;
+  const measureSheet = () => {
+    sheetCover = isPhone() ? Math.min(card.offsetHeight, window.innerHeight - 140) + 40 : 0;
+  };
   measureSheet();
-  window.addEventListener("resize", measureSheet);
-  function roamFor(zoom) {
-    if (!sheetMax) return baseRoam;
+  function roamFor(zoom, cover = sheetCover) {
+    if (!cover) return baseRoam;
     const crs = L.CRS.EPSG3857;
     const p = crs.latLngToPoint(L.latLng(regionBounds.getSouth(), baseRoam.getWest()), zoom);
-    p.y += sheetMax + 60;
+    p.y += cover;
     return L.latLngBounds([Math.min(baseRoam.getSouth(), crs.pointToLatLng(p, zoom).lat), baseRoam.getWest()],
       baseRoam.getNorthEast());
   }
@@ -187,9 +193,12 @@
     zoomSnap: 0.25,
     fadeAnimation: false,   // cached tiles appear at once (a new round no longer fades in from dark)
     tapHold: false,         // iOS: a long, careful press still places the pin
+    bounceAtZoomLimits: false,   // pinching past the widest view just stops (no dark speck-and-snap)
   });
   const setRoam = (zoom) => { map.options.maxBounds = roamFor(zoom); };   // read at drag start and moveend
   map.on("zoom", () => setRoam(map.getZoom()));
+  // the sheet grows, shrinks, tucks away: the room below the region follows
+  if (window.ResizeObserver) new ResizeObserver(() => { measureSheet(); if (map._loaded) setRoam(map.getZoom()); }).observe(card);
   // zoom buttons on larger screens (phones pinch); the attribution clear of the card
   const zoomCtl = L.control.zoom({ position: "bottomright" });
   const attrCtl = L.control.attribution({ prefix: false }).addAttribution(CFG.tileAttribution).addTo(map);
@@ -215,7 +224,8 @@
   if (MASK.length) {
     const maskRenderer = L.svg({ padding: 1 });
     const outN = Math.min(85, regionBounds.getNorth() + 25);
-    const outS = Math.max(-85, Math.min(regionBounds.getSouth() - 25, roamFor(CFG.minZoom).getSouth() - 5));
+    const tallest = Math.max(window.innerHeight, window.screen.height || 0);   // any sheet, either orientation
+    const outS = Math.max(-85, Math.min(regionBounds.getSouth() - 25, roamFor(CFG.minZoom, tallest).getSouth() - 5));
     const outW = regionBounds.getWest() - 50;
     const outE = regionBounds.getEast() + 50;
     const outer = [[outN, outW], [outN, outE], [outS, outE], [outS, outW]];
@@ -344,6 +354,7 @@
     if (!sized()) { map.setView(bounds.getCenter(), 6, { animate: false }); return done(); }
     const o = Object.assign(framePadding(), { maxZoom: 10 }, opts);
     const t = map._getBoundsCenterZoom(bounds, o);           // Leaflet 1.9.4 internal: flyToBounds' target
+    measureSheet();                                          // the sheet as it is now (just refilled)
     setRoam(Math.min(t.zoom, map.getZoom() || t.zoom));      // the looser of the two, until the zoom lands
     if (!map._loaded || o.animate === false || reducedMotion()) {
       map.setView(t.center, t.zoom, { animate: false });
@@ -682,7 +693,7 @@
   const locOf = (r) => byName.get(r.name) || DATA.locations[r.i] || { geometry: [r.point] };
   const save = () => store.set(KEY(DATE), game);
   if (!IS_ARCHIVE) onWake = () => {
-    if (!game.rounds.length && iso(new Date()) !== TODAY && fbEl.hidden && navigator.onLine !== false) {
+    if (!game.rounds.length && today() !== TODAY && fbEl.hidden && navigator.onLine !== false) {
       location.replace(location.pathname);
     }
   };
@@ -904,7 +915,7 @@
     };
 
     const cd = document.getElementById("countdown");
-    const midnight = parseISO(addDays(TODAY, 1));      // when this page's day ends
+    const midnight = dayBegins(addDays(TODAY, 1));     // when this page's day ends (midnight Pacific)
     const lateFinish = Date.now() >= midnight;         // a game that ran past midnight
     const nextIsOut = () => {
       clearInterval(tick);

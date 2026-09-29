@@ -2,7 +2,8 @@
 import argparse
 import json
 from collections import Counter
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 from pnwtap import config, sheet, schedule, images, render
@@ -46,7 +47,8 @@ def main() -> None:
     if image_map:
         print(f"localized {len(image_map)} images")
 
-    today = date.fromisoformat(args.today) if args.today else date.today()
+    # the puzzle day is the game's day (Pacific), wherever the build runs
+    today = date.fromisoformat(args.today) if args.today else datetime.now(ZoneInfo(config.TIME_ZONE)).date()
     epoch = date.fromisoformat(config.EPOCH)
 
     # Hand-picked days (data/curated.csv) win over the auto-picker and over the lock.

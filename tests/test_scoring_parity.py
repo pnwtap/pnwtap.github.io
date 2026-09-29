@@ -69,3 +69,29 @@ def test_js_decodes_every_path_exactly():
     out = subprocess.run(["node", "-e", script], input=json.dumps(encoded),
                          capture_output=True, text=True, check=True).stdout
     assert json.loads(out) == [decode_polyline(e) for e in encoded]   # the browser sees what Python encoded
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+@pytest.mark.parametrize("host_tz", ["America/Los_Angeles", "America/New_York", "Europe/London", "Asia/Tokyo", "UTC"])
+def test_puzzle_day_is_pacific_whatever_the_device_zone(host_tz):
+    import os
+    from datetime import datetime, timedelta
+    from zoneinfo import ZoneInfo
+    la = ZoneInfo("America/Los_Angeles")
+    instants = [datetime(2026, 9, 29, 4, 30, tzinfo=ZoneInfo("Europe/London")),    # 20:30 Sep 28 in LA
+                datetime(2026, 9, 28, 23, 59, 59, tzinfo=la), datetime(2026, 9, 29, 0, 0, 1, tzinfo=la),
+                datetime(2026, 11, 1, 1, 30, tzinfo=la), datetime(2027, 3, 14, 3, 30, tzinfo=la)]
+    days = ["2026-09-28", "2026-09-29", "2026-11-01", "2026-11-02", "2027-03-14", "2027-03-15"]
+    script = (
+        f"const S = require({json.dumps(str(SCORING_JS))}); const tz = 'America/Los_Angeles';"
+        f"console.log(JSON.stringify({{ d: {json.dumps([int(i.timestamp() * 1000) for i in instants])}.map((t) => S.dayIn(t, tz)),"
+        f"  s: {json.dumps(days)}.map((d) => S.dayStart(d, tz)) }}));"
+    )
+    out = json.loads(subprocess.run(["node", "-e", script], capture_output=True, text=True, check=True,
+                                    env={**os.environ, "TZ": host_tz}).stdout)
+    assert out["d"] == [i.astimezone(la).date().isoformat() for i in instants]
+    for day, ms in zip(days, out["s"]):
+        start = datetime.fromisoformat(day).replace(tzinfo=la)       # local midnight, DST-aware
+        assert ms == int(start.timestamp() * 1000), day
+    # the fall-back day (Nov 1) is 25 hours long, spring-forward (Mar 14) 23
+    assert out["s"][3] - out["s"][2] == 25 * 3600e3 and out["s"][5] - out["s"][4] == 23 * 3600e3

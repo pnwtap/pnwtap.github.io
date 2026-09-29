@@ -84,7 +84,37 @@
     return out;
   }
 
-  const api = { haversine, nearest, score, decode };
+  // ---- the puzzle calendar: one day for everyone, on the game's own clock (a time zone
+  // such as America/Los_Angeles), whatever the device's zone ----
+  const clocks = {};
+  function wallClock(t, tz) {           // {year, month, day, hour, minute, second} at instant t in tz
+    const f = clocks[tz] || (clocks[tz] = new Intl.DateTimeFormat("en-US", {
+      timeZone: tz, hourCycle: "h23", year: "numeric", month: "numeric", day: "numeric",
+      hour: "numeric", minute: "numeric", second: "numeric",
+    }));
+    const p = {};
+    f.formatToParts(t).forEach((x) => { if (x.type !== "literal") p[x.type] = +x.value; });
+    p.hour %= 24;                       // some engines say 24:00 for midnight
+    return p;
+  }
+  /** The calendar date (YYYY-MM-DD) at instant t (ms) in time zone tz. */
+  function dayIn(t, tz) {
+    const p = wallClock(t, tz), z = (n) => String(n).padStart(2, "0");
+    return `${p.year}-${z(p.month)}-${z(p.day)}`;
+  }
+  /** The instant (ms) the calendar day YYYY-MM-DD begins in time zone tz. */
+  function dayStart(day, tz) {
+    const [y, m, d] = day.split("-").map(Number);
+    const midnightUTC = Date.UTC(y, m - 1, d);
+    const offset = (t) => {             // tz's wall clock minus UTC, at instant t
+      const p = wallClock(t, tz);
+      return Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second) - Math.floor(t / 1000) * 1000;
+    };
+    const t = midnightUTC - offset(midnightUTC);
+    return midnightUTC - offset(t);     // again at the answer, in case a DST change lies between
+  }
+
+  const api = { haversine, nearest, score, decode, dayIn, dayStart };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.PNWTAP_SCORING = api;
 })(this);
