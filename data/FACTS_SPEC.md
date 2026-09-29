@@ -33,7 +33,7 @@ The game shows **clue** facts in a short line on the guess prompt (they must not
 | high_point_m | yes | highest point of a road / traverse / hike | `1668` |
 | vertical_m | yes | ski area lift-served vertical | `948` |
 | lifts | no | ski area lift count | `10` |
-| area_km2 | yes | lakes, islands, parks, glaciers | `344.6` |
+| area_km2 | yes | lakes, islands, parks, glaciers (under 1 sq mi the card shows acres; from an acreage keep 4 significant figures: 25.10 ac → `0.1016`) | `344.6` |
 | depth_m | no | lake max depth | `594` |
 | grade | yes | climbs: YDS `5.14d` / `5.10a`; alpine `III 5.7` or `II, 35° snow`; scrambles `Class 3` | `5.9` |
 | style | yes | one of: `sport`, `trad`, `sport & trad`, `alpine rock`, `mountaineering`, `glacier climb`, `scramble`, `ski tour`, `ski mountaineering`, `hike` | `sport` |

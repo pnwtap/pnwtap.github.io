@@ -58,3 +58,13 @@ def test_every_card_key_is_registered():
     for cat, keys in config.CARDS.items():
         assert cat in config.CATEGORIES
         assert set(keys) <= set(config.FACTS)
+
+
+def test_small_areas_read_in_acres():
+    from pnwtap.facts import full_value, clue_text
+    assert full_value("km2", "0.1016") == "0.1 km² (25 acres)"          # Rachel Lake, 25.1 ac
+    assert full_value("km2", "0.01133") == "0.011 km² (2.8 acres)"      # Lila Lake, 2.8 ac
+    assert full_value("km2", "0.355") == "0.35 km² (88 acres)"
+    assert full_value("km2", "2.266") == "2.3 km² (560 acres)"
+    assert full_value("km2", "2.59") == "2.6 km² (1 sq mi)"             # a square mile and up: sq mi
+    assert clue_text("area_km2", "0.01133", "lake") == "0.011 km²"

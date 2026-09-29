@@ -23,6 +23,8 @@ HORIZON_DAYS = 400                   # days of puzzles to bake ahead of the buil
 SEED = 0                             # change to reshuffle all *future* days (played days are locked)
 SPREAD_KM = 80                       # a day's places prefer to be at least this far apart...
 MAX_PER_CATEGORY = 2                 # ...and to repeat a category at most this often (both soft)
+RECENT_DAYS = 2                      # a place prefers to be RECENT_KM from anything played in the
+RECENT_KM = 20                       # previous RECENT_DAYS days: one basin's places get spread out (soft)
 
 # Share-string emoji per difficulty tier
 EMOJI = {"easy": "🏅", "medium": "🔥", "hard": "🏆"}

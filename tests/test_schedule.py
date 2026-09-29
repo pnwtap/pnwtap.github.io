@@ -227,3 +227,23 @@ def test_curated_days_are_pinned_and_respected_by_spacing():
     assert sched["2026-09-28"] == curated["2026-09-28"]
     # the curated places count as used, so they don't come straight back
     assert not set(curated["2026-09-28"]) & set(sched["2026-09-29"])
+
+
+# ---- cross-day variety ----
+
+def test_neighbours_are_not_served_on_back_to_back_days():
+    locs = _grid_pool()
+    basin = [Location(f"basin{k}", "lake", "hard", [(47.42 + k * 0.004, -121.29)], None, "") for k in range(5)]
+    grown = locs + basin
+    sched = build_schedule(grown, date(2026, 7, 7), 200, RAMP, seed=0, spread_km=70, recent_days=2, recent_km=20)
+    days = sorted(sched)
+    seen = [n for n, d in enumerate(days) if any(grown[i].name.startswith("basin") for i in sched[d])]
+    assert len(seen) >= 5                                   # they all still get played...
+    assert all(b - a > 2 for a, b in zip(seen, seen[1:]))   # ...never within two days of each other
+
+
+def test_cross_day_variety_relaxes_instead_of_failing():
+    locs = _big_pool()          # everything within a few km: the cross-day rule can never be met
+    sched = build_schedule(locs, date(2026, 7, 7), 60, RAMP, seed=0, recent_days=3, recent_km=500)
+    assert len(sched) == 60
+    assert {i for ids in sched.values() for i in ids} == set(range(len(locs)))

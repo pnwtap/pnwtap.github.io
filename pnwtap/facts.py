@@ -9,6 +9,7 @@ import re
 M_TO_FT = 3.28084
 KM_TO_MI = 0.621371
 KM2_TO_MI2 = 0.386102
+KM2_TO_ACRES = 247.105
 NUMERIC = {"m", "km", "km2", "int"}
 
 
@@ -47,6 +48,11 @@ def _fmt(x: float) -> str:
     return f"{x:,.1f}".replace(".0", "") if abs(x) < 10 else f"{round(x):,}"
 
 
+def _fmt_area(km2: float) -> str:
+    """km²: as _fmt, but two significant figures below 1 km² (a tarn isn't '0 km²')."""
+    return _fmt(km2) if km2 >= 1 else f"{km2:.2g}"
+
+
 def full_value(kind: str, value: str) -> str:
     """The reveal-card value: metric with imperial alongside."""
     if kind == "m":
@@ -54,7 +60,10 @@ def full_value(kind: str, value: str) -> str:
     if kind == "km":
         return f"{_fmt(_num(value))} km ({_fmt(_num(value) * KM_TO_MI)} mi)"
     if kind == "km2":
-        return f"{_fmt(_num(value))} km² ({_fmt(_num(value) * KM2_TO_MI2)} sq mi)"
+        km2 = _num(value)
+        mi2 = km2 * KM2_TO_MI2   # small areas (most lakes) read better in acres
+        imperial = f"{_fmt(mi2)} sq mi" if mi2 >= 1 else f"{_fmt(km2 * KM2_TO_ACRES)} acres"
+        return f"{_fmt_area(km2)} km² ({imperial})"
     if kind == "int":
         return f"{round(_num(value)):,}"
     return value
@@ -70,7 +79,7 @@ def clue_text(key: str, value: str, category: str) -> str:
     if key == "days":
         return f"{value} days"
     if key == "area_km2":
-        return f"{_fmt(_num(value))} km²"
+        return f"{_fmt_area(_num(value))} km²"
     if key == "length_km":
         return f"{_fmt(_num(value))} km"
     m = _fmt(_num(value)) + " m" if key.endswith("_m") else None

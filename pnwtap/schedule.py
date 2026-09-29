@@ -11,12 +11,15 @@ pool. That gives:
   row order, and already-played days can be pinned with `locked` so adding or
   reordering sheet rows never rewrites a puzzle someone has already seen;
 - freshness: a never-used location is drawn first, one per day — so a new
-  addition appears the next day, and a big batch of additions is blended in
+  addition appears within days, and a big batch of additions is blended in
   over the following weeks instead of taking over; the very first pass through
   a tier (everything new) is still a permutation;
 - variety: within the eligible set, a day prefers places at least `spread_km`
-  apart and no more than `max_per_category` of one category. These are soft —
-  if nothing eligible satisfies them they're dropped, never the rules above.
+  apart and no more than `max_per_category` of one category, and — strongest of
+  all — places at least `recent_km` from anything played in the previous
+  `recent_days` days, so a cluster of neighbours (say, four lakes in one basin)
+  is spread across weeks rather than served back to back. These are soft — if
+  nothing eligible satisfies them they're dropped, never the rules above.
 """
 import csv
 import io
@@ -48,6 +51,8 @@ def build_schedule(
     locked: dict[str, list[int]] | None = None,
     spread_km: float = 0.0,
     max_per_category: int | None = None,
+    recent_days: int = 0,
+    recent_km: float = 0.0,
 ) -> dict[str, list[int]]:
     """Map each ISO date in [start_date, start_date + horizon_days) to location indices, one per ramp slot."""
     locked = locked or {}
@@ -61,12 +66,19 @@ def build_schedule(
             return True
         return sum(locations[t].category == locations[c].category for t in today) < max_per_category
 
-    def pick(options: list[list[int]], today: list[int], rng: random.Random) -> int:
-        """Choose from the first candidate set that keeps today varied; else relax the soft rules."""
-        for cands in options:
-            good = [c for c in cands if far(c, today) and cat_ok(c, today)]
-            if good:
-                return rng.choice(good)
+    def away(c: int, recent: list[int]) -> bool:
+        return all(haversine_km(centroids[c], centroids[r]) >= recent_km for r in recent)
+
+    def pick(options: list[list[int]], today: list[int], recent: list[int], rng: random.Random) -> int:
+        """Choose from the first candidate set that keeps today (and the last few days) varied;
+        else relax the soft rules, the cross-day one first."""
+        rules = [lambda c: far(c, today) and cat_ok(c, today) and away(c, recent),
+                 lambda c: far(c, today) and cat_ok(c, today)]
+        for rule in rules:
+            for cands in options:
+                good = [c for c in cands if rule(c)]
+                if good:
+                    return rng.choice(good)
         widest = options[-1]
         spread = [c for c in widest if far(c, today)]
         return rng.choice(spread or widest)
@@ -84,8 +96,10 @@ def build_schedule(
 
     last_used: dict[int, int] = {}
     schedule: dict[str, list[int]] = {}
+    history: list[list[int]] = []
     for offset in range(horizon_days):
         day = (start_date + timedelta(days=offset)).isoformat()
+        recent = [i for ids in history[-recent_days:] for i in ids] if recent_days and recent_km else []
         if day in locked:
             ids = list(locked[day])
         else:
@@ -108,10 +122,11 @@ def build_schedule(
                     options = [old, stale_half]
                 else:
                     options = [stale_half]
-                ids.append(pick(options, ids, random.Random(_key(seed, day, slot))))
+                ids.append(pick(options, ids, recent, random.Random(_key(seed, day, slot))))
         for i in ids:
             last_used[i] = offset
         schedule[day] = ids
+        history.append(ids)
     return schedule
 
 

@@ -84,6 +84,7 @@ def main() -> None:
     sched = schedule.build_schedule(
         locations, start, horizon, config.RAMP, config.SEED, locked=locked,
         spread_km=config.SPREAD_KM, max_per_category=config.MAX_PER_CATEGORY,
+        recent_days=config.RECENT_DAYS, recent_km=config.RECENT_KM,
     )
     last = start + timedelta(days=horizon - 1)
     print(f"scheduled {len(sched)} days, {start.isoformat()} → {last.isoformat()} "
