@@ -24,7 +24,7 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb, facts`.
 
 - `name`: must be unique — it's how played days are remembered (see *Schedule* below).
 - `category`: `peak / hike / traverse / road / climb / river / town / poi / lake / glacier / pass /
-  island / ski / waterfall / park` (icons and labels live in `CATEGORIES` in `pnwtap/config.py`).
+  island / ski / waterfall / park / beach` (icons and labels live in `CATEGORIES` in `pnwtap/config.py`).
 - `difficulty`: `easy / medium / hard`. The day is 1 easy, 1 medium, 2 hard, so keep roughly twice
   as many hard rows as easy or medium ones.
 - `geometry`: one or more `lat,lng` points, semicolon-separated. Quote the cell — it contains commas.
