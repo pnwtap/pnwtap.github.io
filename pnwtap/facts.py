@@ -81,7 +81,7 @@ def clue_text(key: str, value: str, category: str) -> str:
     if key == "area_km2":
         return f"{_fmt_area(_num(value))} km²"
     if key == "length_km":
-        return f"{_fmt(_num(value))} km"
+        return f"{_fmt(_num(value))} km long"   # "50 km" alone reads like a distance from you
     m = _fmt(_num(value)) + " m" if key.endswith("_m") else None
     if key == "elevation_m":
         return m if category in ("peak", "pass") else f"elev. {m}"

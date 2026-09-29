@@ -429,7 +429,8 @@
   const total = (rounds) => rounds.reduce((s, r) => s + r.score * r.mult, 0);
   const fmtKm = (km) => (km == null ? "–"
     : (km < 1 ? km.toFixed(1) : km < 10 ? km.toFixed(1).replace(/\.0$/, "") : Math.round(km)) + " km");
-  const offBy = (km) => (km === 0 ? "<b>Inside it</b>" : `<b>${fmtKm(km)}</b> off`);
+  // the miss, worded so it can't be confused with a fact like a route's length
+  const offBy = (km) => (km === 0 ? "Your tap was <b>inside it</b>" : `Your tap was <b>${fmtKm(km)}</b> off`);
   // bands on the score curve: ≥99 ≈ within 3 km, ≥90 ≈ 13 km, ≥75 ≈ 34 km, ≥55 ≈ 95 km,
   // ≥35 ≈ 260 km, ≥15 ≈ 700 km
   function verdict(score) {

@@ -68,3 +68,8 @@ def test_small_areas_read_in_acres():
     assert full_value("km2", "2.266") == "2.3 km² (560 acres)"
     assert full_value("km2", "2.59") == "2.6 km² (1 sq mi)"             # a square mile and up: sq mi
     assert clue_text("area_km2", "0.01133", "lake") == "0.011 km²"
+
+
+def test_a_length_clue_says_long():
+    from pnwtap.facts import clue_text
+    assert clue_text("length_km", "50", "traverse") == "50 km long"   # not "50 km", which reads like a miss
