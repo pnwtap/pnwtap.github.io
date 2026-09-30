@@ -1,8 +1,8 @@
 # Events batch 1 (+ Bill Gates's house, Valve HQ) — sources (added 2026-09-29)
 
 Each row written and then independently fact-checked. Events use the new optional "prompt" column: the round asks with
-the prompt, and the name appears on the reveal. womens_events_ready.csv holds pre-verified women's-sports events not yet
-chosen.
+the prompt, and the name appears on the reveal. The women's-sports rows researched alongside them were not used: the event
+almost always names its place, so it can't be guessed from the description.
 
 ## Fact-check changes (events-a)
 

@@ -752,7 +752,7 @@
         `<img class="prompt-img" src="${esc(loc.image)}" alt="Photo of the mystery location">`
       : loc.prompt
         ? `<p class="ask-text">${esc(loc.prompt)}</p>${catChip(loc)}${clueLine(loc)}${hint}` +
-          '<p class="ask-where">Where did it happen?</p>'
+          `<p class="ask-where">${loc.category === "event" ? "Where did it happen?" : "Where is it?"}</p>`
         : `<p class="ask"><strong>${esc(loc.name)}</strong></p>${catChip(loc)}${clueLine(loc)}${hint}`;
     setBody(
       `<div class="round-meta"><span>${CFG.emoji[loc.difficulty]} ${esc(loc.difficulty)} · ×${mult}</span>` +
