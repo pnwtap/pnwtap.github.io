@@ -1,6 +1,6 @@
 # Glacier "any of" rows — sources (added 2026-09-29)
 
-Two rows built for a paired day (curated 2026-10-03, rounds 3 and 4): **Any glacier that's vanished since 1900** (54 members)
+Two rows built for a paired day (curated 2026-10-03, rounds 3 and 4): **Any glacier that's vanished since 1900** (57 members)
 and **Any growing glacier** (3 members). Each member was researched and then independently fact-checked.
 
 ## Vanished: how members were chosen
@@ -12,8 +12,13 @@ and **Any growing glacier** (3 members). Each member was researched and then ind
 - **Historic outlines** (GLIMS 1958–1985 inventories, simplified): Hinman, Anderson, Stevens, Lewis, Conrad, Glisan, Clark; Lathrop is a point.
 - **Region-wide sweep** (OR, WA, BC, Alberta, Yukon/SE Alaska): only high-confidence, non-borderline members kept, plus a few
   medium ones where Pelto's post names the loss explicitly (Tenderfoot, Macbeth).
-- **Left out on purpose:** Mount St. Helens glaciers (destroyed by the 1980 eruption, not melt, and Crater Glacier, a *growing*
-  member, now fills that crater); Palmer (still skied as the Palmer Snowfield); borderline cases where experts disagree
+- **Mount St. Helens:** Loowit, Leschi and Wishbone, which the 18 May 1980 eruption destroyed (USGS Circular 850-D: 100% of
+  Loowit and Leschi, 95% of Wishbone's area and 99% of its volume; GNIS lists all three as "(historical)"). Pinned at the GNIS
+  Historical Features points, entered from the 1979 pre-eruption map. Players will think of the eruption, so these count even
+  though they weren't lost to melt. Loowit's point lies inside today's Crater Glacier (a *growing* member), so a crater tap scores
+  in both rounds of the paired day; both blurbs mention it.
+- **Left out on purpose:** the beheaded St. Helens remnants (Forsyth, Nelson, Ape, Shoestring) and the snowfield reclassifications
+  (Talus, Dryer), which rest on one remote-sensing inventory (Fountain et al. 2023) and sit within 2.5 km of the three above; Palmer (still skied as the Palmer Snowfield); borderline cases where experts disagree
   (Irving, Pyramid, Van Trump, Gotchen, Whistler, Ghost, lower Fraser); single-source or loosely placed ones (Meade, the Pasayten
   and Indian Head clusters, the glacier north of Bonnet, Dirt, Andrews, Pin Peak, Eugene/Linn/Waldo).
 
@@ -75,6 +80,9 @@ and **Any growing glacier** (3 members). Each member was researched and then ind
 | Favorite Glacier | 58.675,-136.475 | lost Between 1919 and 1926; https://pubs.usgs.gov/pp/p1386k/pdf/05_1386K_stelias.pdf; https://edits.nationalmap.gov/apps/gaz-domestic/public/summary/1420989 |
 | Wood Glacier (Glacier Bay) | 58.5595,-136.515 | lost Completely gone by the early 1940s; https://pubs.usgs.gov/pp/p1386k/pdf/05_1386K_stelias.pdf; https://edits.nationalmap.gov/apps/gaz-domestic/public/summary/1422122 |
 | Dying Glacier | 58.8306,-136.2528 | lost Retreated fast in 1886-90; only stagnant ice was left in Ice Valley by the 1940s; now entirely gone; https://edits.nationalmap.gov/apps/gaz-domestic/public/summary/1894170; https://edits.nationalmap.gov/apps/gaz-domestic/public/summary/1422715 |
+| Loowit Glacier | 46.2118,-122.1865 | destroyed 18 May 1980; https://pubs.usgs.gov/circ/1981/0850d/report.pdf; https://edits.nationalmap.gov/apps/gaz-domestic/public/summary/1522451 |
+| Leschi Glacier | 46.2079,-122.1818 | destroyed 18 May 1980; https://pubs.usgs.gov/circ/1981/0850d/report.pdf; https://edits.nationalmap.gov/apps/gaz-domestic/public/summary/1522032 |
+| Wishbone Glacier | 46.2118,-122.1979 | destroyed 18 May 1980 (95% of area, 99% of volume); https://pubs.usgs.gov/circ/1981/0850d/report.pdf; https://edits.nationalmap.gov/apps/gaz-domestic/public/summary/1528267 |
 
 ## Growing: members
 
