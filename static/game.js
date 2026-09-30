@@ -668,6 +668,7 @@
         `<button class="pt-btn" id="pt-rand" aria-label="Random">🎲</button></div>` +
         `<label class="pt-all"><input type="checkbox" id="pt-all"${map.hasLayer(allLayer) ? " checked" : ""}> show all answers</label>` +
         `<p class="ask"><strong>${esc(loc.name)}</strong></p>` +
+        (loc.prompt ? `<p class="ask-text">${esc(loc.prompt)}</p>` : "") +
         catChip(loc) + `<span class="pt-meta"> · ${loc.members ? "any of " + loc.members.length : loc.kind} · ${esc(loc.difficulty)}</span>` + clueLine(loc) +
         '<div id="pt-out"></div><button class="primary" id="lock" disabled>Tap the map</button>');
       const go = (n) => { pos = (n + all.length) % all.length; show(); };
@@ -745,10 +746,14 @@
     const hint = loc.members ? '<p class="hint">Whichever is nearest your tap counts.</p>'   // how many: revealed after
       : loc.kind === "area" ? '<p class="hint">Anywhere inside it counts.</p>'
       : loc.kind === "line" ? '<p class="hint">Anywhere along it counts.</p>' : "";
+    // an event (or any row with a prompt) asks with its description; the name comes on the reveal
     const ask = loc.image
       ? `<p class="ask">Where is <strong>this place</strong>?</p>${catChip(loc)}${clueLine(loc)}` +
         `<img class="prompt-img" src="${esc(loc.image)}" alt="Photo of the mystery location">`
-      : `<p class="ask"><strong>${esc(loc.name)}</strong></p>${catChip(loc)}${clueLine(loc)}${hint}`;
+      : loc.prompt
+        ? `<p class="ask-text">${esc(loc.prompt)}</p>${catChip(loc)}${clueLine(loc)}${hint}` +
+          '<p class="ask-where">Where did it happen?</p>'
+        : `<p class="ask"><strong>${esc(loc.name)}</strong></p>${catChip(loc)}${clueLine(loc)}${hint}`;
     setBody(
       `<div class="round-meta"><span>${CFG.emoji[loc.difficulty]} ${esc(loc.difficulty)} · ×${mult}</span>` +
       `<span>${total(game.rounds)} pts so far</span></div>` + ask +

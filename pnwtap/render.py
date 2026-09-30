@@ -20,6 +20,7 @@ def build_payload(locations, schedule, image_map, config, region_mask=None) -> d
             "geometry": [[lat, lng] for (lat, lng) in loc.geometry],
             "image": image_map.get(idx),
             "blurb": loc.blurb,
+            **({"prompt": loc.prompt} if loc.prompt else {}),
             "kind": loc.kind,
             "facts": card(loc.facts, loc.category, config.FACTS, config.CARDS),
         })

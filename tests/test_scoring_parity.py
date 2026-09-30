@@ -56,8 +56,13 @@ def test_js_decodes_every_path_exactly():
     import csv
     from pnwtap.geometry import decode_polyline, encode_polyline, parse_geometry
     root = Path(__file__).resolve().parent.parent
+    from pnwtap.sheet import parse_members
     rows = csv.DictReader((root / "data" / "locations.csv").open(encoding="utf-8"))
-    paths = [[list(p) for p in parse_geometry(r["geometry"])] for r in rows]
+    paths = []
+    for r in rows:                                   # an "any of" row contributes each member's path
+        members = parse_members(r["geometry"], r["category"])
+        paths += [[list(p) for p in m.geometry] for m in members] if members else [
+            [list(p) for p in parse_geometry(r["geometry"])]]
     paths += json.loads((root / "data" / "region_mask.json").read_text())
     paths.append([[47.433612, -121.773598], [-0.00005, 179.99995]])   # finer than the page carries
     encoded = [encode_polyline(p) for p in paths]

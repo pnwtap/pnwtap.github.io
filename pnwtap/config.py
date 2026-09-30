@@ -37,7 +37,7 @@ CATEGORIES = {
     "town": ("🏘️", "town"), "poi": ("📍", "landmark"), "lake": ("💧", "lake"),
     "glacier": ("🧊", "glacier"), "pass": ("⛰️", "pass"), "island": ("🏝️", "island"),
     "ski": ("⛷️", "ski area"), "waterfall": ("🌊", "waterfall"), "park": ("🌲", "park"),
-    "beach": ("🏖️", "beach"),
+    "beach": ("🏖️", "beach"), "event": ("🗓️", "event"),
 }
 
 # Facts: the optional `facts` column holds "key: value | key: value". Each key has a
@@ -70,6 +70,7 @@ FACTS = {
     "range":         ("Range",          "str", False),
     "region":        ("Region",         "str", False),
     "founded":       ("Founded",        "str", False),
+    "date":          ("Date",           "str", False),   # events: when it happened
     "first_ascent":  ("First ascent",   "str", False),
     "first_done":    ("First done",     "str", False),
     "built":         ("Built",          "str", False),
@@ -100,6 +101,7 @@ CARDS = {
     "waterfall": ["height_m", "type"],
     "park":      ["type", "area_km2", "founded", "built"],
     "beach":     ["type", "length_km", "area_km2"],
+    "event":     ["date", "type", "region"],
     "poi":       ["type", "height_m", "elevation_m", "area_km2", "length_km", "built"],
 }
 

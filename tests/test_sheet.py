@@ -145,3 +145,13 @@ def test_an_any_of_row_cannot_have_an_image():
     row = ANY_ROW.replace('",,b', '",https://example.com/x.jpg,b')
     with pytest.raises(ValueError, match="can't have an image"):
         parse_locations(row, config.BBOX)
+
+
+def test_an_optional_prompt_column_asks_instead_of_the_name():
+    from pnwtap.sheet import parse_locations
+    from pnwtap import config
+    csv_text = ("name,category,difficulty,geometry,image,blurb,facts,prompt\n"
+                "Lituya Bay megatsunami,poi,hard,\"58.6500,-137.5000\",,b,,A wave ran 524 m up this bay's far side.\n"
+                "Plain,poi,easy,\"47.6,-122.3\",,b,,\n")
+    locs = parse_locations(csv_text, config.BBOX)
+    assert locs[0].prompt == "A wave ran 524 m up this bay's far side." and locs[1].prompt == ""

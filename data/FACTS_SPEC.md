@@ -36,7 +36,7 @@ The game shows **clue** facts in a short line on the guess prompt (they must not
 | area_km2 | yes | lakes, islands, parks, glaciers (under 1 sq mi the card shows acres; from an acreage keep 4 significant figures: 25.10 ac → `0.1016`) | `344.6` |
 | depth_m | no | lake max depth | `594` |
 | grade | yes | climbs: YDS `5.14d` / `5.10a`; alpine `III 5.7` or `II, 35° snow`; scrambles `Class 3` | `5.9` |
-| style | yes | one of: `sport`, `trad`, `sport & trad`, `alpine rock`, `mountaineering`, `glacier climb`, `scramble`, `ski tour`, `ski mountaineering`, `hike` | `sport` |
+| style | yes | one of: `sport`, `trad`, `sport & trad`, `alpine rock`, `mountaineering`, `glacier climb`, `scramble`, `ski tour`, `ski mountaineering`, `hike`, `boulder` | `sport` |
 | pitches | yes | **multipitch routes only** (omit for single pitch and for crags) | `18` |
 | rock | no | rock type | `granite`, `basalt`, `gneiss`, `limestone`, `welded tuff` |
 | classic | no | crags / formations / big peaks: the signature route with grade (and pitches if multipitch) | `Grand Wall, 5.11a, 10 pitches` |

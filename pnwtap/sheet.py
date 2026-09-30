@@ -41,6 +41,7 @@ class Location:
     blurb: str
     facts: dict[str, str] = field(default_factory=dict)
     members: list[Member] = field(default_factory=list)
+    prompt: str = ""        # shown instead of the name when asking (events: "In 1971 a hijacker...")
 
     @property
     def kind(self) -> str:
@@ -122,7 +123,8 @@ def parse_locations(csv_text: str, bbox, categories=None, region=None, facts_reg
             facts = parse_facts(row.get("facts") or "", facts_registry)
         except ValueError as exc:
             raise ValueError(f"row {line_no} ({name}): {exc}") from exc
-        locations.append(Location(name, category, difficulty, geometry, image, blurb, facts, members))
+        prompt = (row.get("prompt") or "").strip()
+        locations.append(Location(name, category, difficulty, geometry, image, blurb, facts, members, prompt))
     return locations
 
 

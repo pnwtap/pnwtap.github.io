@@ -136,3 +136,10 @@ def test_any_of_places_ship_their_members(tmp_path):
     assert loc["kind"] == "any" and loc["geometry"] == ""
     assert [(m["name"], decode_polyline(m["geometry"]), m["kind"]) for m in loc["members"]] == [
         ("Crater Glacier", [[46.2, -122.19]], "point"), ("Hubbard Glacier", [[60.02, -139.5]], "point")]
+
+
+def test_a_prompt_ships_only_when_set():
+    locs = _pool()
+    locs[0].prompt = "In 1971 a hijacker jumped from a 727 over here."
+    payload = build_payload(locs, {}, {}, config)
+    assert payload["locations"][0]["prompt"].startswith("In 1971") and "prompt" not in payload["locations"][1]

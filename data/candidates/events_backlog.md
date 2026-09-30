@@ -1,0 +1,328 @@
+# Event ideas — backlog (parked 2026-09-29)
+
+Candidates for the "event" category from a six-theme sweep (disasters, transport, history, culture, science, oddities),
+edited into tiers and fact-checked. Parked by the owner: events pinnable to just a city ("tap Seattle") are out, and
+only a few events should run at once so they don't crowd out places. Already being built: D.B. Cooper, Boeing's
+first flight (Lake Union), LIGO Hanford, the Lituya Bay megatsunami, the end of the Oregon Trail, the Oso landslide,
+Rajneeshpuram.
+
+## Tier A — famous, pinnable, fun
+
+- **'Galloping Gertie' collapses (Tacoma Narrows Bridge)** (7 November 1940) — Tacoma Narrows main span, between Tacoma and Gig Harbor, WA; today's twin bridges stand on the same piers [WA, pinpoint, 47.269,-122.5517]
+  - Wind twisted the new suspension bridge apart on film: history's most famous engineering-failure footage. Source: https://en.wikipedia.org/wiki/Tacoma_Narrows_Bridge_(1940)
+  - Fact-check: where: Tacoma Narrows main span, between Tacoma and Gig Harbor, WA. Only the 1950 westbound bridge (the northern span) reuses Gertie's two main piers. The 2007 eastbound bridge just south of it stands on new concrete caissons.
+- **Where D.B. Cooper's ransom money washed up** (10 February 1980 (hijacking 24 November 1971)) — Tena Bar, Washington shore of the Columbia River, about 9 mi downstream of Vancouver, WA [WA, pinpoint, 45.7179,-122.7595]
+  - The only confirmed trace of the only unsolved US airline hijacking: $5,800 of Cooper's marked $20s. Source: https://en.wikipedia.org/wiki/D._B._Cooper
+  - Overlaps existing place: Columbia River
+- **Oregon blows up a beached whale** (12 November 1970) — South Jetty beach, about a mile south of the Siuslaw River south jetty, Florence, OR [OR, local, 44.003,-124.139]
+  - The Highway Division dynamited a dead sperm whale; blubber rained on spectators and crushed a car. Legendary news clip. Source: https://en.wikipedia.org/wiki/Exploding_whale
+- **Bertha the tunnel machine gets stuck** (6 December 2013 (restarted December 2015)) — About 60 ft under Alaskan Way between S Jackson and S Main St, Pioneer Square waterfront, Seattle; the rescue pit was dug here [WA, pinpoint, 47.5998,-122.3365]
+  - The world's largest tunnel-boring machine stalled about 1,000 ft in; Seattle watched the two-year rescue saga. Source: https://en.wikipedia.org/wiki/Bertha_(tunnel_boring_machine)
+- **Marshawn Lynch's 'Beast Quake' run** (8 January 2011) — Qwest Field (now Lumen Field), SoDo, Seattle [WA, pinpoint, 47.5953,-122.3316]
+  - Lynch broke nine tackles on a 67-yard playoff touchdown; the crowd's roar registered on a nearby seismometer. Source: https://en.wikipedia.org/wiki/Beast_Quake
+- **The Great Seattle Fire starts** (6 June 1889 (afternoon)) — Clairmont's cabinet shop in the basement of the Pontius Building, Front St (now 1st Ave) & Madison St, downtown Seattle [WA, pinpoint, 47.6044,-122.3364]
+  - A boiled-over glue pot burned 25+ blocks of wooden downtown; Seattle rebuilt in brick and raised its streets. Source: https://en.wikipedia.org/wiki/Great_Seattle_Fire
+- **Amazon starts in Jeff Bezos's garage** (July 1994 (site launched 16 July 1995)) — Garage of a rented house on NE 28th St, Bridle Trails area, Bellevue, WA [WA, pinpoint, 47.6354,-122.1982]
+  - The world's biggest online store (first named Cadabra) began in a rented Bellevue garage, not Seattle. Source: https://www.geekwire.com/2024/amazons-birthplace-is-back-on-the-market-visitors-flock-to-the-house-where-it-all-started/
+  - Fact-check: where: Garage of a rented house at 10704 NE 28th St, Northwest Bellevue (west of I-405, next to Clyde Hill), WA. It is not in Bridle Trails. The lat/lng is correct.
+- **The Nisqually earthquake** (28 February 2001, 10:54 a.m.) — Epicentre about 52 km beneath Anderson Island / the Nisqually delta, southern Puget Sound [WA, pinpoint, 47.149,-122.7267]
+  - M6.8 quake that cracked the Alaskan Way Viaduct and damaged Pioneer Square and the Capitol dome. Source: https://earthquake.usgs.gov/earthquakes/eventpage/uw10530748
+- **Lewis & Clark reach the Pacific** (15-18 November 1805) — Cape Disappointment, north side of the Columbia River mouth, WA; the Corps camped at Station Camp nearby and Clark walked out to the cape on 18 Nov [WA, local, 46.2756,-124.0518]
+  - The Corps of Discovery reached the Pacific after crossing the continent, then wintered across the river at Fort Clatsop. Source: https://www.historylink.org/File/5383
+  - Overlaps existing place: Columbia River
+- **The end of the Oregon Trail** (1840s (Congress designated the official terminus in 1978)) — Abernethy Green, End of the Oregon Trail Interpretive Center, Oregon City, OR [OR, pinpoint, 45.3649,-122.5945]
+  - Official end of the 2,000-mile emigrant trail, and the goal of the 'you have died of dysentery' game. Source: https://www.hmdb.org/m.asp?m=114198
+- **The Eagle Creek Fire starts** (2 September 2017, about 4 p.m.) — Eagle Creek Trail about 1 mile above the trailhead, near Punch Bowl Falls, Columbia River Gorge, OR [OR, local, 45.63,-121.904]
+  - A teen's firework burned about 50,000 acres of the Gorge, trapping 153 hikers and threatening Multnomah Falls Lodge. Source: https://en.wikipedia.org/wiki/Eagle_Creek_Fire
+  - Overlaps existing place: Historic Columbia River Highway; Columbia River
+- **Canada's hottest temperature ever recorded (49.6 °C)** (29 June 2021) — Lytton, BC, at the Fraser-Thompson confluence [BC, pinpoint, 50.2311,-121.5814] · sensitivity: mild
+  - The heat dome smashed Canada's all-time high by 4.6 °C; the village burned the next day. Source: https://en.wikipedia.org/wiki/Lytton,_British_Columbia
+  - Overlaps existing place: Fraser River
+- **Alaska Airlines 1282's door plug lands in a backyard** (5 January 2024) — A backyard in Cedar Hills near SW Barnes Rd and OR-217, west Portland (the flight returned to PDX) [OR, local, 45.5095,-122.778]
+  - A 737 MAX 9 lost a fuselage panel at 16,000 ft; the missing door turned up in a teacher's backyard. Source: https://en.wikipedia.org/wiki/Alaska_Airlines_Flight_1282
+  - Overlaps existing place: Portland
+  - Fact-check: where: A wooded backyard of a Portland schoolteacher's home in the Cedar Hills area, near SW Barnes Rd and OR-217. This is unincorporated Washington County on the edge of Beaverton, a Portland suburb and not Portland city proper. The pin is fine at 'local' precision.
+- **The Peter Iredale runs aground** (25 October 1906) — Clatsop Spit beach, Fort Stevens State Park, Warrenton, OR [OR, pinpoint, 46.1784,-123.981]
+  - The rusting skeleton of this four-masted barque still sits on the beach: the Oregon coast's most photographed wreck. Source: https://en.wikipedia.org/wiki/Peter_Iredale
+- **The Lituya Bay megatsunami, the tallest wave ever recorded** (9 July 1958, about 10:15 p.m.) — Gilbert Inlet at the head of Lituya Bay, Glacier Bay National Park, SE Alaska [SE-AK, pinpoint, 58.6733,-137.5022] · sensitivity: mild
+  - A quake-triggered rockfall sent water 524 m (1,720 ft) up the opposite ridge, the highest run-up ever recorded. Source: https://en.wikipedia.org/wiki/1958_Lituya_Bay_earthquake_and_megatsunami
+- **The Boeing 747 makes its first flight** (9 February 1969) — Paine Field, Everett, WA, next to the factory built for the 747 [WA, pinpoint, 47.9061,-122.2814]
+  - The first jumbo jet took off from Everett; its factory is still the world's largest building by volume. Source: https://en.wikipedia.org/wiki/Boeing_747
+- **Hanford's B Reactor goes critical** (26 September 1944) — B Reactor, Hanford Site, beside the Columbia River, WA [WA, pinpoint, 46.6303,-119.6472] · sensitivity: mild
+  - The world's first full-scale plutonium reactor made the fuel for the Trinity test and the Nagasaki bomb. Source: https://en.wikipedia.org/wiki/B_Reactor
+  - Overlaps existing place: Columbia River
+- **Sasquatch! Music Festival at the Gorge** (2002-2018 (Memorial Day weekends)) — The Gorge Amphitheatre, above the Columbia River near George, WA [WA, pinpoint, 47.101,-119.995]
+  - Sixteen years of Memorial Day indie-rock camping at the cliff-edge amphitheatre, a Seattle rite of passage. Source: https://en.wikipedia.org/wiki/Sasquatch!_Music_Festival
+  - Overlaps existing place: Columbia River
+- **Nirvana's hometown: Kurt Cobain's 'Something in the Way' bridge** (1987 (Nirvana formed in Aberdeen)) — Young Street Bridge over the Wishkah River / Kurt Cobain Memorial Park, Aberdeen, WA [WA, pinpoint, 46.9845,-123.8053] · sensitivity: mild
+  - Cobain and Novoselic formed Nirvana in Aberdeen; a memorial park sits beneath the bridge from 'Something in the Way'. Source: https://en.wikipedia.org/wiki/Kurt_Cobain_Memorial_Park
+  - Fact-check: where: Same spot (the pin is correct). Flag it as disputed: Cobain said he lived under this bridge, but Krist Novoselic and Cobain's family say the story was exaggerated. The date also isn't a single event.
+- **Rajneeshpuram, the 'Wild Wild Country' commune** (1981-1985 (salmonella attack 1984)) — Big Muddy Ranch near Antelope, Wasco County, OR [OR, local, 44.842,-120.482] · sensitivity: mild
+  - A guru's commune took over a town and poisoned 751 people via salad bars: the largest US bioterror attack. Source: https://en.wikipedia.org/wiki/Rajneeshpuram
+- **Gold is found on Bonanza Creek (the Klondike strike)** (16 August 1896 (sometimes given as the 17th)) — Discovery Claim National Historic Site, Bonanza Creek, about 17 km SSE of Dawson City, YT [YT, pinpoint, 63.9168,-139.317] · sensitivity: mild
+  - Keish (Skookum Jim), Dawson Charlie and George Carmack's strike set off the Klondike stampede that made Seattle boom. Source: https://en.wikipedia.org/wiki/Discovery_Claim
+  - Overlaps existing place: Dawson City
+- **The Hope Slide** (9 January 1965) — Hope-Princeton Highway (Hwy 3), Nicolum Valley, about 18 km east of Hope, BC [BC, pinpoint, 49.2989,-121.2636] · sensitivity: mild
+  - 47 million m³ of rock buried 3 km of Highway 3; the giant scar is now a roadside viewpoint. Source: https://en.wikipedia.org/wiki/Hope_Slide
+
+## Tier B — good, less famous or fuzzier
+
+- **The Denny Party lands at Alki Point (Seattle is founded)** (13 November 1851) — 'Birthplace of Seattle' monument, 63rd Ave SW & Alki Ave SW, Alki Beach, West Seattle [WA, pinpoint, 47.5785,-122.4133]
+  - 22 settlers (10 adults, 12 children) landed at Alki ('New York Alki') and founded what became Seattle. Source: https://www.historylink.org/file/5392
+  - Overlaps existing place: Alki Beach
+  - Fact-check: overlap: Sits on the existing 'Alki Beach' line. Its first vertex (47.5781,-122.4159) is about 200 m from the monument.
+- **Mount St. Helens erupts** (18 May 1980, 8:32 a.m.) — Mount St. Helens' north-facing horseshoe crater and lava dome, WA [WA, pinpoint, 46.2003,-122.1867] · sensitivity: mild
+  - Deadliest, costliest US eruption: the lateral blast flattened about 600 km² of forest and killed 57. Source: https://en.wikipedia.org/wiki/1980_eruption_of_Mount_St._Helens
+  - Overlaps existing place: Mt St Helens
+  - Fact-check: overlap: Duplicates the existing 'Mt St Helens' peak (46.1912,-122.1944, about 1 km away). It is also the endpoint of the existing 'Worm Flows' climb.
+- **The Pig War: an American shoots a British pig** (15 June 1859) — Lyman Cutlar's farm (now the Frazer Homestead Preserve), near American Camp, south end of San Juan Island, WA [WA, local, 48.4649,-123.0243]
+  - A shot pig sparked a 13-year US-British military standoff over the San Juans; the only casualty was the pig. Source: https://www.nps.gov/sajh/learn/historyculture/the-pig-war.htm
+  - Overlaps existing place: San Juan Island
+  - Fact-check: lat/lng: 48.4756, -123.0306. The old pin is the American Camp visitor-centre trailhead, about 1.3 km SE of the Frazer Homestead Preserve. The NPS places Cutlar's homestead in the southern part of the preserve. Note: the site also falls inside the existing 'San Juan Island' location.
+- **Tex Johnston barrel-rolls the Boeing 707 prototype** (7 August 1955 (some sources say the 6th)) — Over Lake Washington on the Seafair Gold Cup hydroplane course, off Stan Sayres pits / Genesee Park, Seattle [WA, local, 47.571,-122.266]
+  - Boeing's test pilot rolled the Dash 80 jetliner prototype, unauthorised, over Seafair crowds and airline executives. Source: https://www.historylink.org/file/390
+- **The I-90 floating bridge sinks** (25 November 1990) — Lacey V. Murrow Memorial Bridge, Lake Washington between Seattle and Mercer Island [WA, pinpoint, 47.59,-122.2703]
+  - During renovation, storm-flooded pontoons dragged a half-mile of the floating bridge to the lakebed on live TV. Source: https://en.wikipedia.org/wiki/Lacey_V._Murrow_Memorial_Bridge
+- **The 'Battle in Seattle' WTO protests** (30 November - 3 December 1999) — Around the Washington State Convention Center and Paramount Theatre, 6th-8th Ave & Pike St, downtown Seattle [WA, local, 47.6115,-122.333] · sensitivity: mild
+  - Protesters shut down the WTO ministerial; tear gas, a curfew and the National Guard made it a global flashpoint. Source: https://en.wikipedia.org/wiki/1999_Seattle_WTO_protests
+  - Overlaps existing place: Pike Place Market
+- **The first Starbucks opens** (30 March 1971) — 2000 Western Ave, Seattle (moved to 1912 Pike Place in 1976) [WA, pinpoint, 47.6105,-122.3436]
+  - The world's biggest coffee chain began as one Seattle bean shop; the Pike Place 'original' store draws huge lines. Source: https://en.wikipedia.org/wiki/Original_Starbucks
+  - Overlaps existing place: Pike Place Market
+  - Fact-check: overlap with existing location: About 130 m from the existing 'Pike Place Market' pin (47.6094,-122.3417), whose blurb already mentions the original Starbucks.
+- **UPS is founded (as the American Messenger Company)** (28 August 1907) — Saloon basement at 2nd Ave S & S Main St, Pioneer Square (now Waterfall Garden Park), Seattle [WA, pinpoint, 47.6003,-122.3319]
+  - Teenage messenger Jim Casey started UPS in Seattle with $100 borrowed; UPS built this waterfall park to mark it. Source: https://en.wikipedia.org/wiki/Waterfall_Garden_Park
+- **Boeing's first airplane (the B&W) takes off** (15 June 1916) — Lake Union, from Bill Boeing's hangar-boathouse at the foot of Roanoke St (east shore), Seattle [WA, local, 47.6432,-122.3245]
+  - Bill Boeing flew his first aircraft off Lake Union, the start of the Boeing Company. Source: https://www.historylink.org/file/369
+  - Fact-check: lat/lng: 47.6434,-122.3290. The old pin is about 350 m inland at 250 E Roanoke St, near I-5. The foot of E Roanoke St is at the water, where the houseboats at 10 E Roanoke St are. The date of 15 June 1916 and the hangar at the foot of Roanoke St check out.
+- **The first gravitational waves are detected (LIGO Hanford)** (14 September 2015 (GW150914)) — LIGO Hanford Observatory corner station, near Richland, WA [WA, pinpoint, 46.4553,-119.4078]
+  - First direct detection of spacetime ripples, from two merging black holes; it won the 2017 Nobel Prize. Source: https://en.wikipedia.org/wiki/LIGO
+- **The Overlook Hotel from 'The Shining'** (Exteriors filmed 1979; film released 1980) — Timberline Lodge, south slope of Mount Hood, OR [OR, pinpoint, 45.3311,-121.71]
+  - Kubrick used Timberline's exterior as the Overlook; Room 217 became 237 so guests wouldn't avoid the real room. Source: https://en.wikipedia.org/wiki/Timberline_Lodge
+  - Overlaps existing place: Timberline Trail; Mount Hood
+  - Fact-check: date: The exterior establishing shot was filmed by Jan Harlan's second unit during the 1978-79 production (May 1978 to 1979). No source confirms 1979 specifically. Film released 1980.
+  - Fact-check: overlap with existing location: The existing 'Timberline Trail' line starts at the lodge (45.3311,-121.7118), and the 'Mount Hood' blurb mentions Timberline Lodge. Near-duplicate.
+- **The Goonies house** (Filmed 1984; released 1985) — Walsh family house, 368 38th St, east Astoria, OR [OR, pinpoint, 46.1929,-123.7996]
+  - 'Goonies never say die!' Astoria was the Goon Docks, and Mikey's hillside house became a pilgrimage site. Source: https://en.wikipedia.org/wiki/The_Goonies
+  - Overlaps existing place: Astoria
+- **Twin Peaks' Double R Diner ('damn fine coffee')** (Pilot filmed 1989; aired 1990-91) — Twede's Cafe, 137 W North Bend Way, North Bend, WA [WA, pinpoint, 47.4952,-121.7868]
+  - David Lynch shot Twin Peaks around Snoqualmie and North Bend; Twede's played the cherry-pie-and-coffee Double R Diner. Source: https://en.wikipedia.org/wiki/Twin_Peaks
+  - Overlaps existing place: North Bend
+- **The Jamaican bobsled team crashes ('Cool Runnings')** (28 February 1988 (four-man, 3rd run)) — Bobsleigh track, Canada Olympic Park, Calgary [AB, pinpoint, 51.0809,-114.2164]
+  - A tropical nation's bobsled team crashed at the 1988 Olympics and walked its sled home, inspiring Disney's 'Cool Runnings'. Source: https://en.wikipedia.org/wiki/Bobsleigh_at_the_1988_Winter_Olympics_–_Four-man
+  - Overlaps existing place: Calgary
+- **Mount Mazama blows its top (and becomes Crater Lake)** (About 7,700 years ago (about 5700 BCE)) — Crater Lake caldera, southern Oregon Cascades [OR, local, 42.9333,-122.1167]
+  - The Cascades' biggest Holocene eruption; the summit collapsed into a caldera that filled to become Crater Lake. Source: https://en.wikipedia.org/wiki/Mount_Mazama
+  - Overlaps existing place: Crater Lake
+  - Fact-check: overlap with existing location: Duplicates the existing location 'Crater Lake' (lake, easy). The answer would be the same spot.
+- **The Bonneville Slide, the legendary 'Bridge of the Gods'** (About 1450 CE (older estimates 1060-1280)) — Columbia River Gorge at Cascade Locks, OR; the debris came off Table Mountain and Greenleaf Peak, WA [OR, local, 45.6589,-121.9162]
+  - A landslide dammed the Columbia, the origin of the Bridge of the Gods legend of Loowit, Wy'east and Pahto. Source: https://en.wikipedia.org/wiki/Bridge_of_the_Gods_(land_bridge)
+  - Overlaps existing place: Columbia River
+  - Fact-check: region / where: WA. The pin (45.6589,-121.9162) is on the slide debris at North Bonneville, Skamania County, WA, about 2 km west of Cascade Locks. The slide mass sits on the north (WA) bank. The coordinates are fine; only the region tag and wording are wrong.
+- **The Wellington avalanche sweeps two trains off the tracks** (1 March 1910) — Wellington (later Tye) townsite at the west portal of the old Cascade Tunnel, below Stevens Pass, WA (Iron Goat Trail) [WA, pinpoint, 47.7494,-121.1194] · sensitivity: mild
+  - The deadliest avalanche in US history pushed two snowbound Great Northern trains into the Tye River gorge, killing 96. Source: https://en.wikipedia.org/wiki/Wellington_avalanche
+  - Overlaps existing place: Stevens Pass; US-2 (Stevens Pass Hwy)
+- **The Frank Slide** (29 April 1903, 4:10 a.m.) — Turtle Mountain above the town of Frank, Crowsnest Pass, AB (Hwy 3 runs through the boulder field) [AB, pinpoint, 49.5911,-114.3953] · sensitivity: mild
+  - Canada's deadliest landslide: 110 million tonnes of limestone buried part of Frank in about 100 seconds. Source: https://en.wikipedia.org/wiki/Frank_Slide
+- **Portland gets its name from a coin flip** (1845) — Oregon City, OR, traditionally the parlour of the Francis Ermatinger House [OR, local, 45.3556,-122.6056]
+  - Pettygrove (from Maine) beat Lovejoy (from Boston) two tosses of three, so it's Portland, not Boston. Source: https://en.wikipedia.org/wiki/Portland_Penny
+  - Overlaps existing place: Portland
+- **A Japanese floatplane bombs Oregon (the Lookout Air Raid)** (9 September 1942) — Wheeler Ridge on Mount Emily, Siskiyou National Forest, about 16 km east of Brookings, OR (Bombsite Trail) [OR, pinpoint, 42.0783,-124.1111]
+  - The first aerial bombing of the contiguous US: a submarine-launched floatplane tried to start a forest fire. Source: https://en.wikipedia.org/wiki/Lookout_Air_Raids
+- **The Last Spike of the Canadian Pacific Railway** (7 November 1885) — Craigellachie, Eagle Pass, between Sicamous and Revelstoke, BC (monument and rest area on Hwy 1) [BC, pinpoint, 50.9751,-118.7239] · sensitivity: mild
+  - Donald Smith drove the plain iron spike completing Canada's transcontinental railway, captured in an iconic photo. Source: https://en.wikipedia.org/wiki/Craigellachie,_British_Columbia
+- **Captain Cook anchors in Nootka Sound** (March-April 1778) — Resolution Cove on Bligh Island, Nootka Sound, west coast of Vancouver Island, BC [BC, pinpoint, 49.6061,-126.5303]
+  - Cook's month-long stay put the Northwest Coast on European maps and launched the sea-otter fur trade. Source: https://en.wikipedia.org/wiki/Nootka_Sound
+- **Alaska is handed over from Russia to the United States** (18 October 1867) — Castle Hill (Baranof Castle State Historic Site / Noow Tlein), downtown Sitka, AK [SE-AK, pinpoint, 57.0486,-135.3381] · sensitivity: mild
+  - The Russian flag came down and the US flag rose at the formal transfer, now celebrated as Alaska Day. Source: https://www.hmdb.org/m.asp?m=181361
+- **Charles Walcott discovers the Burgess Shale** (30 August 1909) — Walcott Quarry, Fossil Ridge between Mount Wapta and Mount Field, above Field, Yoho NP, BC [BC, pinpoint, 51.4388,-116.4714]
+  - The world's most famous Cambrian fossil bed: 508-million-year-old soft-bodied animals, reached by guided hike. Source: https://en.wikipedia.org/wiki/Burgess_Shale
+  - Fact-check: where: The 30 Aug 1909 find was of loose fossil slabs on Fossil Ridge (between Wapta Mountain and Mount Field). Walcott located and opened the quarry itself in 1910. The pin stays valid, since it is on the ridge within about 1 km (Mount Field 51.4308,-116.4628; Wapta 51.4514,-116.4775). Reword so the prompt doesn't claim he found the quarry in 1909.
+- **Sitka's volcano 'erupts' on April Fools' Day** (1 April 1974) — Crater of Mount Edgecumbe, Kruzof Island, about 25 km west of Sitka, AK [SE-AK, pinpoint, 57.0511,-135.7606]
+  - A local prankster flew about 70 old tyres into the dormant crater and lit them, faking an eruption. Source: https://en.wikipedia.org/wiki/Mount_Edgecumbe_(Alaska)
+- **Armed militants occupy the Malheur National Wildlife Refuge** (2 January - 11 February 2016) — Malheur National Wildlife Refuge headquarters, about 30 mi south of Burns, Harney County, OR [OR, pinpoint, 43.2654,-118.8443] · sensitivity: mild
+  - Ammon Bundy's militia seized a remote bird refuge for nearly six weeks over federal land policy; the nation watched. Source: https://en.wikipedia.org/wiki/Occupation_of_the_Malheur_National_Wildlife_Refuge
+- **The 'Millennium Bomber' is caught at the ferry** (14 December 1999) — Black Ball (MV Coho) ferry terminal, Port Angeles, WA [WA, pinpoint, 48.1209,-123.4317] · sensitivity: mild
+  - A US customs inspector found explosives in Ahmed Ressam's trunk, foiling an al-Qaeda-linked plot to bomb LAX. Source: https://en.wikipedia.org/wiki/Ahmed_Ressam
+- **'Will the last person leaving SEATTLE turn out the lights'** (16 April 1971 (up for about two weeks)) — Billboard at S 167th St & Pacific Hwy S, near Sea-Tac Airport, SeaTac, WA [WA, local, 47.4532,-122.296]
+  - Two realtors' joke billboard became the icon of the Boeing Bust, when Boeing's local workforce fell by over half. Source: https://www.historylink.org/File/1287
+- **The 'Sleepless in Seattle' houseboat** (Filmed 1992; released 1993) — Floating home at 2460 Westlake Ave N, west shore of Lake Union, Seattle [WA, pinpoint, 47.6411,-122.3413]
+  - Tom Hanks's character lived in this Lake Union floating home, one of Seattle's most recognisable film locations. Source: https://www.king5.com/article/news/sleepless-in-seattle-houseboat-sold/281-246976072
+- **A mudslide buries the Makah village of Ozette** (About 1750 (exposed by a storm in 1970; excavated 1970-81)) — Ozette village site at Cape Alava, Olympic coast, WA [WA, local, 48.1698,-124.7314] · sensitivity: mild
+  - A slide sealed longhouses like a Northwest Coast Pompeii; excavation recovered 55,000+ Makah artifacts. Source: https://en.wikipedia.org/wiki/Ozette_Indian_Village_Archeological_Site
+  - Fact-check: date: Disputed. The Makah Museum gives a radiocarbon date of about 500 ± 50 years BP, and Wikipedia says around 1560. Other accounts say about 1700 (linked to the Cascadia quake) or about 1750. It was exposed by a February 1970 storm and excavated 1970-81. Suggested wording: 'sometime c. 1500-1750 (date disputed)'.
+
+## Tier C — niche, area-only, or sensitive
+
+- **The first Costco warehouse opens** (15 September 1983) — 4401 4th Ave S, SoDo/Georgetown, Seattle [WA, pinpoint, 47.5655,-122.3303]
+  - Costco's first-ever warehouse; its 2005 replacement store on the neighbouring lot still operates. Source: https://www.historylink.org/File/3609
+- **Bill Gates and Paul Allen learn to program on Lakeside's Teletype** (1968) — Lakeside School, 14050 1st Ave NE, north Seattle [WA, pinpoint, 47.7323,-122.3273]
+  - Mothers' Club rummage-sale money rented a time-share terminal; Gates later said 'no Lakeside, no Microsoft'. Source: https://www.historylink.org/file/10421
+- **The great Cascadia earthquake of 1700** (26 January 1700, about 9 p.m.) — Cascadia Subduction Zone, offshore from mid-Vancouver Island to northern California [OR, area, 45,-125] · sensitivity: mild
+  - M8.7-9.2 megaquake, dated by Japan's 'orphan tsunami'; the model for the 'Really Big One'. Source: https://en.wikipedia.org/wiki/1700_Cascadia_earthquake
+- **The Ice Age Missoula Floods carve the Channeled Scablands** (About 18,000-13,000 years ago (dozens of floods)) — Channeled Scablands of eastern WA, then Wallula Gap and the Columbia Gorge to the Willamette Valley [WA, area, 47,-118.6]
+  - Among Earth's largest known floods; they carved Dry Falls, the coulees and the scablands. Source: https://en.wikipedia.org/wiki/Missoula_floods
+  - Overlaps existing place: Dry Falls
+- **The Oso landslide (SR 530 slide)** (22 March 2014, 10:37 a.m.) — Steelhead Haven neighbourhood on SR 530, North Fork Stillaguamish, between Oso and Darrington, WA [WA, pinpoint, 48.2826,-121.848] · sensitivity: high
+  - Deadliest non-volcanic landslide in US history, killing 43 near Oso. Source: https://en.wikipedia.org/wiki/2014_Oso_mudslide
+- **The Palm Sunday avalanche on the Chilkoot Trail** (3 April 1898) — Chilkoot Trail between Sheep Camp and the Scales, below Chilkoot Pass, SE Alaska [SE-AK, local, 59.68,-135.252] · sensitivity: mild
+  - Deadliest event of the Klondike Gold Rush, burying about 65+ stampeders heading for the Golden Stairs. Source: https://www.nps.gov/articles/palm-sunday-avalanche.htm
+  - Overlaps existing place: Chilkoot Trail
+- **The 1964 tsunami floods Port Alberni** (28 March 1964 (night after the Good Friday Alaska quake)) — Port Alberni and Alberni, at the head of Alberni Inlet, Vancouver Island, BC [BC, local, 49.2339,-124.8055]
+  - The narrow inlet amplified the waves (up to 3 m), washing away 55 homes. Nobody died. Source: https://en.wikipedia.org/wiki/Alberni_Inlet
+- **North America's coldest recorded temperature (-63 °C)** (3 February 1947) — Snag airstrip weather station, near Beaver Creek, southwest Yukon [YT, pinpoint, 62.367,-140.4]
+  - -63.0 °C (-81.4 °F), the coldest temperature ever recorded in continental North America. Source: https://en.wikipedia.org/wiki/Snag,_Yukon
+- **The Vanport flood** (30 May 1948 (Memorial Day), 4:17 p.m.) — Vanport, OR, between north Portland and the Columbia (now Delta Park / Portland International Raceway) [OR, local, 45.6019,-122.7] · sensitivity: mild
+  - A railroad dike failed and in hours wiped out Oregon's second-largest city (about 18,500 people). Source: https://en.wikipedia.org/wiki/Vanport,_Oregon
+  - Overlaps existing place: Portland; Columbia River
+- **The Fort McMurray wildfire ('The Beast')** (Began 1 May 2016; entered the city 3 May) — Fort McMurray, AB (the Horse River Fire started about 15 km southwest of town) [AB, local, 56.7264,-111.3808] · sensitivity: mild
+  - Costliest disaster in Canadian history: 88,000 people evacuated and about 2,400 homes destroyed. Source: https://en.wikipedia.org/wiki/2016_Fort_McMurray_wildfire
+- **A stolen Horizon Air Q400 crashes on Ketron Island** (10 August 2018) — Ketron Island, south Puget Sound, near Steilacoom, WA [WA, pinpoint, 47.1498,-122.6381] · sensitivity: high
+  - A ground-crew employee stole an empty airliner from Sea-Tac, did aerobatics chased by F-15s, then crashed. Source: https://en.wikipedia.org/wiki/2018_Horizon_Air_Q400_incident
+- **Chkalov's Soviet transpolar flight lands** (20 June 1937) — Pearson Field, Vancouver, WA (monument on E 5th St) [WA, pinpoint, 45.6206,-122.6564]
+  - The first nonstop flight over the North Pole, Moscow to Washington State: 63 hours in an ANT-25. Source: https://en.wikipedia.org/wiki/Valeri_Chkalov
+  - Overlaps existing place: Portland; Columbia River
+- **Ripple Rock is blown up** (5 April 1958) — Seymour Narrows, north of Campbell River, BC [BC, pinpoint, 50.1318,-125.3546]
+  - The largest planned non-nuclear explosion of its time removed a ship-killing underwater peak, broadcast live nationwide. Source: https://en.wikipedia.org/wiki/Ripple_Rock
+- **The SS Valencia wrecks: birth of the West Coast Trail** (22 January 1906) — Reef below 'Valencia Bluffs', southeast of Pachena Point, west coast of Vancouver Island, BC [BC, pinpoint, 48.7056,-125.0058] · sensitivity: mild
+  - A San Francisco-Seattle steamer wrecked in sight of shore; the disaster led directly to building the West Coast Trail. Source: https://en.wikipedia.org/wiki/SS_Valencia
+- **The Princess Sophia sinks on Vanderbilt Reef** (25 October 1918 (grounded 24 October)) — Vanderbilt Reef, Lynn Canal, about 30 mi north of Juneau, AK [SE-AK, pinpoint, 58.5911,-135.0192] · sensitivity: mild
+  - The worst maritime disaster in BC/Alaska history: everyone aboard a Skagway-Vancouver steamer died. Source: https://en.wikipedia.org/wiki/SS_Princess_Sophia
+- **The Alaska Highway officially opens** (20 November 1942) — Soldier's Summit above Kluane Lake, Alaska Highway (historic Mile 1061), Yukon [YT, pinpoint, 61.0241,-138.5083]
+  - The ribbon-cutting where the two construction crews met, finishing the ~2,700-km wartime road in about eight months. Source: https://parks.canada.ca/pn-np/yt/kluane/activ/randonnee-hiking/soldiers
+  - Overlaps existing place: Kluane Lake
+- **The Lethbridge Viaduct is completed** (1909 (first train November 1909)) — CPR High Level Bridge over the Oldman River, Lethbridge, AB [AB, pinpoint, 49.6975,-112.8686]
+  - One of the world's largest railway trestles: 1.6 km long and 96 m high, still carrying trains. Source: https://en.wikipedia.org/wiki/Lethbridge_Viaduct
+- **The SS Portland lands 'a ton of gold' in Seattle** (17 July 1897) — Schwabacher's Wharf, foot of Union St (now Pier 58 / Waterfront Park), Seattle [WA, pinpoint, 47.6068,-122.3417]
+  - Klondike miners arrived with gold, setting off the stampede north and making Seattle the gateway outfitter. Source: https://www.historylink.org/File/22738
+  - Overlaps existing place: Pike Place Market
+- **Bainbridge Islanders become the first Japanese Americans forcibly removed in WWII** (30 March 1942) — Former Eagledale ferry dock, now the Bainbridge Island Japanese American Exclusion Memorial ('Nidoto Nai Yoni'), Eagle Harbor [WA, pinpoint, 47.6153,-122.5102] · sensitivity: mild
+  - 227 Bainbridge residents of Japanese ancestry were the first removed under Executive Order 9066, sent to incarceration camps. Source: https://en.wikipedia.org/wiki/Bainbridge_Island_Japanese_American_Exclusion_Memorial
+- **The Whitman Mission killings (Waiilatpu)** (29 November 1847) — Whitman Mission National Historic Site, Walla Walla River at Mill Creek, about 11 km west of Walla Walla, WA [WA, pinpoint, 46.04,-118.4614] · sensitivity: high
+  - Cayuse men killed the Whitmans and 11 others amid a deadly measles epidemic, leading to the Cayuse War. Source: https://en.wikipedia.org/wiki/Whitman_massacre
+- **Celilo Falls is drowned by The Dalles Dam** (10 March 1957) — Former Celilo Falls on the Columbia River, between Celilo Village, OR and Wishram, WA [OR, pinpoint, 45.6495,-120.9779] · sensitivity: mild
+  - A great Indigenous fishing and trading hub, used for millennia, went underwater when The Dalles Dam closed its gates. Source: https://en.wikipedia.org/wiki/Celilo_Falls
+  - Overlaps existing place: Columbia River
+- **Alexander Mackenzie paints 'from Canada, by land' on a rock at the Pacific** (22 July 1793) — Mackenzie Rock, Dean Channel (Sir Alexander Mackenzie Provincial Park), west of Bella Coola, BC [BC, pinpoint, 52.38,-127.4711]
+  - The first recorded crossing of North America north of Mexico, 12 years before Lewis & Clark. Source: https://en.wikipedia.org/wiki/Sir_Alexander_Mackenzie_Provincial_Park
+- **The Komagata Maru is turned away from Vancouver** (23 May - 23 July 1914) — Burrard Inlet off Coal Harbour, Vancouver (memorial at Harbour Green Park) [BC, local, 49.2898,-123.1197] · sensitivity: mild
+  - 376 mostly Sikh passengers were held offshore for two months, then expelled under racist rules; Canada apologised in 2016. Source: https://en.wikipedia.org/wiki/Komagata_Maru_incident
+  - Overlaps existing place: Stanley Park; Vancouver
+- **Unmarked graves reported at the Kamloops Indian Residential School** (27 May 2021 (school operated 1890-1978)) — Former Kamloops Indian Residential School, Tk'emlups te Secwepemc lands, Kamloops, BC [BC, pinpoint, 50.6797,-120.295] · sensitivity: high
+  - Radar indicated about 200 potential unmarked graves, sparking a national reckoning over Canada's residential schools. Source: https://en.wikipedia.org/wiki/Kamloops_Indian_Residential_School
+  - Overlaps existing place: Kamloops
+- **Klondike stampeders climb the 'Golden Stairs' of the Chilkoot Pass** (Winter 1897-98) — Chilkoot Pass summit on the Alaska-BC border, above Dyea [SE-AK, pinpoint, 59.6969,-135.2386]
+  - Stampeders hauled a ton of supplies each up the icy steps: the defining image of the Klondike rush. Source: https://en.wikipedia.org/wiki/Chilkoot_Pass
+  - Overlaps existing place: Chilkoot Trail
+- **Treaty 7 is signed at Blackfoot Crossing** (22 September 1877) — Treaty Flats, Blackfoot Crossing of the Bow River, Siksika Nation near Cluny, AB (Blackfoot Crossing Historical Park) [AB, pinpoint, 50.7867,-112.8951] · sensitivity: mild
+  - Crowfoot and leaders of the Blackfoot Confederacy, Tsuut'ina and Stoney Nakoda signed the treaty covering southern Alberta. Source: https://www.historicplaces.ca/en/rep-reg/place-lieu.aspx?id=15908
+- **The Kingdome is imploded** (26 March 2000) — Kingdome site, SoDo, Seattle (now Lumen Field) [WA, pinpoint, 47.5953,-122.3314]
+  - The Seahawks/Mariners concrete dome came down in seconds on live TV, one of the largest implosions by volume. Source: https://en.wikipedia.org/wiki/Kingdome
+- **The 1962 Seattle World's Fair (Century 21 Exposition)** (21 April - 21 October 1962) — Seattle Center fairgrounds, Lower Queen Anne, Seattle [WA, pinpoint, 47.6214,-122.3508]
+  - Nearly 10 million visitors; it left Seattle the Space Needle, the Monorail and the Pacific Science Center. Source: https://en.wikipedia.org/wiki/Century_21_Exposition
+  - Overlaps existing place: Space Needle
+- **Pre's Rock: where Steve Prefontaine died** (30 May 1975) — Skyline Blvd near Hendricks Park, Eugene, OR [OR, pinpoint, 44.0433,-123.0548] · sensitivity: mild
+  - America's rebel distance-running star, a Nike icon, crashed here; the rock is a pilgrimage site for runners. Source: https://en.wikipedia.org/wiki/Steve_Prefontaine
+  - Overlaps existing place: Eugene
+- **Expo 86** (2 May - 13 October 1986) — Main site on the north shore of False Creek, Vancouver (Plaza of Nations / Science World) [BC, local, 49.2748,-123.11]
+  - The World's Fair drew 22 million visitors and put Vancouver on the global map; Science World is a legacy. Source: https://en.wikipedia.org/wiki/Expo_86
+  - Overlaps existing place: Vancouver
+- **Sidney Crosby's 'Golden Goal'** (28 February 2010) — Canada Hockey Place (Rogers Arena), Vancouver [BC, pinpoint, 49.2779,-123.1089]
+  - Crosby's overtime winner beat the US 3-2 for Olympic gold, perhaps Canada's most-watched TV moment ever. Source: https://en.wikipedia.org/wiki/Ice_hockey_at_the_2010_Winter_Olympics_–_Men's_tournament
+  - Overlaps existing place: Vancouver
+- **The 2011 Stanley Cup riot (and the 'riot kiss')** (15 June 2011) — West Georgia St fan zone near the Canada Post building, downtown Vancouver [BC, pinpoint, 49.281,-123.115] · sensitivity: mild
+  - The Canucks lost Game 7 and downtown erupted; a photo of a couple kissing amid the chaos went viral. Source: https://en.wikipedia.org/wiki/2011_Vancouver_Stanley_Cup_riot
+  - Overlaps existing place: Vancouver
+- **Rambo's town in 'First Blood'** (Filmed winter 1981-82; released 1982) — Hope, BC (the film's 'Hope, Washington'), plus Coquihalla Canyon ('Chapman Gorge') [BC, local, 49.38,-121.4416]
+  - Stallone's Rambo shot up the town of Hope, which still runs Rambo walking tours and keeps film props. Source: https://en.wikipedia.org/wiki/First_Blood
+  - Overlaps existing place: Coquihalla Hwy; Fraser River
+- **The Calgary Stampede** (First held 1912; every July since 1923) — Stampede Park, Beltline, Calgary [AB, pinpoint, 51.035,-114.054]
+  - 'The Greatest Outdoor Show on Earth': rodeo, chuckwagon races and over a million visitors every July. Source: https://en.wikipedia.org/wiki/Calgary_Stampede
+  - Overlaps existing place: Calgary
+- **The Sourtoe Cocktail is born** (1973) — Sourdough Saloon, Downtown Hotel, Second Ave & Queen St, Dawson City, YT [YT, pinpoint, 64.0622,-139.4334]
+  - A mummified human toe goes in the shot, and 'your lips must touch the toe'; over 100,000 have done it. Source: https://en.wikipedia.org/wiki/Sourtoe_Cocktail
+  - Overlaps existing place: Dawson City
+- **The 'Bridge to Nowhere'** (Earmark stripped 2005; cancelled 2007; formally dropped 2015) — Tongass Narrows, Ketchikan: planned crossing via Pennock Island to Gravina Island and the airport [SE-AK, local, 55.3204,-131.6311]
+  - A $398 million earmark became the national symbol of pork-barrel politics and a flashpoint in Sarah Palin's 2008 campaign. Source: https://en.wikipedia.org/wiki/Gravina_Island_Bridge
+- **Kennewick Man (the Ancient One) is found** (28 July 1996) — Columbia River bank, Columbia Park, Kennewick, WA [WA, pinpoint, 46.2262,-119.1723] · sensitivity: high
+  - A 9,000-year-old skeleton found by hydroplane fans set off a 20-year fight between scientists and tribes. Source: https://en.wikipedia.org/wiki/Kennewick_Man
+  - Overlaps existing place: Columbia River
+- **The Willamette Meteorite is found** (Autumn 1902) — Oregon Iron & Steel land near the old town of Willamette, now West Linn, OR [OR, local, 45.3667,-122.5833] · sensitivity: mild
+  - The largest meteorite ever found in North America (15.5 tons); the finder secretly moved it onto his farm. Source: https://en.wikipedia.org/wiki/Willamette_Meteorite
+- **The Fort Rock sandals are found, among the world's oldest shoes** (1938) — Fort Rock Cave, about 2.4 km west of the Fort Rock tuff ring, Lake County, OR [OR, pinpoint, 43.3786,-121.1015]
+  - Dozens of 9,000-10,000-year-old sagebrush-bark sandals: some of the oldest footwear ever found. Source: https://en.wikipedia.org/wiki/Fort_Rock_Cave
+- **Leduc No. 1 strikes oil** (13 February 1947) — Imperial Oil well on Mike Turta's farm, about 15 km west of Leduc, near Devon, AB [AB, pinpoint, 53.3296,-113.7253]
+  - The gusher that made Alberta an oil province and Canada self-sufficient in oil. Source: https://en.wikipedia.org/wiki/Leduc_No._1
+  - Overlaps existing place: Edmonton
+- **The Cave and Basin hot springs: birthplace of Canada's national parks** (November 1883) — Cave and Basin, lower slope of Sulphur Mountain, southwest edge of Banff, AB [AB, pinpoint, 51.1683,-115.5914] · sensitivity: mild
+  - Railway workers' dispute over the springs led to the 1885 reserve that started Canada's national parks. Source: https://en.wikipedia.org/wiki/Cave_and_Basin_National_Historic_Site
+  - Overlaps existing place: Banff
+- **D.B. Cooper's parachute jump** (24 November 1971) — FBI's original drop zone a few miles SE of Ariel, WA, near Lake Merwin (disputed) [WA, area, 45.925,-122.525]
+  - The only unsolved US airline hijacking: Cooper jumped from a 727 with $200,000 and vanished. Source: https://en.wikipedia.org/wiki/D._B._Cooper
+- **Kenneth Arnold sees the first 'flying saucers'** (24 June 1947) — In the air near Mineral, WA at about 9,200 ft; nine objects streaked past Mount Rainier toward Mount Adams [WA, area, 46.7194,-122.1877]
+  - The sighting that launched the modern UFO craze and gave us the term 'flying saucer'. Source: https://en.wikipedia.org/wiki/Kenneth_Arnold_UFO_sighting
+  - Overlaps existing place: Mt Rainier; Mt Adams
+- **The Maury Island UFO incident** (21 June 1947) — Waters off Maury Island, Puget Sound (retellings say off the south shore) [WA, local, 47.3751,-122.4334]
+  - A harbor patrolman's 'doughnut-shaped' saucers hoax, the origin of the 'Men in Black' legend, three days before Arnold. Source: https://en.wikipedia.org/wiki/Maury_Island_incident
+- **Miners attacked by 'apes' at Ape Canyon** (July 1924) — Ape Canyon, southeast flank of Mount St. Helens (edge of the Plains of Abraham) [WA, local, 46.2014,-122.1066]
+  - Prospectors said 7-ft 'apes' stoned their cabin: a foundational Bigfoot story that named the canyon. Source: https://en.wikipedia.org/wiki/Ape_Canyon
+  - Overlaps existing place: Mt St Helens
+- **War of the Worlds blackout panic in Concrete** (30 October 1938) — Concrete, Skagit County, WA (SR 20) [WA, pinpoint, 48.5389,-121.7469]
+  - Power failed mid-broadcast just as the Martians attacked; the town's 'panic' made worldwide news. Source: https://mynorthwest.com/history/concrete-war-of-the-worlds/1158440
+  - Overlaps existing place: North Cascades Hwy (SR-20); Skagit River
+- **The McMinnville UFO photos** (11 May 1950) — Trent family farm just outside Sheridan, OR (about 13 mi SW of McMinnville) [OR, pinpoint, 45.1008,-123.3344]
+  - Two farm photos of a 'saucer', published in LIFE, are among the most famous UFO pictures ever. Source: https://en.wikipedia.org/wiki/McMinnville_UFO_photographs
+- **Japanese balloon bomb kills six picnickers** (5 May 1945) — Mitchell Monument, Leonard Creek near Gearhart Mountain, 8 mi east of Bly, OR [OR, pinpoint, 42.4317,-120.8608] · sensitivity: mild
+  - The only WWII deaths from enemy action on the US mainland, caused by a drifting Fu-Go balloon bomb. Source: https://en.wikipedia.org/wiki/Mitchell_Recreation_Area
+- **First 'sneaker foot' washes up in the Salish Sea** (20 August 2007) — Jedediah Island, Strait of Georgia, BC [BC, pinpoint, 49.4986,-124.2042] · sensitivity: mild
+  - Start of 20+ detached feet in sneakers washing ashore in BC and WA, a long-running viral mystery. Source: https://en.wikipedia.org/wiki/Salish_Sea_human_foot_discoveries
+- **The Golden Spruce is cut down** (20 January 1997) — Bank of the Yakoun River near Port Clements, Haida Gwaii, BC [BC, pinpoint, 53.62,-132.2081] · sensitivity: mild
+  - A protester felled a sacred golden-needled Sitka spruce, then vanished kayaking across Hecate Strait. Source: https://en.wikipedia.org/wiki/Kiidk%27yaas
+  - Overlaps existing place: Haida Gwaii
+- **The world's first UFO landing pad** (3 June 1967) — St. Paul, Alberta (4902 53 St) [AB, pinpoint, 53.9914,-111.3051]
+  - A prairie town built a landing pad for aliens as a centennial project, opened by Canada's defence minister. Source: https://www.guinnessworldrecords.com/world-records/first-official-ufo-landing-pad
+- **The first big US COVID-19 outbreak** (Late February - March 2020) — Life Care Center of Kirkland, NE 120th St, Kirkland, WA [WA, pinpoint, 47.7071,-122.2056] · sensitivity: high
+  - A Kirkland nursing home became the first major US COVID-19 cluster, linked to dozens of deaths. Source: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Washington_(state)
+- **The Capitol Hill Occupied Protest (CHOP/CHAZ)** (8 June - 1 July 2020) — Around the SPD East Precinct (12th Ave & E Pine St) and Cal Anderson Park, Capitol Hill, Seattle [WA, local, 47.616,-122.318] · sensitivity: high
+  - Protesters held a police-free zone around an abandoned precinct for three weeks during the 2020 racial-justice protests. Source: https://en.wikipedia.org/wiki/Capitol_Hill_Occupied_Protest
+- **Amtrak Cascades 501 derails onto I-5** (18 December 2017, 7:33 a.m.) — I-5 overpass on the Point Defiance Bypass near DuPont, WA [WA, pinpoint, 47.0819,-122.6758] · sensitivity: high
+  - On the new bypass's first run, a train took a 30-mph curve at 78 mph and fell onto I-5. Source: https://en.wikipedia.org/wiki/2017_Washington_train_derailment
+- **The I-5 Skagit River Bridge collapses** (23 May 2013, about 7 p.m.) — I-5 bridge over the Skagit River between Burlington and Mount Vernon, WA [WA, pinpoint, 48.4455,-122.3411]
+  - An oversize truck clipped the overhead braces and a whole span of I-5 dropped into the river. Source: https://en.wikipedia.org/wiki/I-5_Skagit_River_Bridge_collapse
+  - Overlaps existing place: Skagit River
+- **The Treaty of Point Elliott is signed** (22 January 1855) — Point Elliott (Mukilteo Lighthouse Park), Mukilteo, WA [WA, pinpoint, 47.947,-122.3065] · sensitivity: mild
+  - Chief Si'ahl (Seattle) and other leaders ceded much of northwest Washington, creating the Tulalip, Lummi and other reservations. Source: https://en.wikipedia.org/wiki/Treaty_of_Point_Elliott
+- **The first nonstop trans-Pacific flight lands** (5 October 1931) — Fancher Heights, East Wenatchee, WA (Pangborn-Herndon Memorial Site) [WA, local, 47.4431,-120.28]
+  - Pangborn and Herndon flew 41 hours from Misawa, Japan, and belly-landed Miss Veedol on a hillside airstrip. Source: https://en.wikipedia.org/wiki/Pangborn-Herndon_Memorial_Site
+  - Overlaps existing place: Columbia River
+- **Keiko, the 'Free Willy' orca, lives in Newport** (January 1996 - September 1998) — Oregon Coast Aquarium, South Beach, Newport, OR [OR, pinpoint, 44.6171,-124.0477]
+  - The film's star orca was rehabilitated here before returning to the wild off Iceland; crowds queued to see him. Source: https://en.wikipedia.org/wiki/Keiko_(orca)
+- **Sumas Lake returns: the November 2021 atmospheric-river floods** (14-16 November 2021) — Sumas Prairie (the drained Sumas Lake bed), Abbotsford, BC [BC, local, 49.0656,-122.1257] · sensitivity: mild
+  - An atmospheric river overtopped the Nooksack and refilled the drained Sumas Lake, cutting Vancouver off by road and rail. Source: https://en.wikipedia.org/wiki/2021_Pacific_Northwest_floods
+- **Billy Barker strikes gold: the Cariboo Gold Rush** (17 August 1862) — Williams Creek, Barkerville Historic Town, Cariboo, BC [BC, local, 53.0667,-121.5167]
+  - Barker's strike on Williams Creek made Barkerville the biggest town north of San Francisco and west of Chicago, legend says. Source: https://en.wikipedia.org/wiki/Barkerville,_British_Columbia
+- **Expo '74, the first environmental world's fair** (4 May - 3 November 1974) — Riverfront Park on the Spokane River falls, downtown Spokane [WA, pinpoint, 47.6617,-117.4199]
+  - Spokane, then the smallest city to host a world's fair, turned its railyards into Riverfront Park. Source: https://en.wikipedia.org/wiki/Expo_%2774
+  - Overlaps existing place: Spokane
+
+## Dropped during editing
+
+- Merged, not a real drop: the four duplicated events were folded into one entry each, keeping the best coordinate. They are Galloping Gertie (disasters + transport), the I-90 bridge sinking (disasters + transport), the Wellington avalanche (disasters + transport) and Lituya Bay (disasters + science). For Lituya Bay the pin moved to the USGS GNIS Gilbert Inlet point; the disasters list's pin was ~5 km off, in mid-bay.
+- Merged, not a real drop: the exploding whale appeared three times (transport, culture, weird). The pins spanned ~6 km; I kept a pin ~1 mile S of the Siuslaw south jetty, and the transport list's 43.95 was about 6 km too far south.
+- Merged, not a real drop: Tex Johnston's 707 barrel roll appeared three times (transport, culture, science), and the Last Spike appeared three times (transport, history, science).
+- Merged, not a real drop: Bertha (transport + science), Ripple Rock (transport + weird), the SS Portland 'ton of gold' (transport + history), the Horizon Q400 (transport + weird; sensitivity set to high), the Lookout Air Raid (transport + history) and the Alaska Highway opening (transport + history).
+- Merged, not a real drop: the WTO protests (history + culture), the Bonanza Creek strike (history + science), the Beast Quake (culture + weird), the Sourtoe Cocktail (culture + weird) and Kenneth Arnold's saucers (transport + weird).
+- Not merged: D.B. Cooper appears twice on purpose. The 1971 parachute jump is disputed and only works as an area (C); the 1980 ransom-money find at Tena Bar can be pinned exactly (A).
+- Dropped, not a real event: 'The Cremation of Sam McGee' on Lake Laberge (YT) is a fictional poem and only works as an area. It would make a fun fact on the Yukon River row.
+- Dropped, legend and not placeable: Ogopogo's lair (Rattlesnake Island, Okanagan Lake, BC) has no event and no documented spot. It is also a sacred Syilx figure (N'ha-a-itk) and overlaps the existing Okanagan Lake.
+- Considered, not added, outside the map: the Patterson-Gimlin Bigfoot film (1967, Bluff Creek, California).
+- Considered, not added, outside the map: the Exxon Valdez spill (1989) and the 1964 Good Friday quake epicentre, both west of 141°W.
+- Considered, not added, outside the map: the Nez Perce flight and Chief Joseph's surrender (1877, Idaho and Montana).
+- Considered, not added, high sensitivity: Kurt Cobain's death (1994). The house is a private home in Denny-Blaine, and the Aberdeen bridge entry already covers Cobain.
+- Considered, not added, no single place: the Green River Killer and Ted Bundy. These were serial murders with no single event site, and victims' families are local.
+- Considered, not added, not placeable: the Highway of Tears (BC Hwy 16) is a 700-km route and a pattern of cases rather than one event, and it is high sensitivity.
+- Considered, not added, area-only: the Seattle General Strike (1919), the Columbus Day Storm (1962) and the Tillamook Burn (1933-51).
+- Considered, not added, not an event: Twilight's Forks is a fictional setting, and the films were mostly shot in Oregon. Stadium High School ('10 Things I Hate About You') and Brownsville OR ('Stand by Me') could be added later if you want more film-location prompts.
+- Considered, not added, would duplicate Vancouver: the founding of Greenpeace in Vancouver (1971) has no documented single spot, and the Great Vancouver Fire (1886) is low fame for Seattle players.
+- Considered, not added, niche and high sensitivity: the Everett Massacre (1916) and the Centralia Tragedy (1919), both episodes of labour violence.
+- Considered, not added, duplicate: Mount Rainier's first ascent (1870) would repeat the existing Mt Rainier peak.

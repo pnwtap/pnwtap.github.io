@@ -20,7 +20,7 @@ and worth more. Share your result Wordle-style.
 
 ## The sheet
 
-One tab, columns: `name, category, difficulty, geometry, image, blurb, facts`.
+One tab, columns: `name, category, difficulty, geometry, image, blurb, facts` (plus an optional `prompt`).
 
 - `name`: must be unique — it's how played days are remembered (see *Schedule* below).
 - `category`: `peak / hike / traverse / road / climb / river / town / poi / lake / glacier / pass /
@@ -39,6 +39,9 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb, facts`.
     A tap scores by the nearest member; the prompt doesn't say how many there are — the reveal
     does, naming the nearest and showing the rest.
 - `image` (optional): a URL. If set, that round shows the image instead of the name.
+- `prompt` (optional column): text the round asks with instead of the name — how events work
+  ("In 1958 an earthquake-triggered rockfall sent a wave 524 m up the far side of this bay…");
+  the name then appears on the reveal and in the results.
 - `blurb`: a line or two shown on the reveal.
 - `facts` (optional): `key: value | key: value`, e.g. `grade: 5.9 | style: sport | pitches: 18`.
   The reveal shows them as a card laid out for the category (a peak's card leads with elevation
