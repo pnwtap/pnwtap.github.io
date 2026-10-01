@@ -1,7 +1,7 @@
 # Glacier "any of" rows — sources (added 2026-09-29, named-glacier rule 2026-09-30)
 
 Two rows for a paired day (curated 2026-10-03, rounds 3 and 4): **Any named glacier that's vanished since 1900**
-(46 members) and **Any growing glacier** (3 members). Every member was researched region by region and then checked
+(55 members) and **Any growing glacier** (3 members). Every member was researched region by region and then checked
 by an independent skeptic.
 
 ## Vanished: the rule
@@ -67,6 +67,15 @@ Loowit's point lies inside today's Crater Glacier (a *growing* member), so a cra
 | Boulder Glacier (Glacier NP) | 48.9575,-114.0879 | Area fell to 0.0488 km2 by 1998 and 0.0353 km2 by 2015 (USGS named-glacier table). USGS/NPS 2017 say it 'has m; https://www.npshistory.com/publications/glac/glacier-retreat-2017.pdf; https://www.usgs.gov/media/files/table-depicting-area-named-glaciers-glacier-national-park; https://essd.copernicus.org/articles/15/4077/2023/ |
 | Blackwell Glacier | 48.2297,-115.6852 | In the 2015 inventory (Fountain et al. 2023), the named body is 0.037 km2. It and all four neighbouring 2015 p; https://essd.copernicus.org/articles/15/4077/2023/; https://www.glims.org/maps/info.html?anlys_id=1014678; https://www.glims.org/maps/info.html?anlys_id=764819 |
 | Iceberg Glacier (Glacier NP) | 48.8124,-113.7538 | Dyson says it was barely recognizable as a glacier in its last years and gone by about 1940, leaving only a sn; https://www.gutenberg.org/files/62831/62831-h/62831-h.htm; https://www.sciencebase.gov/catalog/item/5ff72f2ad34ea5387df03a0e; https://www.usgs.gov/centers/norock/science/iceberg-glacier-circa-1940-2008 |
+| Pyramid Glacier | 46.8222,-121.7908 | Broke into small ice patches in the 2021–2022 melt seasons. In Oct 2022 Sentinel imagery no patch was larger than 0.05 km2, and NCGCP declared it no longer a glacier. By ; https://glacierchange.blog/2023/06/05/pyramid-and-van-trump-glacier-mount-rainier-no-longer-glaciers-thresholds-leading-to-glacier-loss/; https://www.kuow.org/stories/another-three-bite-the-dust-rip-3-mount-rainier-glaciers; https://www.spokesman.com/stories/2025/jun/23/mount-rainiers-glaciers-are-disappearing-what-happ/ |
+| Van Trump Glacier | 46.8185,-121.7624 | Broke into small ice patches in the 2021–2022 melt seasons. In Oct 2022 imagery the largest piece was about 0.046 km2, and NCGCP declared it no longer a glacier. By 2024 ; https://glacierchange.blog/2023/06/05/pyramid-and-van-trump-glacier-mount-rainier-no-longer-glaciers-thresholds-leading-to-glacier-loss/; https://www.kuow.org/stories/another-three-bite-the-dust-rip-3-mount-rainier-glaciers; https://www.spokesman.com/stories/2025/jun/23/mount-rainiers-glaciers-are-disappearing-what-happ/ |
+| Gotchen Glacier | 46.1643,-121.4743 | Reduced to remnants by Oct 2022. NCGCP's 19 Oct 2022 Sentinel image labels it 'Gotchen Perennial Snowfield', with the largest remnant at 0.04 km2 (in 2019 one piece was s; https://glaciers.nichols.edu/washington-glaciers-that-have-disappeared-since-1984-list/ |
+| Irving Glacier | 44.1354,-121.7786 | Stopped flowing in the late 2010s (OGI points to the hot 2015 summer). Fountain et al. 2023 class it a perennial snowfield (2018 imagery). Carlson et al. 2025 found 0.033; https://olis.oregonlegislature.gov/liz/2025I1/Downloads/CommitteeMeetingDocument/316736; https://www.kgw.com/article/tech/science/environment/scientists-warn-oregon-south-sister-faces-vanishing-glaciers/283-abd7fdeb-9c5a-4873-bac2-f1ec31493f47; https://www.cambridge.org/core/journals/annals-of-glaciology/article/disappearing-glaciers-of-the-oregon-cascades-usa/588D41C09CB73BCC4A4941F53E467359 |
+| Eugene Glacier | 44.1102,-121.7805 | Stopped flowing about 2018-2020. By 2020 it had no crevasses and a concave terminus, and by 2023 it was 0.034 km2 of non-flowing ice (Carlson et al. 2025, 'almost disappe; https://olis.oregonlegislature.gov/liz/2025I1/Downloads/CommitteeMeetingDocument/316736; https://www.kgw.com/article/tech/science/environment/scientists-warn-oregon-south-sister-faces-vanishing-glaciers/283-abd7fdeb-9c5a-4873-bac2-f1ec31493f47; https://www.cambridge.org/core/journals/annals-of-glaciology/article/disappearing-glaciers-of-the-oregon-cascades-usa/588D41C09CB73BCC4A4941F53E467359 |
+| Linn Glacier | 44.1749,-121.7748 | Stopped flowing about 2019-2020. By 2020 it had no crevasses, no accumulation zone and a concave terminus, leaving a 0.025 km2 stagnant remnant in 2023 (Carlson et al. 20; https://olis.oregonlegislature.gov/liz/2025I1/Downloads/CommitteeMeetingDocument/316736; https://www.cambridge.org/core/journals/annals-of-glaciology/article/disappearing-glaciers-of-the-oregon-cascades-usa/588D41C09CB73BCC4A4941F53E467359; https://www.orglaciersinst.org/north-sister |
+| Waldo Glacier | 44.6627,-121.7960 | Stopped flowing between 2020 and 2023. Carlson et al. 2025 found no crevasses and a concave terminus (0.097 km2 in 2023), and OGI called it 'a dead glacier, no longer flo; https://olis.oregonlegislature.gov/liz/2025I1/Downloads/CommitteeMeetingDocument/316736; https://www.cambridge.org/core/journals/annals-of-glaciology/article/disappearing-glaciers-of-the-oregon-cascades-usa/588D41C09CB73BCC4A4941F53E467359; https://www.orglaciersinst.org/post/2024-updates-year-end-giving |
+| Palmer Glacier | 45.3526,-121.7076 | Stopped flowing by the mid-1980s (no ice movement by then). Now the stagnant Palmer Snowfield above Timberline Lodge, about 0.066 km2 in 2023 (Bakken-French et al. 2024; ; https://www.cambridge.org/core/journals/annals-of-glaciology/article/disappearing-glaciers-of-the-oregon-cascades-usa/588D41C09CB73BCC4A4941F53E467359; https://bendbulletin.com/2026/03/18/half-of-oregons-named-glaciers-have-disappeared-or-are-near-extinction-study-finds/; https://olis.oregonlegislature.gov/liz/2025I1/Downloads/CommitteeMeetingDocument/316736 |
+| Whistler Glacier | 50.0581,-122.9513 | Relict by 2024: fragmented into multiple small ice masses (three, per Canadian Press). The main eastern piece was 0.012 km2 in 4 Sept 2024 imagery, down 95% since 1973. T;  |
 
 ## Vanished: left out
 
@@ -97,22 +106,28 @@ Loowit's point lies inside today's Crater Glacier (a *growing* member), so a cra
 - Small glacier by Tenderfoot Glacier
 - Small glaciers by the Macbeth Icefield
 
-**Disputed — experts disagree, so excluded:**
-- Pyramid Glacier: NPS, the managing agency, still counted it as a glacier in its 2023 report (2021 survey, signs of movement) and has not removed it since. Fountain's 2019-imagery inventory also keeps glacier pieces. Pelto's 2022 finding 
-- Van Trump Glacier: NPS still counts it as one of Mount Rainier's 28 glaciers, based on the 2021 survey.
-- Gotchen Glacier: The loss is only implied by where the image sits on the page. A peer-reviewed inventory based on 2019 imagery still classifies part of it as glacier.
-- Hanging Glacier (Olympics): The only loss statement is a one-line NPS description with no date or evidence of when it stopped flowing. The peer-reviewed 2015 inventory implicitly keeps it as a glacier.
-- Whistler Glacier: The only authoritative source (2026) says ice remains and projects the end date instead of stating it. The authors say the question depends on the definition. The 0.05 km2 threshold crossing is a size note, which rule (d
-- Clements Glacier: Fountain et al. 2023 (peer-reviewed, 2015 imagery, crevasse-based) classifies the remnant in this cirque as a glacier (GLIMS class 6).
-- Harris Glacier: The loss statements are hedged or threshold-based. Fountain et al. 2023 (2015 imagery) still classifies Harris as a glacier.
-- Red Eagle Glacier: Fountain et al. 2023 (2015 imagery, crevasse-based) still classifies Red Eagle as a glacier. The 2002 'stagnant' call is undercut by Logan, which remains active.
-- Irving Glacier: The later field study (Carlson et al. 2025) calls it 'almost disappeared', a still-continuous ice body that is not extinct under the Cogley/GLIMS definition.
-- Eugene Glacier: The authoritative 2025 source calls it 'almost disappeared', not disappeared, and Fountain et al. 2023 lists it as a glacier.
-- Linn Glacier: Called 'almost disappeared', not disappeared, in the only post-2019 field study; Fountain et al. 2023 lists it as a glacier.
-- Waldo Glacier: The authoritative source calls it 'almost disappeared', not gone; Fountain et al. 2023 lists all its pieces as glaciers.
-- Skinner Glacier: Carlson et al. 2025 (field-based, later) says it still shows evidence of flow and is only 'critically endangered'.
-- Carver Glacier: Carlson et al. 2025 (field-based, later) says it is still a critically endangered glacier with evidence of flow.
-- Palmer Glacier (Mount Hood): counted as disappeared by Carlson et al. 2025, but still skied as the Palmer Snowfield.
+**Disputes settled by the newest observation** (owner's rule, 2026-09-30): when sources disagree, the observation made most
+recently wins, dated by when the ice was seen (imagery or field date), not when it was published. Agency pages that restate an
+older survey carry that survey's date. "Too thin to flow" counts as vanished; a size threshold alone does not.
+
+Added under that rule:
+- Pyramid Glacier: 2024 imagery (Pelto/NCGCP): every fragment of the 'former' Pyramid Glacier is under 0.025 km2, and its 'capacity to return to glacier status' is called non-existent. Before that, the 19 Oct 2022 Sentinel image showed no patch above 0.05 km2 and the glacier was
+- Van Trump Glacier: 2024 imagery (Pelto/NCGCP): every fragment of the 'former' Van Trump Glacier is under 0.025 km2, with no capacity to return to glacier status. Before that, the 19 Oct 2022 Sentinel image put the largest patch at about 0.046 km2 (five patches, 0.114 km2 combine
+- Gotchen Glacier: The 19 Oct 2022 Sentinel image (NCGCP). I opened the image itself: it is annotated '10-19-2022' and labels the remaining ice 'Gotchen Perennial Snowfield'. The caption gives the largest remnant as 0.04 km2, down from 0.071 km2 in 2019, and the image sits in NC
+- Irving Glacier: Carlson et al. 2025: field work 2020-23, with the 2023 outline checked in the field in 2024. Ice remains but 'does not flow' (concave terminus, no crevasses, no accumulation zone); 0.033 km2 in 2023; category 'almost disappeared'. The June 2026 legislative dec
+- Eugene Glacier: Carlson et al. 2025 (field 2020-23, checked 2024): no crevasses and a concave terminus, 'not an actively flowing glacier'; 0.034 km2 in 2023; almost disappeared. The June 2026 deck still has South Sister's one 'A', which is Eugene.
+- Linn Glacier: Carlson et al. 2025 (field through 2023, checked 2024): no crevasses, no accumulation zone, concave terminus, so no evidence of flow. A 0.025 km2 continuous ice body, 'almost disappeared'. The June 2026 deck restates it as 'A'.
+- Waldo Glacier: 2024: OGI's satellite check ('dead glacier, no longer flowing') and Carlson et al.'s 2024 field check of the 2023 outline (no crevasses, concave terminus; 0.097 km2). Both say it does not flow, and the June 2026 deck restates it as 'A'.
+- Palmer Glacier: Bakken-French et al. 2024 field observations (2020-23): no flowing ice, about 0.066 km2 of stagnant ice or snowfield left in 2023. Carlson et al. 2025 and the June 2026 deck class Palmer as disappeared ('D').
+- Whistler Glacier: The newest dated material is a set of field photos from 13 Sept 2025 (SFU release). Their captions still call the ice 'Whistler Glacier, main (eastern) section' and give no classification. The newest classified observation is the Planet imagery mapping of 4 Se
+
+Still left out:
+- Skinner Glacier: 2025 photo, as presented by the observing team in June 2026. Carlson's legislative deck shows the same 2020/2025 Skinner pair as the flyer, with no category label. Its category slide gives South Sister 1 D (Clark), 1 A (Eugene) and 2 C (Carver and Skinner), an
+- Carver Glacier: 2025 photo in Carlson's June 2026 legislative deck (Carver 2020 vs 2025, -9.8 %/yr). The deck still counts Carver among South Sister's 2 'C' glaciers, and among the 8 that 'will cease to flow' in the next 25 years. The underlying written field evidence is Carl
+- Clements Glacier: The newest observation is the 2015-08-22 Maxar imagery in Fountain et al. 2023, which classes the 0.066 km2 cirque body as a glacier (class 6, on its crevasse criterion). Two older USGS calls say otherwise: the 2005 inventory classes the cirque ice as 'perenni
+- Harris Glacier: The newest observation is the 2015-08-22 Maxar imagery, which two analyses used. Fountain et al. 2023 classes Harris as a glacier on its movement/crevasse criterion. USGS/NPS 2017 labels it 'no longer active' on the 0.1 km2 size criterion alone. No outline, ph
+- Red Eagle Glacier: The newest observation is the 2015 Maxar imagery. Fountain et al. 2023 (image dated 2015-09-25) classes Red Eagle (0.0637 km2) as a glacier on its crevasse/movement criterion. The USGS 2015-08-22 'no longer active' label rests on the size criterion alone. Noth
+- Hanging Glacier (Olympics): The newest dated observation is still the 2015 imagery: about 0.060 km2, mapped twice, and implicitly kept as a glacier in Fountain's inventory (glacier = crevasses visible). The NPS 'permanent snowfield' line was published later (page updated Apr 2023) but ca
 
 ## Growing: members
 
