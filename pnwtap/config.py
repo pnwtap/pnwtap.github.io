@@ -106,8 +106,9 @@ CARDS = {
 }
 
 # Region bounding box for typo validation: (min_lat, min_lng, max_lat, max_lng).
-# Covers WA, OR, BC, AB, and YT — the area the stencil (data/region_mask.json) spans.
-BBOX = (41.5, -141.5, 70.0, -109.5)
+# Covers WA, OR, BC, AB, and YT — the area the stencil (data/region_mask.json) spans
+# (its south edge reaches about 41.1 N, into far northern California).
+BBOX = (41.0, -141.5, 70.0, -109.5)
 # Each round opens framed on this box [[south, west], [north, east]] — the populated
 # south of the region (OR → southern BC/AB); players zoom out for the far north.
 START_BOUNDS = [[43.0, -125.5], [53.0, -113.0]]
