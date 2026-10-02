@@ -48,3 +48,30 @@ Sources:
 - Oregon region page (context for the in-map alternative): 457 miles, and Oregon's highest point on the trail is an unnamed saddle at 7,560 ft north of Mount Thielsen — https://explore.pcta.org/regions/oregon/
 - Geometry: OSM superroute 1225378 and section relations 1253065, 1253310, 1255154, 1255155, 1258061, 1260310, 1260388, 1260401, 1268073, 1268116, 1285294, 1285818, 1296807, 1304995, 1322978 (OSM API, fetched 2026-10-01) — https://www.openstreetmap.org/relation/1225378
 - Northern end: OSM node 1040294835 'Pacific Crest Trail Northern Terminus', 0.4 m from node 1738808391 'Monument 78' (International Boundary Commission, 1905) — https://www.openstreetmap.org/node/1738808391
+
+## PCT Section J (hike, line)
+
+80 points from OSM route relation 1296807 (PCT - Washington Section J), Snoqualmie Pass (I-90) to Stevens
+Pass (US-2); one continuous path, max deviation about 150 m. Endpoints match Section I's end and Section K's start nodes.
+
+Length is WTA's 74.7 mi (120.22 km); the OSM path measures 72.2 mi (116.18 km), matching current PCTA milepost spacing.
+High point 5,988 ft (WTA), on the shoulder between Huckleberry Mountain and Chikamin Peak.
+
+Time-sensitive, not in the blurb: in Sep 2026 the King and Three Queens fires closed part of Section J (WTA, 24 Sep 2026: Ridge Lake
+to the Lake Vicente junction; PCTA order through Oct 31, 2026).
+
+Sources:
+- geometry: PCT Washington Section J route relation (from Interstate 90 to Hwy 2), 25 member ways chained into one 116.18 km path — https://www.openstreetmap.org/relation/1296807
+- start endpoint: Section I (to Interstate 90) ends on the same node, 47.4271,-121.4153 — https://www.openstreetmap.org/relation/1285818
+- end endpoint: Section K (from Hwy 2) starts on the same node, 47.7461,-121.0886 — https://www.openstreetmap.org/relation/1304995
+- length_km 120.22 (74.7 miles one-way), gain_m 4876.8 (about 16,000 ft), high_point_m 1825.1 (5,988 ft), days 6–7 (six or seven days of food), not crossing a road, Kendall Katwalk on day 1, some places impassable until well into August. Closure note dated 9.24.26 — https://www.wta.org/go-hiking/hikes/pacific-crest-trail-section-j-snoqualmie-pass-to-stevens-pass-east
+- season: Washington snow usually melts by mid to late July or August, and the mountains are typically snow-covered from October through June. Direct fetch returned 403, so this is verified from the page's search-indexed text — https://www.pcta.org/discover-the-trail/backcountry-basics/when-to-hike-pct/
+- high point check, USGS 3DEP sampled every 100 m along the OSM path: 5,983 ft (1823.6 m) at 47.4788,-121.3210, 18.5 km from the start. The runner-up is Pieper Pass at 5,923 ft — https://epqs.nationalmap.gov/v1/docs
+- high point location: Chikamin Peak summit 0.85 km ESE of the high point — https://www.openstreetmap.org/node/3012987620
+- high point location: Huckleberry Mountain summit 1.1 km WSW of the high point — https://www.openstreetmap.org/node/288650064
+- blurb: Kendall Katwalk viewpoint node lies on the trail (0 m) — https://www.openstreetmap.org/node/1013218078
+- blurb: Spectacle Lake shore is 0.21 km from the trail — https://www.openstreetmap.org/relation/14308756
+- blurb: Waptus Lake shore is 0.17 km from the trail — https://www.openstreetmap.org/relation/16190245
+- blurb: Deep Lake shore is 0.15 km from the trail — https://www.openstreetmap.org/relation/16193988
+- blurb: Cathedral Pass node lies on the trail (0 m) — https://www.openstreetmap.org/node/1013212545
+- section identity, length (116.31 km) and endpoints, linked to OSM relation 1296807 — https://www.wikidata.org/wiki/Q133272510
