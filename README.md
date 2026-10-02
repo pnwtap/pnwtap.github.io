@@ -41,7 +41,8 @@ One tab, columns: `name, category, difficulty, geometry, image, blurb, facts` (p
 - `image` (optional): a URL. If set, that round shows the image instead of the name.
 - `prompt` (optional column): text the round asks with instead of the name — how events work
   ("In 1958 an earthquake-triggered rockfall sent a wave 524 m up the far side of this bay…");
-  the name then appears on the reveal and in the results.
+  the name then appears on the reveal and in the results. The round adds "Where did it happen?"
+  (events) or "Where is it?" below it, unless the prompt ends with its own question.
 - `blurb`: a line or two shown on the reveal.
 - `facts` (optional): `key: value | key: value`, e.g. `grade: 5.9 | style: sport | pitches: 18`.
   The reveal shows them as a card laid out for the category (a peak's card leads with elevation
