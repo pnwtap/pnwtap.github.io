@@ -227,3 +227,10 @@ Notes: Verified. Valve's own Steam Subscriber Agreement (rev. Sept 10, 2026) con
 - Valve founded August 24, 1996; HQ Bellevue, WA — https://en.wikipedia.org/wiki/Valve_Corporation
 - Lincoln Square expansion (two mixed-use towers) completed January 2017 — https://en.wikipedia.org/wiki/Lincoln_Square_(Bellevue)
 - Geometry: OSM way 1326151866 'Lincoln Square South Tower' (31 levels) and node 5270634805 'Valve Corporation Headquarters', 10400 NE 4th St — https://www.openstreetmap.org/way/1326151866
+
+## Update 2026-10-01: Rajneeshpuram row moved to The Dalles
+
+Renamed "Rajneeshee salmonella attack" and pinned to The Dalles (45.6017,-121.1847, Wikipedia city coordinates), where the
+poisoning happened, so the round's default "Where did it happen?" fits. The commune site is about 101 km (63 mi) southeast;
+it is now in the blurb. Prompt reworded by the owner. Ten restaurants, 751 ill, led by Ma Anand Sheela:
+https://en.wikipedia.org/wiki/1984_Rajneeshee_bioterror_attack ; city coordinates: https://en.wikipedia.org/wiki/The_Dalles,_Oregon
